@@ -24,8 +24,17 @@ public class LoginController {
 
     @FXML
     void onClickEnviar(ActionEvent event) {
+        String user = txtUser.getText();
+        String password = txtPassword.getText();
+
+        if(user.equals("Carlos") && password.equals("1234")){
+            System.out.println("nome: "+ user + " senha: "+ password);
+        }else{
+            System.out.println("ERROUUUU!");
+        }
+
         
-        System.out.println(txtUser.getText());
+        
         txtUser.clear();
         txtPassword.clear();     
         cadastroUsuario();  
@@ -37,6 +46,8 @@ public class LoginController {
             Stage stage = new Stage();
             stage.setTitle("Usuario");
             stage.setScene(new Scene(root));
+
+            stage.setMaximized(true);
 
             stage.show();
 

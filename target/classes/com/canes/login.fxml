@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
+  All rights reserved. Use is subject to license terms.
+
+  This file is available and licensed under the following license:
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the distribution.
+  - Neither the name of Oracle Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -10,60 +42,78 @@
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" fillWidth="false" spacing="20.0" style="-fx-background-color: #d7d5d5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.LoginController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
-   <children>
-      <Pane style="-fx-background-color: #d7d5d5; -fx-background-color: ;">
+<VBox prefHeight="714.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.LoginController">
+  <children>
+    <AnchorPane focusTraversable="true" maxHeight="-1.0" maxWidth="-1.0" prefHeight="633.0" prefWidth="1269.0" style="-fx-background-color: #0E0C1F;" VBox.vgrow="ALWAYS">
          <children>
-            <Label layoutX="484.0" layoutY="133.0" text="Usuário" textFill="#404040">
+            <Label alignment="CENTER" layoutX="919.0" layoutY="317.0" text="Usuário" textFill="#e5dada">
                <font>
-                  <Font name="Verdana Bold" size="36.0" />
+                  <Font name="Verdana Bold" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="306.0" layoutY="25.0" text="Login" textFill="#404040">
-               <font>
-                  <Font name="Verdana Bold" size="48.0" />
-               </font>
-            </Label>
-            <Label layoutX="504.0" layoutY="280.0" text="Senha">
-               <font>
-                  <Font name="Verdana Bold" size="36.0" />
-               </font>
-            </Label>
-            <TextField fx:id="txtUser" layoutX="463.0" layoutY="206.0" prefHeight="46.0" prefWidth="197.0" style="-fx-background-radius: 7;">
-               <font>
-                  <Font name="Verdana" size="18.0" />
-               </font>
+            <TextField fx:id="txtUser" layoutX="861.0" layoutY="353.0" prefHeight="35.0" prefWidth="214.0" promptText="Digite o nome do usuário" style="-fx-background-radius: 7;">
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
             </TextField>
-            <PasswordField fx:id="txtPassword" layoutX="463.0" layoutY="340.0" prefHeight="46.0" prefWidth="197.0" style="-fx-background-radius: 7;">
-               <font>
-                  <Font name="Verdana" size="18.0" />
-               </font>
-            </PasswordField>
-            <Separator layoutX="370.0" layoutY="98.0" orientation="VERTICAL" prefHeight="409.0" prefWidth="20.0" />
-            <ImageView fitHeight="356.0" fitWidth="549.0" layoutY="125.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="21.0" fitWidth="31.0" layoutX="868.0" layoutY="360.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../../../../../Users/Carlos%20Borges/Pictures/istockphoto-1399883742-612x612.jpg" />
+                  <Image url="@img/person_24dp_999999_FILL0_wght400_GRAD0_opsz24.png" />
+               </image>
+            </ImageView>
+            <PasswordField fx:id="txtPassword" layoutX="861.0" layoutY="441.0" prefHeight="35.0" prefWidth="214.0" promptText="Digite a senha" style="-fx-background-radius: 7;">
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
+            </PasswordField>
+            <ImageView fitHeight="21.0" fitWidth="31.0" layoutX="868.0" layoutY="448.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/lock_24dp_999999_FILL0_wght400_GRAD0_opsz24.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="443.0" fitWidth="546.0" layoutX="260.0" layoutY="216.0" nodeOrientation="INHERIT" opacity="0.85" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/Cores-para-loja-de-roupa-masculina.jpg" />
                </image>
                <effect>
-                  <DropShadow height="144.11" radius="56.89750000000001" spread="0.47" width="85.48" />
+                  <DropShadow blurType="GAUSSIAN" height="244.99" radius="119.49000000000001" spread="0.38" width="234.97">
+                     <color>
+                        <Color opacity="0.7213740944862366" />
+                     </color>
+                  </DropShadow>
                </effect>
             </ImageView>
-            <Button fx:id="btEnviar" layoutX="483.0" layoutY="435.0" mnemonicParsing="false" onAction="#onClickEnviar" prefHeight="55.0" prefWidth="166.0" style="-fx-background-radius: 7;" text="Enviar">
+            <Button fx:id="btEnviar" contentDisplay="CENTER" layoutX="997.0" layoutY="500.0" mnemonicParsing="false" onAction="#onClickEnviar" prefHeight="35.0" prefWidth="78.0" style="-fx-background-radius: 7;" text="Enviar">
                <font>
-                  <Font name="System Bold Italic" size="36.0" />
+                  <Font name="Verdana Bold" size="14.0" />
                </font>
                <cursor>
                   <Cursor fx:constant="CLOSED_HAND" />
                </cursor>
             </Button>
+            <Label alignment="CENTER" layoutX="929.0" layoutY="403.0" text="Senha" textFill="#e5dada">
+               <font>
+                  <Font name="Verdana Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="614.0" layoutY="77.0" text="Canes Fashion" textFill="#e4dada">
+               <font>
+                  <Font name="Verdana Bold Italic" size="64.0" />
+               </font>
+            </Label>
+            <Separator layoutX="450.0" layoutY="189.0" prefHeight="0.0" prefWidth="844.0" />
          </children>
-      </Pane>
-   </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+    </AnchorPane>
+  </children>
+   <opaqueInsets>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </opaqueInsets>
 </VBox>

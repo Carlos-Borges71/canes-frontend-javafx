@@ -10,12 +10,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" fillWidth="false" spacing="20.0" style="-fx-background-color: #d7d5d5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.SecondaryController">
+<VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="800.0" prefWidth="1200.0" spacing="20.0" style="-fx-background-color: #d7d5d5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.SecondaryController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
    <children>
-      <Pane style="-fx-background-color: #d7d5d5; -fx-background-color: ;">
+      <Pane prefHeight="778.0" prefWidth="1192.0" style="-fx-background-color: #d7d5d5; -fx-background-color: ;">
          <children>
             <Label layoutX="164.0" layoutY="14.0" text="Usuário" textFill="#404040">
                <font>
