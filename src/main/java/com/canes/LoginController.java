@@ -2,14 +2,21 @@ package com.canes;
 
 import java.io.IOException;
 
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class LoginController {
 
@@ -17,27 +24,59 @@ public class LoginController {
     private Button btEnviar;
 
     @FXML
-    private TextField txtPassword;
+    private PasswordField txtPassword;
 
     @FXML
     private TextField txtUser;
 
     @FXML
+    private ImageView noVisible;
+    
+    @FXML
+    private ImageView visible;
+
+    @FXML
+    private TextField txtPassword2;
+
+     @FXML
+    private Label aviso;
+
+     @FXML
+    private Label labelUser;
+
+   @FXML
+    void onNoVisible(DragEvent event) {
+        txtUser.setAccessibleHelp("test");
+    }
+
+
+    @FXML
     void onClickEnviar(ActionEvent event) {
+
+        
         String user = txtUser.getText();
         String password = txtPassword.getText();
 
         if(user.equals("Carlos") && password.equals("1234")){
             System.out.println("nome: "+ user + " senha: "+ password);
+
+           
+
         }else{
-            System.out.println("ERROUUUU!");
+
+            aviso.setText("Login ou senha invalido. Tente novamente");
+            aviso.setVisible(true);
+            PauseTransition pausa = new PauseTransition(Duration.seconds(5));
+            pausa.setOnFinished(ignored -> aviso.setVisible(false));
+            pausa.play();
+
         }
 
         
         
-        txtUser.clear();
-        txtPassword.clear();     
-        cadastroUsuario();  
+        // txtUser.clear();
+        // txtPassword.clear();     
+        
     }
 
     private void cadastroUsuario(){
@@ -59,6 +98,60 @@ public class LoginController {
             e.printStackTrace();
         }
     }
+
+        
+
+    @FXML
+    void onClickPassword(MouseEvent event) {
+
+        
+        
+        if(txtPassword.isVisible()){
+            txtPassword2.setText(txtPassword.getText());
+
+            txtPassword.setVisible(false);
+            txtPassword.setManaged(false);
+            visible.setVisible(false);
+            visible.setManaged(false);
+
+
+            txtPassword2.setVisible(true);
+            txtPassword2.setManaged(true);
+            noVisible.setVisible(true);
+            noVisible.setManaged(true);
+
+            
+         }
+    
+
+    }
+
+     @FXML
+    void onClickNoVisible(MouseEvent event) {
+        
+
+         txtPassword.setText(txtPassword2.getText());
+
+            txtPassword.setVisible(true);
+            txtPassword.setManaged(true);
+            visible.setVisible(true);
+            visible.setManaged(true);
+
+            txtPassword2.setVisible(false);
+            txtPassword2.setManaged(false);
+            noVisible.setVisible(false);
+            noVisible.setManaged(false);         
+        
+        
+
+    }
+
+    @FXML
+    void onClickUser(MouseEvent event) {
+
+         cadastroUsuario();  
+    }
+
 
     
 
