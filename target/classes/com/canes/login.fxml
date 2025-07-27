@@ -50,11 +50,6 @@
    <children>
       <AnchorPane focusTraversable="true" maxHeight="-1.0" maxWidth="-1.0" prefHeight="757.0" prefWidth="1454.0">
          <children>
-            <Label fx:id="aviso" layoutX="332.0" layoutY="238.0" textFill="RED">
-               <font>
-                  <Font name="Verdana" size="20.0" />
-               </font>
-            </Label>
             <ImageView fitHeight="426.0" fitWidth="547.0" layoutX="43.0" layoutY="210.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/canes.png" />
@@ -143,6 +138,11 @@
             <Label layoutX="565.0" layoutY="61.0" text="Login" textFill="WHITE">
                <font>
                   <Font name="Verdana Bold" size="70.0" />
+               </font>
+            </Label>
+            <Label fx:id="aviso" layoutX="792.0" layoutY="175.0" textFill="RED">
+               <font>
+                  <Font name="Verdana Bold" size="20.0" />
                </font>
             </Label>
          </children>
