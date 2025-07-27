@@ -43,45 +43,45 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox onDragEntered="#onNoVisible" prefHeight="714.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.LoginController">
-  <children>
-    <AnchorPane focusTraversable="true" maxHeight="-1.0" maxWidth="-1.0" prefHeight="633.0" prefWidth="1269.0" style="-fx-background-color: #0E0C1F;" VBox.vgrow="ALWAYS">
+<HBox alignment="CENTER" prefHeight="757.0" prefWidth="830.0" style="-fx-background-color: #0E0C1F;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.LoginController">
+   <children>
+      <AnchorPane focusTraversable="true" maxHeight="-1.0" maxWidth="-1.0" prefHeight="757.0" prefWidth="1057.0" style="-fx-background-color: #0E0C1F;">
          <children>
-            <Label alignment="CENTER" layoutX="919.0" layoutY="317.0" text="Usuário" textFill="#e5dada">
+            <Label alignment="CENTER" layoutX="688.0" layoutY="317.0" text="Usuário" textFill="#e5dada">
                <font>
                   <Font name="Verdana Bold" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="txtUser" layoutX="861.0" layoutY="353.0" prefHeight="35.0" prefWidth="214.0" promptText="Digite o nome do usuário" style="-fx-background-radius: 7;">
+            <TextField fx:id="txtUser" layoutX="630.0" layoutY="354.0" prefHeight="35.0" prefWidth="214.0" promptText="Digite seu login" style="-fx-background-radius: 7;">
                <padding>
                   <Insets left="30.0" />
                </padding>
             </TextField>
-            <ImageView fitHeight="21.0" fitWidth="31.0" layoutX="868.0" layoutY="360.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="21.0" fitWidth="31.0" layoutX="637.0" layoutY="360.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/person_24dp_999999_FILL0_wght400_GRAD0_opsz24.png" />
                </image>
             </ImageView>
-            <PasswordField fx:id="txtPassword" layoutX="861.0" layoutY="441.0" prefHeight="35.0" prefWidth="214.0" promptText="Digite sua senha" style="-fx-background-radius: 7;">
+            <PasswordField fx:id="txtPassword" layoutX="630.0" layoutY="441.0" prefHeight="35.0" prefWidth="214.0" promptText="Digite sua senha" style="-fx-background-radius: 7;">
                <padding>
                   <Insets left="30.0" />
                </padding>
             </PasswordField>
-            <TextField fx:id="txtPassword2" layoutX="861.0" layoutY="441.0" prefHeight="35.0" prefWidth="214.0" promptText="Digite sua senha" style="-fx-background-radius: 7;" visible="false">
+            <TextField fx:id="txtPassword2" layoutX="630.0" layoutY="441.0" prefHeight="35.0" prefWidth="214.0" promptText="Digite sua senha" style="-fx-background-radius: 7;" visible="false">
                <padding>
                   <Insets left="30.0" />
                </padding>
             </TextField>
-            <ImageView fitHeight="21.0" fitWidth="31.0" layoutX="868.0" layoutY="448.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="21.0" fitWidth="31.0" layoutX="637.0" layoutY="448.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/lock_24dp_999999_FILL0_wght400_GRAD0_opsz24.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="443.0" fitWidth="546.0" layoutX="260.0" layoutY="216.0" nodeOrientation="INHERIT" opacity="0.85" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="443.0" fitWidth="546.0" layoutX="29.0" layoutY="216.0" nodeOrientation="INHERIT" opacity="0.85" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/Cores-para-loja-de-roupa-masculina.jpg" />
                </image>
@@ -93,7 +93,7 @@
                   </DropShadow>
                </effect>
             </ImageView>
-            <Button fx:id="btEnviar" contentDisplay="CENTER" layoutX="997.0" layoutY="505.0" mnemonicParsing="false" onAction="#onClickEnviar" prefHeight="35.0" prefWidth="78.0" style="-fx-background-radius: 7;" text="Enviar">
+            <Button fx:id="btEnviar" contentDisplay="CENTER" layoutX="766.0" layoutY="505.0" mnemonicParsing="false" onAction="#onClickEnviar" prefHeight="35.0" prefWidth="78.0" style="-fx-background-radius: 7;" text="Enviar">
                <font>
                   <Font name="Verdana Bold" size="14.0" />
                </font>
@@ -101,47 +101,44 @@
                   <Cursor fx:constant="CLOSED_HAND" />
                </cursor>
             </Button>
-            <Label alignment="CENTER" layoutX="929.0" layoutY="403.0" text="Senha" textFill="#e5dada">
+            <Label alignment="CENTER" layoutX="698.0" layoutY="403.0" text="Senha" textFill="#e5dada">
                <font>
                   <Font name="Verdana Bold" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="614.0" layoutY="77.0" text="Canes Fashion" textFill="#e4dada">
+            <Label layoutX="383.0" layoutY="77.0" text="Canes Fashion" textFill="#e4dada">
                <font>
                   <Font name="Verdana Bold Italic" size="64.0" />
                </font>
             </Label>
-            <Separator layoutX="450.0" layoutY="189.0" prefHeight="0.0" prefWidth="844.0" />
-            <ImageView fx:id="visible" fitHeight="21.0" fitWidth="31.0" layoutX="1079.0" layoutY="448.0" onMouseClicked="#onClickPassword" pickOnBounds="true" preserveRatio="true">
+            <Separator layoutX="17.0" layoutY="195.0" prefHeight="0.0" prefWidth="908.0" />
+            <ImageView fx:id="visible" fitHeight="21.0" fitWidth="31.0" layoutX="848.0" layoutY="448.0" onMouseClicked="#onClickPassword" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/visibility_24dp_999999_FILL0_wght400_GRAD0_opsz24.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="noVisible" visible="false" managed="false" fitHeight="21.0" fitWidth="31.0" layoutX="1079.0" layoutY="448.0" onMouseClicked="#onClickNoVisible" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="noVisible" fitHeight="21.0" fitWidth="31.0" layoutX="848.0" layoutY="448.0" managed="false" onMouseClicked="#onClickNoVisible" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@img/visibility_off_24dp_999999_FILL0_wght400_GRAD0_opsz24.png" />
                </image>
             </ImageView>
-            <Label fx:id="aviso" layoutX="900.0" layoutY="266.0" textFill="RED">
+            <Label fx:id="aviso" layoutX="640.0" layoutY="266.0" textFill="RED">
                <font>
                   <Font name="Verdana" size="14.0" />
                </font>
             </Label>
-            <Label fx:id="labelUser" layoutX="929.0" layoutY="483.0" onMouseClicked="#onClickUser" text="Click para dadastrar usuário" textFill="#e5dada">
+            <Label fx:id="labelUser" layoutX="698.0" layoutY="483.0" onMouseClicked="#onClickUser" text="Click para dadastrar usuário" textFill="#e5dada">
                <cursor>
                   <Cursor fx:constant="CLOSED_HAND" />
                </cursor>
             </Label>
          </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
          <cursor>
             <Cursor fx:constant="DEFAULT" />
          </cursor>
-    </AnchorPane>
-  </children>
-   <opaqueInsets>
-      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-   </opaqueInsets>
-</VBox>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </AnchorPane>
+   </children>
+</HBox>
