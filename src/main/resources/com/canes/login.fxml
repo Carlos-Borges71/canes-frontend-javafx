@@ -43,108 +43,116 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-
-<HBox alignment="CENTER" prefHeight="757.0" prefWidth="1459.0" style="-fx-background-color: #0E0C1F;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.LoginController">
+<HBox alignment="CENTER" maxHeight="768.0" maxWidth="1188.0" prefHeight="768.0" prefWidth="1188.0" style="-fx-background-color: linear-gradient(to bottom, #1B1A16, #141442);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.LoginController">
    <children>
-      <AnchorPane focusTraversable="true" maxHeight="-1.0" maxWidth="-1.0" prefHeight="757.0" prefWidth="1454.0">
+      <AnchorPane accessibleRole="NODE" focusTraversable="true" maxHeight="-Infinity" maxWidth="-1.0" prefHeight="768.0" prefWidth="1188.0" style="-fx-border-radius: 30; -fx-border-color: fff;">
          <children>
-            <ImageView fitHeight="426.0" fitWidth="547.0" layoutX="43.0" layoutY="210.0" pickOnBounds="true" preserveRatio="true">
+            <Label layoutX="742.0" layoutY="98.0" text="Login" textFill="WHITE">
+               <font>
+                  <Font name="Verdana Bold" size="48.0" />
+               </font>
+            </Label>
+            <Label fx:id="aviso" layoutX="650.0" layoutY="242.0" textFill="RED">
+               <font>
+                  <Font name="Verdana Bold" size="16.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="229.6" fitWidth="325.0" layoutX="84.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/canes.png" />
                </image>
             </ImageView>
-            <Pane layoutX="744.0" layoutY="223.0" prefHeight="401.0" prefWidth="526.0" style="-fx-border-color: fff; -fx-border-radius: 50;">
+            <ImageView fitHeight="768.0" fitWidth="538.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/imgFundo.png" />
+               </image>
+               <clip>
+               <Rectangle arcHeight="40.0" arcWidth="40.0" height="768.0" width="513.0" />
+               </clip>
+            </ImageView>
+            <Pane layoutX="649.0" layoutY="283.0" prefHeight="283.0" prefWidth="373.0" style="-fx-border-color: fff; -fx-border-radius: 50;">
                <children>
-                  <TextField fx:id="txtUser" layoutX="112.0" layoutY="98.0" prefHeight="46.0" prefWidth="289.0" promptText="Digite seu login" style="-fx-background-radius: 7;">
+                  <TextField fx:id="txtUser" layoutX="87.0" layoutY="60.0" prefHeight="32.0" prefWidth="198.0" promptText="Digite seu login" style="-fx-border-color: fff; -fx-background-color: #161622; -fx-border-radius: 7; -fx-text-fill: fff; -fx-background-color: trasparent;">
                      <padding>
-                        <Insets left="35.0" />
+                        <Insets left="30.0" />
                      </padding>
                      <font>
-                        <Font size="20.0" />
+                        <Font name="Verdana" size="12.0" />
                      </font>
                   </TextField>
-                  <Label alignment="CENTER" layoutX="194.0" layoutY="49.0" text="Usuário" textFill="#e5dada">
+                  <Label alignment="CENTER" layoutX="150.0" layoutY="32.0" text="Usuário" textFill="#e5dada">
                      <font>
-                        <Font name="Verdana Bold" size="20.0" />
+                        <Font name="Verdana Bold" size="16.0" />
                      </font>
                   </Label>
-                  <ImageView fitHeight="29.0" fitWidth="31.0" layoutX="118.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="19.0" fitWidth="19.0" layoutX="93.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@img/person_24dp_999999_FILL0_wght400_GRAD0_opsz24.png" />
                      </image>
                   </ImageView>
-                  <PasswordField fx:id="txtPassword" layoutX="112.0" layoutY="199.0" prefHeight="46.0" prefWidth="289.0" promptText="Digite sua senha" style="-fx-background-radius: 7;">
+                  <PasswordField fx:id="txtPassword" layoutX="87.0" layoutY="140.0" prefHeight="32.0" prefWidth="198.0" promptText="Digite sua senha" style="-fx-border-color: fff; -fx-border-radius: 7; -fx-text-fill: fff; -fx-background-color: trasparent;">
                      <padding>
-                        <Insets left="35.0" />
+                        <Insets left="30.0" />
                      </padding>
                      <font>
-                        <Font size="20.0" />
+                        <Font name="Verdana" size="12.0" />
                      </font>
                   </PasswordField>
-                  <TextField fx:id="txtPassword2" layoutX="112.0" layoutY="199.0" prefHeight="46.0" prefWidth="289.0" promptText="Digite sua senha" style="-fx-background-radius: 7;" visible="false">
+                  <TextField fx:id="txtPassword2" layoutX="87.0" layoutY="140.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="198.0" promptText="Digite sua senha" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7; -fx-text-fill: fff;" visible="false">
                      <padding>
-                        <Insets left="35.0" />
+                        <Insets left="30.0" />
                      </padding>
                      <font>
-                        <Font size="20.0" />
+                        <Font name="Verdana" size="12.0" />
                      </font>
                   </TextField>
-                  <ImageView fitHeight="29.0" fitWidth="29.0" layoutX="118.0" layoutY="206.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="19.0" fitWidth="19.0" layoutX="95.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@img/lock_24dp_999999_FILL0_wght400_GRAD0_opsz24.png" />
                      </image>
                   </ImageView>
-                  <Button fx:id="btEnviar" contentDisplay="CENTER" layoutX="281.0" layoutY="288.0" mnemonicParsing="false" onAction="#onClickEnviar" prefHeight="46.0" prefWidth="119.0" style="-fx-background-radius: 7;" text="Enviar">
+                  <Button fx:id="btEnviar" contentDisplay="CENTER" layoutX="209.0" layoutY="214.0" mnemonicParsing="false" onAction="#onClickEnviar" prefHeight="32.0" prefWidth="77.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent;" text="Enviar" textFill="WHITE">
                      <font>
-                        <Font name="Verdana Bold" size="20.0" />
+                        <Font name="Verdana Bold" size="12.0" />
                      </font>
                      <cursor>
-                        <Cursor fx:constant="CLOSED_HAND" />
+                        <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Label alignment="CENTER" layoutX="202.0" layoutY="163.0" text="Senha" textFill="#e5dada">
+                  <Label alignment="CENTER" layoutX="154.0" layoutY="113.0" text="Senha" textFill="#e5dada">
                      <font>
-                        <Font name="Verdana Bold" size="20.0" />
+                        <Font name="Verdana Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label fx:id="labelUser" layoutX="209.0" layoutY="251.0" onMouseClicked="#onClickUser" text="Clique para cadastrar usuário" textFill="#e5dada">
+                  <Label fx:id="labelUser" layoutX="121.0" layoutY="180.0" onMouseClicked="#onClickUser" text="Clique para cadastrar usuário" textFill="#e5dada">
                      <cursor>
-                        <Cursor fx:constant="CLOSED_HAND" />
+                        <Cursor fx:constant="HAND" />
                      </cursor>
                      <font>
-                        <Font name="System Bold" size="14.0" />
+                        <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="visible" fitHeight="29.0" fitWidth="38.0" layoutX="413.0" layoutY="209.0" onMouseClicked="#onClickPassword" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="visible" fitHeight="24.0" layoutX="292.0" layoutY="144.0" onMouseClicked="#onClickPassword" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@img/visibility_24dp_999999_FILL0_wght400_GRAD0_opsz24.png" />
                      </image>
                      <cursor>
-                        <Cursor fx:constant="CLOSED_HAND" />
+                        <Cursor fx:constant="HAND" />
                      </cursor>
                   </ImageView>
-                  <ImageView fx:id="noVisible" fitHeight="29.0" fitWidth="29.0" layoutX="413.0" layoutY="209.0" managed="false" onMouseClicked="#onClickNoVisible" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="noVisible" fitHeight="24.0" layoutX="292.0" layoutY="144.0" managed="false" onMouseClicked="#onClickNoVisible" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@img/visibility_off_24dp_999999_FILL0_wght400_GRAD0_opsz24.png" />
                      </image>
                      <cursor>
-                        <Cursor fx:constant="CLOSED_HAND" />
+                        <Cursor fx:constant="HAND" />
                      </cursor>
                   </ImageView>
                </children>
             </Pane>
-            <Label layoutX="565.0" layoutY="61.0" text="Login" textFill="WHITE">
-               <font>
-                  <Font name="Verdana Bold" size="70.0" />
-               </font>
-            </Label>
-            <Label fx:id="aviso" layoutX="792.0" layoutY="175.0" textFill="RED">
-               <font>
-                  <Font name="Verdana Bold" size="20.0" />
-               </font>
-            </Label>
          </children>
          <cursor>
             <Cursor fx:constant="DEFAULT" />

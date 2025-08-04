@@ -64,7 +64,7 @@ public class LoginController {
 
         }else{
 
-            aviso.setText("Login ou senha invalido. Tente novamente");
+            aviso.setText("Login ou senha inválido! Tente novamente.");
             aviso.setVisible(true);
             PauseTransition pausa = new PauseTransition(Duration.seconds(5));
             pausa.setOnFinished(ignored -> aviso.setVisible(false));
@@ -81,7 +81,7 @@ public class LoginController {
 
     private void cadastroUsuario(){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("secondary.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("usuario.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Usuario");
             stage.setScene(new Scene(root));
