@@ -10,6 +10,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class UsuarioController {
@@ -76,6 +77,7 @@ public class UsuarioController {
 
     @FXML
     private TextField txtcel;
+    
 
     @FXML
     private VBox vBoxTel;
@@ -114,30 +116,43 @@ public class UsuarioController {
     void onclickLimpar(ActionEvent event) {
 
     }
+    
 
     @FXML
     void onclickTel(MouseEvent event) {
 
+       
         TextField newText = new TextField();
         newText.setMaxWidth(132);
         newText.setStyle("-fx-background-color: transparent;" + "-fx-border-color: fff;" +
         "-fx-border-radius: 7;" + "-fx-text-fill: fff;" );
-        vBoxTel.setMargin(newText, new Insets(0, 0, 10, 0));
+    
 
-        vBoxTel.getChildren().add(newText);
+        
 
-        Label labelMenos = new Label("-");
-        labelMenos.setStyle("-fx-text-fill: fff;" +
-            "-fx-font-size: 40;" +
-            "-fx-font-weight: bold ;" +
-            "-fx-font-style: verdana;" +
-            "-fx-alignment: center;");
-        vBoxMenos.setMargin(labelMenos, new Insets(0, 0, -21, 0));
-        vBoxMenos.getChildren().add(labelMenos);
+        Label labelRemover = new Label("Remover");
+        labelRemover.setStyle("-fx-text-fill: red;" +
+            "-fx-font-size: 14;" +
+            //"-fx-font-weight: bold ;" +
+            //"-fx-alignment: center;" +
+            "-fx-padding: 4 0 0 0;" +
+            "-fx-cursor: hand; ");
 
+
+         HBox linha = new HBox(10, newText,labelRemover);
+
+        vBoxTel.setMargin(linha, new Insets(0, 0, 10, 0));
+
+         labelRemover.setOnMouseClicked(e -> {vBoxTel.getChildren().remove(linha);});
+
+         vBoxTel.getChildren().add(linha);
 
         System.out.println("Clicou");
 
     }
+
+    
+
+   
 
 }
