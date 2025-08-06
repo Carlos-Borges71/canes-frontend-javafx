@@ -168,7 +168,7 @@
                         <Font name="Verdana" size="12.0" />
                      </font>
                   </Label>
-                  <TextField layoutX="427.0" layoutY="209.0" prefWidth="152.0" style="-fx-border-radius: 7; -fx-background-color: transparent; -fx-border-color: fff; -fx-text-fill: fff;">
+                  <TextField fx:id="txtCidade" layoutX="427.0" layoutY="209.0" prefWidth="152.0" style="-fx-border-radius: 7; -fx-background-color: transparent; -fx-border-color: fff; -fx-text-fill: fff;">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets></TextField>
@@ -213,11 +213,11 @@
                      <font>
                         <Font name="Verdana" size="12.0" />
                      </font></TextField>
-                  <TextField fx:id="txtReNoSenha" layoutX="153.0" layoutY="265.0" prefHeight="25.0" prefWidth="132.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7; -fx-text-fill: fff;">
+                  <TextField fx:id="txtReNoSenha" layoutX="153.0" layoutY="265.0" prefHeight="25.0" prefWidth="132.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7; -fx-text-fill: fff;" visible="false">
                      <font>
                         <Font name="Verdana" size="12.0" />
                      </font></TextField>
-                  <ImageView fx:id="btnNoVisivelSenha" fitHeight="150.0" fitWidth="19.0" layoutX="293.0" layoutY="215.0" onDragDetected="#onClickNoVisivelSenha" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="btnNoVisivelSenha" fitHeight="150.0" fitWidth="19.0" layoutX="293.0" layoutY="215.0" onMouseClicked="#onClickNoVisivelSenha" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@img/visibility_off_24dp_999999_FILL0_wght400_GRAD0_opsz24.png" />
                      </image>
@@ -233,7 +233,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </ImageView>
-                  <ImageView fx:id="btnNoVisivelReSenha" fitHeight="19.0" fitWidth="19.0" layoutX="295.0" layoutY="271.0" onDragDetected="#onClickNoVisivelReSenha" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="btnNoVisivelReSenha" fitHeight="19.0" fitWidth="19.0" layoutX="295.0" layoutY="271.0" onMouseClicked="#onClickNoVisivelReSenha" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@img/visibility_off_24dp_999999_FILL0_wght400_GRAD0_opsz24.png" />
                      </image>
