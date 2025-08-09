@@ -1,10 +1,16 @@
 package com.canes;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
+
+import com.canes.util.MaskUtil;
+import com.canes.util.ValidadorSenha;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -18,7 +24,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class UsuarioController {
+public class UsuarioController implements Initializable{
 
      @FXML
     private Button btnCadastrar;
@@ -34,6 +40,14 @@ public class UsuarioController {
 
     @FXML
     private Label btnTel;
+
+    @FXML
+    private Label feedBackLabel;
+
+    @FXML
+    private Label feedBackLabel2;
+     @FXML
+    private Label labelSenhaRepita;
 
     @FXML
     private ImageView btnVisivelReSenha;
@@ -91,6 +105,10 @@ public class UsuarioController {
     private VBox vBoxTel;
 
     private List<TextField> campos = new ArrayList<>();
+
+    private MaskUtil maskUtil = new MaskUtil();
+
+    
 
     @FXML
     void onClickEnviar(MouseEvent event) {
@@ -215,6 +233,8 @@ public class UsuarioController {
         "-fx-border-radius: 7;" + "-fx-text-fill: fff;" );
 
         campos.add(newText);
+
+        maskUtil.applyPhoneMask(newText);
     
 
         Image imgExcluir = new Image(getClass().getResourceAsStream("img/excluir.png"));
@@ -264,7 +284,164 @@ public class UsuarioController {
 
     }
 
-    
+    @Override
+    public void initialize(URL url, ResourceBundle resources) {
+
+         maskUtil.applyPhoneMask(txtcel);
+
+
+
+          txtSenha.textProperty().addListener((obs, oldVal, newVal) -> {
+            if(newVal.isEmpty()) {
+                feedBackLabel.setText("");
+            } else if(ValidadorSenha.isSenhaValida(newVal)){
+                feedBackLabel.setText("Senha Válida :D");
+                feedBackLabel2.setText("");
+                feedBackLabel.setStyle("-fx-text-fill: green;");
+                txtSenha.setStyle("-fx-border-color: fff;" + "-fx-background-color: transparent;" + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
+            } else {
+                feedBackLabel.setText("Senha deve ter letras, números e");
+                feedBackLabel2.setText("no mínimo 8 caracteres!!");
+                feedBackLabel.setStyle("-fx-text-fill: red;");
+                feedBackLabel2.setStyle("-fx-text-fill: red;"); 
+                txtSenha.setStyle("-fx-border-color: red;" + "-fx-background-color: transparent;" + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
+            }
+
+        });
+
+
+        txtNoSenha.textProperty().addListener((obs, oldVal, newVal) -> {
+            if(newVal.isEmpty()) {
+                feedBackLabel.setText("");
+                feedBackLabel2.setText("");
+            } else if(ValidadorSenha.isSenhaValida(newVal)){
+                feedBackLabel.setText("Senha Válida :D");
+                feedBackLabel2.setText("");
+                feedBackLabel.setStyle("-fx-text-fill: green;");
+                txtNoSenha.setStyle("-fx-border-color: fff;" + "-fx-background-color: transparent;" + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
+            } else {
+                feedBackLabel.setText("Senha deve ter letras, números e");
+                feedBackLabel2.setText("no mínimo 8 caracteres!!");
+                feedBackLabel.setStyle("-fx-text-fill: red;"); 
+                feedBackLabel2.setStyle("-fx-text-fill: red;");
+                txtNoSenha.setStyle("-fx-border-color: red;" + "-fx-background-color: transparent;" + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
+                
+            }
+
+        });
+        
+        //repita vendo senha
+        //vendo senha - repita vendo a senha
+        txtReSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+
+             if(newVal.isEmpty()) {
+                labelSenhaRepita.setText("");
+           
+             }else if(txtSenha.getText().equals(txtReSenha.getText())) {
+                labelSenhaRepita.setText("A senha concidem ;D");
+                labelSenhaRepita.setStyle("-fx-text-fill: green");
+                
+                
+            } else {
+               labelSenhaRepita.setText("A senha deve ser igual!");
+               
+            }
+
+        
+         });
+
+         //repita não vendo senha
+         //vendo senha - repita vendo senha
+
+         txtReNoSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+
+            if(newVal.isEmpty()) {
+                labelSenhaRepita.setText("");
+           
+            }else if(txtSenha.getText().equals(txtReSenha.getText())) {
+                labelSenhaRepita.setText("A senha concidem ;D");
+                labelSenhaRepita.setStyle("-fx-text-fill: green");
+                
+            } else {
+               labelSenhaRepita.setText("A senha deve ser igual!");
+                labelSenhaRepita.setStyle("-fx-text-fill: red;");
+            }
+
+        
+         });
+
+         //repita vendo senha
+         //não vendo senha - repita vendo senha
+         txtReSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+
+            if(newVal.isEmpty()) {
+                labelSenhaRepita.setText("");
+           
+            }else if(txtNoSenha.getText().equals(txtReSenha.getText())) {
+                labelSenhaRepita.setText("A senha concidem ;D");
+                labelSenhaRepita.setStyle("-fx-text-fill: green");
+                
+            } else {
+               labelSenhaRepita.setText("A senha deve ser igual!");
+                labelSenhaRepita.setStyle("-fx-text-fill: red;");
+            }
+
+        
+         });
+
+         //não vendo senha
+         //não vendo senha - repita vendo senha
+         txtReNoSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+            if(newVal.isEmpty()) {
+                labelSenhaRepita.setText("");
+           
+            }else if(txtNoSenha.getText().equals(txtReSenha.getText())) {
+                labelSenhaRepita.setText("A senha concidem ;D");
+                labelSenhaRepita.setStyle("-fx-text-fill: green");
+                
+            } else {
+               labelSenhaRepita.setText("A senha deve ser igual!");
+                labelSenhaRepita.setStyle("-fx-text-fill: red;");
+            }
+
+        
+         });
+ 
+         // repita vendo senha
+         //não vendo senha - repita vendo senha
+         txtReSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+            if(newVal.isEmpty()) {
+                labelSenhaRepita.setText("");
+           
+            }else if(txtNoSenha.getText().equals(txtReSenha.getText())) {
+                labelSenhaRepita.setText("A senha concidem ;D");
+                labelSenhaRepita.setStyle("-fx-text-fill: green");
+                
+            } else {
+               labelSenhaRepita.setText("A senha deve ser igual!");
+                labelSenhaRepita.setStyle("-fx-text-fill: red;");
+            }
+             });
+
+             //repita não vendo senha
+             //não vendo senha - não vendo
+             txtReNoSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+                if(newVal.isEmpty()) {
+                labelSenhaRepita.setText("");
+           
+                }else if(txtNoSenha.getText().equals(txtReNoSenha.getText())) {
+                labelSenhaRepita.setText("A senha concidem ;D");
+                labelSenhaRepita.setStyle("-fx-text-fill: green");
+                
+            } else {
+               labelSenhaRepita.setText("A senha deve ser igual!");
+                labelSenhaRepita.setStyle("-fx-text-fill: red;");
+            }
+
+        
+         });
+
+    }
 
    
 
