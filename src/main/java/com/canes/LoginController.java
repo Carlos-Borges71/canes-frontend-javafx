@@ -2,6 +2,8 @@ package com.canes;
 
 import java.io.IOException;
 
+import com.canes.util.HouverEffectUtil;
+
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -150,6 +152,20 @@ public class LoginController {
     void onClickUser(MouseEvent event) {
 
          cadastroUsuario();  
+    }
+
+    @FXML
+    void onMouseEtered(MouseEvent event) {
+
+        HouverEffectUtil.apllyHouverSobre(btEnviar);
+
+    }
+
+    @FXML
+    void onMouseExited(MouseEvent event) {
+
+        HouverEffectUtil.apllyHouverSair(btEnviar);
+
     }
 
 

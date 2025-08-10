@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.canes.util.HouverEffectUtil;
 import com.canes.util.MaskUtil;
 import com.canes.util.ValidadorSenha;
 
@@ -200,6 +201,37 @@ public class UsuarioController implements Initializable{
     @FXML
     void onClickcadastrar(ActionEvent event) {
 
+        
+        if(txtNome.getText().isEmpty() || txtNome.getText().isBlank()){
+            txtNome.requestFocus();
+            txtNome.setPromptText("Digite o nome");
+        
+        }
+
+        if(txtLogradouro.getText().isEmpty() || txtLogradouro.getText().isBlank()){
+            txtLogradouro.requestFocus();
+            txtLogradouro.setPromptText("Digite o logradouto");
+        
+        }
+
+        if(txtLogin.getText().isEmpty() || txtLogin.getText().isBlank()){
+            txtLogin.requestFocus();
+            txtLogin.setPromptText("Digite o login");
+        
+        }
+
+        if(txtNumero.getText().isEmpty() || txtNumero.getText().isBlank()){
+            txtNumero.requestFocus();
+            txtNumero.setPromptText("Digite o número");
+        
+        }
+
+        if(txtBairro.getText().isEmpty() || txtBairro.getText().isBlank()){
+            txtBairro.requestFocus();
+            txtBairro.setPromptText("Digite o bairro");
+        
+        }
+
     }
 
     @FXML
@@ -284,8 +316,48 @@ public class UsuarioController implements Initializable{
 
     }
 
+
+     @FXML
+    void onMouseEntered(MouseEvent event) {
+
+        HouverEffectUtil.apllyHouverSobre(btnCadastrar);
+    }
+
+    @FXML
+    void onMouseExited(MouseEvent event) {
+
+        HouverEffectUtil.apllyHouverSair(btnCadastrar);
+    }
+
+    @FXML
+    void onclickLimparExited(MouseEvent event) {
+
+        //HouverEffectUtil.apllyHouverSair(btnLimpar);
+
+    }
+
+    @FXML
+    void onclickLimparEntered(ActionEvent event) {
+
+        //HouverEffectUtil.apllyHouverSobre(btnLimpar);
+
+    }
+
+
+
+
     @Override
     public void initialize(URL url, ResourceBundle resources) {
+
+
+        btnLimpar.setOnMouseEntered(e -> {
+            HouverEffectUtil.apllyHouverSobre(btnLimpar);
+        });
+
+        btnLimpar.setOnMouseExited(e -> {
+            HouverEffectUtil.apllyHouverSair(btnLimpar);
+        });
+
 
          maskUtil.applyPhoneMask(txtcel);
 

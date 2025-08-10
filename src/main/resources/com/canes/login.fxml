@@ -46,7 +46,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<HBox alignment="CENTER" maxHeight="768.0" maxWidth="1188.0" prefHeight="768.0" prefWidth="1188.0" style="-fx-background-color: linear-gradient(to bottom, #1B1A16, #141442);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.LoginController">
+<HBox alignment="CENTER" maxHeight="768.0" maxWidth="1188.0" prefHeight="768.0" prefWidth="1188.0" style="-fx-background-color: linear-gradient(to bottom, #1B1A16, #141442);" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.LoginController">
    <children>
       <AnchorPane accessibleRole="NODE" focusTraversable="true" maxHeight="-Infinity" maxWidth="-1.0" prefHeight="768.0" prefWidth="1188.0" style="-fx-border-radius: 30; -fx-border-color: fff;">
          <children>
@@ -114,7 +114,7 @@
                         <Image url="@img/lock_24dp_999999_FILL0_wght400_GRAD0_opsz24.png" />
                      </image>
                   </ImageView>
-                  <Button fx:id="btEnviar" contentDisplay="CENTER" layoutX="209.0" layoutY="214.0" mnemonicParsing="false" onAction="#onClickEnviar" prefHeight="32.0" prefWidth="77.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent;" text="Enviar" textFill="WHITE">
+                  <Button fx:id="btEnviar" contentDisplay="CENTER" layoutX="209.0" layoutY="214.0" mnemonicParsing="false" onAction="#onClickEnviar" onMouseEntered="#onMouseEtered" onMouseExited="#onMouseExited" prefHeight="32.0" prefWidth="77.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent;" text="Enviar" textFill="WHITE">
                      <font>
                         <Font name="Verdana Bold" size="12.0" />
                      </font>
