@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import com.canes.util.HouverEffectUtil;
+import com.canes.util.MaskCep;
+import com.canes.util.MaskEstado;
 import com.canes.util.MaskUtil;
+import com.canes.util.TextFieldUtil;
 import com.canes.util.ValidadorSenha;
 
 import javafx.event.ActionEvent;
@@ -86,12 +89,7 @@ public class UsuarioController implements Initializable{
     @FXML
     private TextField txtReNoSenha;
 
-    @FXML
-    private PasswordField txtReSenha;
-
-    @FXML
-    private PasswordField txtSenha;
-
+       
     @FXML
     private ComboBox<?> txtSetor;
 
@@ -99,7 +97,15 @@ public class UsuarioController implements Initializable{
     private VBox vBoxMenos;
 
     @FXML
-    private TextField txtcel;
+    private TextField txtcel;  
+    
+    @FXML
+    private PasswordField passwordReSenha;
+
+    @FXML
+    private PasswordField passwordSenha;
+
+
     
 
     @FXML
@@ -109,6 +115,11 @@ public class UsuarioController implements Initializable{
 
     private MaskUtil maskUtil = new MaskUtil();
 
+    private MaskCep maskCep = new MaskCep();
+
+    private  MaskEstado maskEstado = new MaskEstado();
+
+    private  TextFieldUtil textFieldUtil = new TextFieldUtil();
     
 
     @FXML
@@ -121,10 +132,10 @@ public class UsuarioController implements Initializable{
 
         
 
-         txtReSenha.setText(txtReNoSenha.getText());
+         passwordReSenha.setText(passwordReSenha.getText());
 
-            txtReSenha.setVisible(true);
-            txtReSenha.setManaged(true);
+            passwordReSenha.setVisible(true);
+            passwordReSenha.setManaged(true);
             btnVisivelReSenha.setVisible(true);
             btnVisivelReSenha.setManaged(true);
 
@@ -139,10 +150,10 @@ public class UsuarioController implements Initializable{
     void onClickNoVisivelSenha(MouseEvent event) {
 
         
-         txtSenha.setText(txtNoSenha.getText());
+         passwordSenha.setText(txtNoSenha.getText());
 
-            txtSenha.setVisible(true);
-            txtSenha.setManaged(true);
+            passwordSenha.setVisible(true);
+            passwordSenha.setManaged(true);
             btnVisivelSenha.setVisible(true);
             btnVisivelSenha.setManaged(true);
 
@@ -156,11 +167,11 @@ public class UsuarioController implements Initializable{
     @FXML
     void onClickVisivelReSenha(MouseEvent event) {
 
-         if(txtReSenha.isVisible()){
-            txtReNoSenha.setText(txtReSenha.getText());
+         if(passwordReSenha.isVisible()){
+            txtReNoSenha.setText(passwordReSenha.getText());
 
-            txtReSenha.setVisible(false);
-            txtReSenha.setManaged(false);
+            passwordReSenha.setVisible(false);
+            passwordReSenha.setManaged(false);
             btnVisivelReSenha.setVisible(false);
             btnVisivelReSenha.setManaged(false);
 
@@ -179,11 +190,11 @@ public class UsuarioController implements Initializable{
     void onClickVisivelSenha(MouseEvent event) {
 
         
-         if(txtSenha.isVisible()){
-            txtNoSenha.setText(txtSenha.getText());
+         if(passwordSenha.isVisible()){
+            txtNoSenha.setText(passwordSenha.getText());
 
-            txtSenha.setVisible(false);
-            txtSenha.setManaged(false);
+            passwordSenha.setVisible(false);
+            passwordSenha.setManaged(false);
             btnVisivelSenha.setVisible(false);
             btnVisivelSenha.setManaged(false);
 
@@ -205,6 +216,12 @@ public class UsuarioController implements Initializable{
         if(txtNome.getText().isEmpty() || txtNome.getText().isBlank()){
             txtNome.requestFocus();
             txtNome.setPromptText("Digite o nome");
+        
+        }
+
+        if(txtcel.getText().isEmpty() || txtcel.getText().isBlank()){
+            txtcel.requestFocus();
+            txtcel.setPromptText("Digite o celular");
         
         }
 
@@ -232,6 +249,54 @@ public class UsuarioController implements Initializable{
         
         }
 
+        if(txtCidade.getText().isEmpty() || txtCidade.getText().isBlank()){
+            txtCidade.requestFocus();
+            txtCidade.setPromptText("Digite a cidade");
+        
+        }
+
+        if(txtEstado.getText().isEmpty() || txtEstado.getText().isBlank()){
+            txtEstado.requestFocus();
+            txtEstado.setPromptText("Digite o estado");
+        
+        }
+
+        if(txtCep.getText().isEmpty() || txtCep.getText().isBlank()){
+            txtCep.requestFocus();
+            txtCep.setPromptText("Digite o cep");
+        
+        }
+
+        if(passwordSenha.getText().isEmpty() || passwordSenha.getText().isBlank()){
+            passwordSenha.requestFocus();
+            passwordSenha.setPromptText("Digite o senha");
+        
+        }
+
+        if(txtReNoSenha.getText().isEmpty() || txtReNoSenha.getText().isBlank()){
+            txtReNoSenha.requestFocus();
+            txtReNoSenha.setPromptText("Digite o senha");
+        
+        }
+
+        if(txtSetor.getItems().isEmpty()){
+            txtSetor.requestFocus();
+            txtSetor.setPromptText("escolha o setor");
+        
+        }
+
+        System.out.println("Dados coletados");
+        System.out.println(txtSetor.getValue());
+        System.out.println(txtLogradouro.getText());
+        System.out.println(txtLogin.getText());
+        System.out.println(passwordSenha.getText());
+        System.out.println(txtReNoSenha.getText());
+        System.out.println(txtEstado.getText());
+        System.out.println(txtNome.getText());
+        System.out.println(txtCidade.getText());
+
+
+
     }
 
     @FXML
@@ -240,8 +305,8 @@ public class UsuarioController implements Initializable{
         txtNome.clear();
         txtSetor.setValue(null);
         txtLogin.clear();
-        txtSenha.clear();
-        txtReSenha.clear();
+        passwordSenha.clear();
+        passwordReSenha.clear();
         txtcel.clear();
         txtLogradouro.clear();
         txtNumero.clear();
@@ -361,22 +426,32 @@ public class UsuarioController implements Initializable{
 
          maskUtil.applyPhoneMask(txtcel);
 
+         maskCep.applyCepMask(txtCep);
+
+         maskEstado.applyStateMask(txtEstado);
+
+         textFieldUtil.aplicarCapitalizacao(txtNome);
 
 
-          txtSenha.textProperty().addListener((obs, oldVal, newVal) -> {
+
+
+
+
+
+          passwordSenha.textProperty().addListener((obs, oldVal, newVal) -> {
             if(newVal.isEmpty()) {
                 feedBackLabel.setText("");
             } else if(ValidadorSenha.isSenhaValida(newVal)){
                 feedBackLabel.setText("Senha Válida :D");
                 feedBackLabel2.setText("");
                 feedBackLabel.setStyle("-fx-text-fill: green;");
-                txtSenha.setStyle("-fx-border-color: fff;" + "-fx-background-color: transparent;" + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
+                passwordSenha.setStyle("-fx-border-color: fff;" + "-fx-background-color: transparent;" + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
             } else {
                 feedBackLabel.setText("Senha deve ter letras, números e");
                 feedBackLabel2.setText("no mínimo 8 caracteres!!");
                 feedBackLabel.setStyle("-fx-text-fill: red;");
                 feedBackLabel2.setStyle("-fx-text-fill: red;"); 
-                txtSenha.setStyle("-fx-border-color: red;" + "-fx-background-color: transparent;" + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
+                passwordSenha.setStyle("-fx-border-color: red;" + "-fx-background-color: transparent;" + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
             }
 
         });
@@ -402,72 +477,17 @@ public class UsuarioController implements Initializable{
 
         });
         
-        //repita vendo senha
-        //vendo senha - repita vendo a senha
-        txtReSenha.textProperty().addListener((obs,oldVal, newVal) -> {
-
-             if(newVal.isEmpty()) {
-                labelSenhaRepita.setText("");
-           
-             }else if(txtSenha.getText().equals(txtReSenha.getText())) {
-                labelSenhaRepita.setText("A senha concidem ;D");
-                labelSenhaRepita.setStyle("-fx-text-fill: green");
-                
-                
-            } else {
-               labelSenhaRepita.setText("A senha deve ser igual!");
-               
-            }
-
         
-         });
-
-         //repita não vendo senha
-         //vendo senha - repita vendo senha
-
-         txtReNoSenha.textProperty().addListener((obs,oldVal, newVal) -> {
-
-            if(newVal.isEmpty()) {
-                labelSenhaRepita.setText("");
-           
-            }else if(txtSenha.getText().equals(txtReSenha.getText())) {
-                labelSenhaRepita.setText("A senha concidem ;D");
-                labelSenhaRepita.setStyle("-fx-text-fill: green");
-                
-            } else {
-               labelSenhaRepita.setText("A senha deve ser igual!");
-                labelSenhaRepita.setStyle("-fx-text-fill: red;");
-            }
-
-        
-         });
-
-         //repita vendo senha
-         //não vendo senha - repita vendo senha
-         txtReSenha.textProperty().addListener((obs,oldVal, newVal) -> {
-
-            if(newVal.isEmpty()) {
-                labelSenhaRepita.setText("");
-           
-            }else if(txtNoSenha.getText().equals(txtReSenha.getText())) {
-                labelSenhaRepita.setText("A senha concidem ;D");
-                labelSenhaRepita.setStyle("-fx-text-fill: green");
-                
-            } else {
-               labelSenhaRepita.setText("A senha deve ser igual!");
-                labelSenhaRepita.setStyle("-fx-text-fill: red;");
-            }
-
-        
-         });
 
          //não vendo senha
          //não vendo senha - repita vendo senha
-         txtReNoSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+         passwordReSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+
+            
             if(newVal.isEmpty()) {
                 labelSenhaRepita.setText("");
            
-            }else if(txtNoSenha.getText().equals(txtReSenha.getText())) {
+            }else if(passwordSenha.getText().equals(passwordReSenha.getText())) {
                 labelSenhaRepita.setText("A senha concidem ;D");
                 labelSenhaRepita.setStyle("-fx-text-fill: green");
                 
@@ -478,30 +498,14 @@ public class UsuarioController implements Initializable{
 
         
          });
- 
-         // repita vendo senha
-         //não vendo senha - repita vendo senha
-         txtReSenha.textProperty().addListener((obs,oldVal, newVal) -> {
-            if(newVal.isEmpty()) {
-                labelSenhaRepita.setText("");
-           
-            }else if(txtNoSenha.getText().equals(txtReSenha.getText())) {
-                labelSenhaRepita.setText("A senha concidem ;D");
-                labelSenhaRepita.setStyle("-fx-text-fill: green");
-                
-            } else {
-               labelSenhaRepita.setText("A senha deve ser igual!");
-                labelSenhaRepita.setStyle("-fx-text-fill: red;");
-            }
-             });
 
-             //repita não vendo senha
-             //não vendo senha - não vendo
-             txtReNoSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+          
+         txtReNoSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+
                 if(newVal.isEmpty()) {
                 labelSenhaRepita.setText("");
            
-                }else if(txtNoSenha.getText().equals(txtReNoSenha.getText())) {
+            }else if(passwordSenha.getText().equals(txtReNoSenha.getText())) {
                 labelSenhaRepita.setText("A senha concidem ;D");
                 labelSenhaRepita.setStyle("-fx-text-fill: green");
                 
@@ -513,6 +517,44 @@ public class UsuarioController implements Initializable{
         
          });
 
+         passwordReSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+
+                if(newVal.isEmpty()) {
+                labelSenhaRepita.setText("");
+           
+            }else if(txtReNoSenha.getText().equals(passwordReSenha.getText())) {
+                labelSenhaRepita.setText("A senha concidem ;D");
+                labelSenhaRepita.setStyle("-fx-text-fill: green");
+                
+            } else {
+               labelSenhaRepita.setText("A senha deve ser igual!");
+                labelSenhaRepita.setStyle("-fx-text-fill: red;");
+            }
+
+        
+         });
+
+         passwordReSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+
+                if(newVal.isEmpty()) {
+                labelSenhaRepita.setText("");
+           
+            }else if(passwordSenha.getText().equals(passwordReSenha.getText())) {
+                labelSenhaRepita.setText("A senha concidem ;D");
+                labelSenhaRepita.setStyle("-fx-text-fill: green");
+                
+            } else {
+               labelSenhaRepita.setText("A senha deve ser igual!");
+                labelSenhaRepita.setStyle("-fx-text-fill: red;");
+            }
+
+        
+         });
+
+
+         
+ 
+        
     }
 
    
