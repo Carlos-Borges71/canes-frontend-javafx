@@ -3,8 +3,9 @@ package com.canes;
 import java.io.IOException;
 
 import com.canes.util.HouverEffectUtil;
+import com.canes.util.ScreenUtils;
+import com.canes.util.UserSession;
 
-import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +19,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class LoginController {
 
@@ -56,23 +56,43 @@ public class LoginController {
     void onClickEnviar(ActionEvent event) {
 
         
-        String user = txtUser.getText();
-        String password = txtPassword.getText();
+        // String user = txtUser.getText();
+        // String password = txtPassword.getText();
 
-        if(user.equals("Carlos") && password.equals("1234")){
-            System.out.println("nome: "+ user + " senha: "+ password);
+        // if(user.equals("Carlos") && password.equals("1234")){
+        //     System.out.println("nome: "+ user + " senha: "+ password);
 
            
 
-        }else{
+        // }else{
 
-            aviso.setText("Login ou senha inválido! Tente novamente.");
-            aviso.setVisible(true);
-            PauseTransition pausa = new PauseTransition(Duration.seconds(5));
-            pausa.setOnFinished(ignored -> aviso.setVisible(false));
-            pausa.play();
+        //     aviso.setText("Login ou senha inválido! Tente novamente.");
+        //     aviso.setVisible(true);
+        //     PauseTransition pausa = new PauseTransition(Duration.seconds(5));
+        //     pausa.setOnFinished(ignored -> aviso.setVisible(false));
+        //     pausa.play();
 
+        // }
+
+        
+    
+    // Exemplo: usuário autenticado com sucesso
+    String nome = "Carlos Borges";
+    String login = txtUser.getText();
+
+    // Salva na sessão
+    UserSession.getInstance().setUsuario(nome, login);
+
+   
+
+
+        try {
+            ScreenUtils.changeScreen(event,"/com/canes/usuario.fxml", "Cadastro de Usuário", null);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        
 
         
         
@@ -151,7 +171,9 @@ public class LoginController {
     @FXML
     void onClickUser(MouseEvent event) {
 
-         cadastroUsuario();  
+        
+
+         //cadastroUsuario();  
     }
 
     @FXML

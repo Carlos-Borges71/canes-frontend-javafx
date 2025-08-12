@@ -10,6 +10,7 @@ import com.canes.util.MaskCep;
 import com.canes.util.MaskEstado;
 import com.canes.util.MaskUtil;
 import com.canes.util.TextFieldUtil;
+import com.canes.util.UserSession;
 import com.canes.util.ValidadorSenha;
 
 import javafx.event.ActionEvent;
@@ -105,7 +106,8 @@ public class UsuarioController implements Initializable{
     @FXML
     private PasswordField passwordSenha;
 
-
+    @FXML
+    private Label txtOperador;
     
 
     @FXML
@@ -431,6 +433,16 @@ public class UsuarioController implements Initializable{
          maskEstado.applyStateMask(txtEstado);
 
          textFieldUtil.aplicarCapitalizacao(txtNome);
+         textFieldUtil.aplicarCapitalizacao(txtLogradouro);
+         textFieldUtil.aplicarCapitalizacao(txtBairro);
+         textFieldUtil.aplicarCapitalizacao(txtCidade);
+
+         String nome = UserSession.getInstance().getNomeUsuario();
+         String login = UserSession.getInstance().getlogin();
+
+         txtOperador.setText("Operador: "+ nome);
+
+         
 
 
 

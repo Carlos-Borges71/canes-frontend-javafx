@@ -269,6 +269,11 @@
                   <Insets bottom="20.0" />
                </padding>
             </Pane>
+            <Label fx:id="txtOperador" layoutX="362.0" layoutY="256.0" textFill="WHITE">
+               <font>
+                  <Font name="Verdana" size="14.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>
