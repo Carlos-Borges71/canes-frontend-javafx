@@ -43,7 +43,8 @@
                      </font>
                      <padding>
                         <Insets left="8.0" />
-                     </padding></TextField>
+                     </padding>
+                  </TextField>
                   <Label layoutX="108.0" layoutY="109.0" text="Setor:" textFill="WHITE">
                      <font>
                         <Font name="Verdana" size="12.0" />
@@ -58,8 +59,8 @@
                         </FXCollections>
                      </items>
                   </ComboBox>
-
-
+      
+      
                   <Label layoutX="110.0" layoutY="162.0" text="Login:" textFill="WHITE">
                      <font>
                         <Font name="Verdana" size="12.0" />
@@ -71,7 +72,8 @@
                      </opaqueInsets>
                      <padding>
                         <Insets left="8.0" />
-                     </padding></TextField>
+                     </padding>
+                  </TextField>
                   <Label layoutX="104.0" layoutY="216.0" text="Senha:" textFill="WHITE">
                      <font>
                         <Font name="Verdana" size="12.0" />
@@ -83,7 +85,8 @@
                      </opaqueInsets>
                      <padding>
                         <Insets left="8.0" />
-                     </padding></PasswordField>
+                     </padding>
+                  </PasswordField>
                   <Label layoutX="39.0" layoutY="269.0" text="Repita sua senha:" textFill="WHITE">
                      <font>
                         <Font name="Verdana" size="12.0" />
@@ -140,7 +143,8 @@
                      </opaqueInsets>
                      <padding>
                         <Insets left="8.0" />
-                     </padding></TextField>
+                     </padding>
+                  </TextField>
                   <Label layoutX="369.0" layoutY="162.0" text="Número:" textFill="WHITE">
                      <font>
                         <Font name="Verdana" size="12.0" />
@@ -152,7 +156,8 @@
                      </opaqueInsets>
                      <padding>
                         <Insets left="8.0" />
-                     </padding></TextField>
+                     </padding>
+                  </TextField>
                   <Label layoutX="612.0" layoutY="160.0" text="Bairro:" textFill="WHITE">
                      <font>
                         <Font name="Verdana" size="12.0" />
@@ -171,7 +176,8 @@
                   <TextField fx:id="txtCidade" layoutX="427.0" layoutY="209.0" prefWidth="152.0" style="-fx-border-radius: 7; -fx-background-color: transparent; -fx-border-color: fff; -fx-text-fill: fff;">
                      <opaqueInsets>
                         <Insets />
-                     </opaqueInsets></TextField>
+                     </opaqueInsets>
+                  </TextField>
                   <Label layoutX="608.0" layoutY="214.0" text="Estado:" textFill="WHITE">
                      <font>
                         <Font name="Verdana" size="12.0" />
@@ -180,7 +186,8 @@
                   <TextField fx:id="txtEstado" layoutX="661.0" layoutY="208.0" prefWidth="64.0" style="-fx-border-radius: 7; -fx-background-color: transparent; -fx-border-color: fff; -fx-text-fill: fff;">
                      <opaqueInsets>
                         <Insets />
-                     </opaqueInsets></TextField>
+                     </opaqueInsets>
+                  </TextField>
                   <Label layoutX="389.0" layoutY="263.0" text="CEP:" textFill="WHITE">
                      <font>
                         <Font name="Verdana" size="12.0" />
@@ -192,7 +199,8 @@
                      </opaqueInsets>
                      <font>
                         <Font name="Verdana" size="12.0" />
-                     </font></TextField>
+                     </font>
+                  </TextField>
                   <Button fx:id="btnLimpar" layoutX="586.0" layoutY="317.0" mnemonicParsing="false" onAction="#onclickLimpar" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Limpar" textFill="WHITE">
                      <font>
                         <Font name="Verdana Bold" size="14.0" />
@@ -212,11 +220,13 @@
                   <TextField fx:id="txtNoSenha" layoutX="151.0" layoutY="211.0" prefHeight="25.0" prefWidth="132.0" style="-fx-background-color: transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;" visible="false">
                      <font>
                         <Font name="Verdana" size="12.0" />
-                     </font></TextField>
+                     </font>
+                  </TextField>
                   <TextField fx:id="txtReNoSenha" layoutX="153.0" layoutY="265.0" prefHeight="25.0" prefWidth="132.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7; -fx-text-fill: fff;" visible="false">
                      <font>
                         <Font name="Verdana" size="12.0" />
-                     </font></TextField>
+                     </font>
+                  </TextField>
                   <ImageView fx:id="btnNoVisivelSenha" fitHeight="150.0" fitWidth="19.0" layoutX="293.0" layoutY="215.0" onMouseClicked="#onClickNoVisivelSenha" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@img/visibility_off_24dp_999999_FILL0_wght400_GRAD0_opsz24.png" />
@@ -269,9 +279,9 @@
                   <Insets bottom="20.0" />
                </padding>
             </Pane>
-            <Label fx:id="txtOperador" layoutX="362.0" layoutY="256.0" textFill="WHITE">
+            <Label fx:id="txtOperador" layoutX="141.0" layoutY="258.0" textFill="#dfdddd">
                <font>
-                  <Font name="Verdana" size="14.0" />
+                  <Font name="Verdana" size="18.0" />
                </font>
             </Label>
          </children>

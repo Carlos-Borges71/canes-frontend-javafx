@@ -94,18 +94,13 @@ public class ScreenUtils {
     public static void openNewWindow(String fxmlFile, String title,
                                      Consumer<Object> controllerConsumer) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(ScreenUtils.class.getResource(fxmlFile));
-        Parent root = loader.load();
+        Parent root = FXMLLoader.load(ScreenUtils.class.getResource(fxmlFile));
+            Stage stage = new Stage();
+            stage.setTitle(title);
+            stage.setScene(new Scene(root));    
 
-        if (controllerConsumer != null) {
-            Object controller = loader.getController();
-            controllerConsumer.accept(controller);
-        }
+            stage.show();
 
-        Stage stage = new Stage();
-        stage.setTitle(title);
-        stage.setScene(new Scene(root));
-        stage.show();
 
         FadeTransition ft = new FadeTransition(Duration.millis(300), root);
         ft.setFromValue(0);

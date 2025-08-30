@@ -87,7 +87,7 @@ public class LoginController {
 
 
         try {
-            ScreenUtils.changeScreen(event,"/com/canes/usuario.fxml", "Cadastro de Usuário", null);
+            ScreenUtils.changeScreen(event,"/com/canes/menu.fxml", "Menu", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -171,7 +171,11 @@ public class LoginController {
     @FXML
     void onClickUser(MouseEvent event) {
 
-        
+        try {
+            ScreenUtils.openNewWindow("/com/canes/menu.fxml", "Menu", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
          //cadastroUsuario();  
     }

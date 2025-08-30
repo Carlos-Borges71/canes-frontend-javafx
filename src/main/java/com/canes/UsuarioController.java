@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import com.canes.util.HouverEffectUtil;
-import com.canes.util.MaskCep;
-import com.canes.util.MaskEstado;
-import com.canes.util.MaskUtil;
+import com.canes.util.MaskTextField;
 import com.canes.util.TextFieldUtil;
 import com.canes.util.UserSession;
 import com.canes.util.ValidadorSenha;
@@ -94,7 +92,7 @@ public class UsuarioController implements Initializable{
     @FXML
     private ComboBox<?> txtSetor;
 
-     @FXML
+    @FXML
     private VBox vBoxMenos;
 
     @FXML
@@ -108,21 +106,13 @@ public class UsuarioController implements Initializable{
 
     @FXML
     private Label txtOperador;
-    
 
     @FXML
     private VBox vBoxTel;
 
     private List<TextField> campos = new ArrayList<>();
 
-    private MaskUtil maskUtil = new MaskUtil();
 
-    private MaskCep maskCep = new MaskCep();
-
-    private  MaskEstado maskEstado = new MaskEstado();
-
-    private  TextFieldUtil textFieldUtil = new TextFieldUtil();
-    
 
     @FXML
     void onClickEnviar(MouseEvent event) {
@@ -214,89 +204,31 @@ public class UsuarioController implements Initializable{
     @FXML
     void onClickcadastrar(ActionEvent event) {
 
-        
-        if(txtNome.getText().isEmpty() || txtNome.getText().isBlank()){
-            txtNome.requestFocus();
-            txtNome.setPromptText("Digite o nome");
-        
+    
+        if(txtLogin.getText().isEmpty()){
+            txtLogin.setPromptText("Digite seu login");
+            return;
         }
+        if(txtSetor.getValue() == null){
+            txtSetor.setPromptText("Digite o Setor");
+            return;
 
-        if(txtcel.getText().isEmpty() || txtcel.getText().isBlank()){
-            txtcel.requestFocus();
-            txtcel.setPromptText("Digite o celular");
-        
         }
-
-        if(txtLogradouro.getText().isEmpty() || txtLogradouro.getText().isBlank()){
-            txtLogradouro.requestFocus();
-            txtLogradouro.setPromptText("Digite o logradouto");
-        
-        }
-
-        if(txtLogin.getText().isEmpty() || txtLogin.getText().isBlank()){
-            txtLogin.requestFocus();
-            txtLogin.setPromptText("Digite o login");
-        
-        }
-
-        if(txtNumero.getText().isEmpty() || txtNumero.getText().isBlank()){
-            txtNumero.requestFocus();
-            txtNumero.setPromptText("Digite o número");
-        
-        }
-
-        if(txtBairro.getText().isEmpty() || txtBairro.getText().isBlank()){
-            txtBairro.requestFocus();
-            txtBairro.setPromptText("Digite o bairro");
-        
-        }
-
-        if(txtCidade.getText().isEmpty() || txtCidade.getText().isBlank()){
-            txtCidade.requestFocus();
-            txtCidade.setPromptText("Digite a cidade");
-        
-        }
-
-        if(txtEstado.getText().isEmpty() || txtEstado.getText().isBlank()){
-            txtEstado.requestFocus();
-            txtEstado.setPromptText("Digite o estado");
-        
-        }
-
-        if(txtCep.getText().isEmpty() || txtCep.getText().isBlank()){
-            txtCep.requestFocus();
-            txtCep.setPromptText("Digite o cep");
-        
-        }
-
-        if(passwordSenha.getText().isEmpty() || passwordSenha.getText().isBlank()){
-            passwordSenha.requestFocus();
-            passwordSenha.setPromptText("Digite o senha");
-        
-        }
-
-        if(txtReNoSenha.getText().isEmpty() || txtReNoSenha.getText().isBlank()){
-            txtReNoSenha.requestFocus();
-            txtReNoSenha.setPromptText("Digite o senha");
-        
-        }
-
-        if(txtSetor.getItems().isEmpty()){
-            txtSetor.requestFocus();
-            txtSetor.setPromptText("escolha o setor");
-        
-        }
+       
+       
 
         System.out.println("Dados coletados");
         System.out.println(txtSetor.getValue());
         System.out.println(txtLogradouro.getText());
         System.out.println(txtLogin.getText());
         System.out.println(passwordSenha.getText());
-        System.out.println(txtReNoSenha.getText());
+        System.out.println(txtcel.getText());
         System.out.println(txtEstado.getText());
         System.out.println(txtNome.getText());
         System.out.println(txtCidade.getText());
-
+        for (TextField campo : campos){
+            System.out.println(campo.getText());
+        }
 
 
     }
@@ -333,7 +265,8 @@ public class UsuarioController implements Initializable{
 
         campos.add(newText);
 
-        maskUtil.applyPhoneMask(newText);
+        MaskTextField.applyPhoneMask(newText);
+        MaskTextField.limitarCaracteresFixos(newText, 15, btnCadastrar);
     
 
         Image imgExcluir = new Image(getClass().getResourceAsStream("img/excluir.png"));
@@ -368,18 +301,7 @@ public class UsuarioController implements Initializable{
 
          vBoxTel.getChildren().add(linha);
 
-         
-
-         btnCadastrar.setOnAction(e -> {
-            System.out.println("Dados digitados");
-
-
-            for (TextField campo : campos){
-                System.out.println(campo.getText());
-            }
-         });
-
-        
+                
 
     }
 
@@ -417,6 +339,22 @@ public class UsuarioController implements Initializable{
     public void initialize(URL url, ResourceBundle resources) {
 
 
+        MaskTextField.limitarCaracteresFixos(txtcel, 15, btnCadastrar);
+        MaskTextField.limitarCaracteresFixos(txtCep, 9, btnCadastrar);
+       
+        MaskTextField.validarNaoVazio(txtNome, btnCadastrar);
+        MaskTextField.validarNaoVazio(txtLogradouro, btnCadastrar);
+        MaskTextField.validarNaoVazio(txtLogin, btnCadastrar);
+        MaskTextField.validarNaoVazio(txtNumero, btnCadastrar);
+        MaskTextField.validarNaoVazio(txtBairro, btnCadastrar);
+        MaskTextField.validarNaoVazio(txtCidade, btnCadastrar);
+        MaskTextField.validarNaoVazio(txtEstado, btnCadastrar);
+        MaskTextField.validarNaoVazio(txtCep, btnCadastrar);
+        MaskTextField.validarNaoVazio(txtcel, btnCadastrar);
+        MaskTextField.validarNaoVazio(passwordSenha, btnCadastrar);
+        MaskTextField.validarNaoVazio(passwordReSenha, btnCadastrar);
+      
+
         btnLimpar.setOnMouseEntered(e -> {
             HouverEffectUtil.apllyHouverSobre(btnLimpar);
         });
@@ -426,16 +364,16 @@ public class UsuarioController implements Initializable{
         });
 
 
-         maskUtil.applyPhoneMask(txtcel);
+         MaskTextField.applyPhoneMask(txtcel);
 
-         maskCep.applyCepMask(txtCep);
+         MaskTextField.applyCepMask(txtCep);  
 
-         maskEstado.applyStateMask(txtEstado);
+         MaskTextField.applyStateMask(txtEstado);
 
-         textFieldUtil.aplicarCapitalizacao(txtNome);
-         textFieldUtil.aplicarCapitalizacao(txtLogradouro);
-         textFieldUtil.aplicarCapitalizacao(txtBairro);
-         textFieldUtil.aplicarCapitalizacao(txtCidade);
+         TextFieldUtil.aplicarCapitalizacao(txtNome);
+         TextFieldUtil.aplicarCapitalizacao(txtLogradouro);
+         TextFieldUtil.aplicarCapitalizacao(txtBairro);
+         TextFieldUtil.aplicarCapitalizacao(txtCidade);
 
          String nome = UserSession.getInstance().getNomeUsuario();
          String login = UserSession.getInstance().getlogin();
