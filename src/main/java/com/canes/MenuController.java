@@ -15,16 +15,11 @@ public class MenuController {
     private Button btnAtualizar;
 
     @FXML
-    private Button btnCliente;
+    private Button btnCadastrar;
 
     @FXML
     private Button btnExcluir;
 
-    @FXML
-    private Button btnFornecedor;
-
-    @FXML
-    private Button btnPedido;
 
     @FXML
     private Button btnPesquisa;
@@ -36,7 +31,8 @@ public class MenuController {
     private Button btnSair;
 
     @FXML
-    private Button btnUsuario;
+    private Label lblCadastrar;
+    
 
     @FXML
     private Label lblSair;
@@ -49,25 +45,14 @@ public class MenuController {
 
     }
 
-    @FXML
-    void onClickCliente(ActionEvent event) {
-
-    }
+   
 
     @FXML
     void onClickExcluir(ActionEvent event) {
 
     }
 
-    @FXML
-    void onClickFornecedor(ActionEvent event) {
-
-    }
-
-    @FXML
-    void onClickPedido(ActionEvent event) {
-
-    }
+    
 
     @FXML
     void onClickPesquisar(ActionEvent event) {
@@ -90,11 +75,11 @@ public class MenuController {
     }
 
     @FXML
-    void onClickUsuario(ActionEvent event) {
+    void onClickCadastrar(ActionEvent event) {
 
         
          try {
-            ScreenUtils.changeScreen(event,"/com/canes/usuario.fxml", "Cadastro de Usuário", null);
+            ScreenUtils.changeScreen(event,"/com/canes/cadastro.fxml", "Cadastro de Usuário", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -117,21 +102,28 @@ public class MenuController {
         HouverEffectUtil.apllyHouverSair(btnSair);
 
     }
-    @FXML
-    void onMouseEteredUser(MouseEvent event) {
+   
+        
 
-        HouverEffectUtil.apllyHouverSobre(btnUsuario);
-        lblUser.setMouseTransparent(true);
+    
+
+    @FXML
+    void onMouseExitedCadastrar(MouseEvent event) {
+
+        HouverEffectUtil.apllyHouverSair(btnCadastrar);
+
+    }
+
+    @FXML
+    void onMouseEnteredCadastrar(MouseEvent event) {
+
+        HouverEffectUtil.apllyHouverSobre(btnCadastrar);
+        lblCadastrar.setMouseTransparent(true);
         
 
     }
 
-    @FXML
-    void onMouseExitedUser(MouseEvent event) {
-
-        HouverEffectUtil.apllyHouverSair(btnUsuario);
-
-    }
+  
 
 }
 

@@ -27,7 +27,7 @@
                   <Font name="Verdana Bold" size="40.0" />
                </font>
             </Label>
-            <Button fx:id="btnPedido" layoutX="65.0" layoutY="286.0" mnemonicParsing="false" onAction="#onClickPedido" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #5E9769; -fx-opacity: 0.6;" textFill="WHITE">
+            <Button fx:id="btnAtualizar" layoutX="59.0" layoutY="521.0" mnemonicParsing="false" onAction="#onClickAtualizar" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #FFFFFF; -fx-opacity: 0.6;" textFill="WHITE">
                <font>
                   <Font name="Verdana Bold" size="48.0" />
                </font>
@@ -35,7 +35,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label layoutX="130.0" layoutY="311.0" text="Pedido" textFill="WHITE">
+            <Label fx:id="lblAtualizar" layoutX="94.0" layoutY="547.0" text="Atualizar" textFill="WHITE">
                <font>
                   <Font name="Verdana Bold" size="48.0" />
                </font>
@@ -43,7 +43,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Label>
-            <Button fx:id="btnFornecedor" layoutX="65.0" layoutY="448.0" mnemonicParsing="false" onAction="#onClickFornecedor" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #243BAC; -fx-opacity: 0.6;" textFill="WHITE">
+            <Button fx:id="btnExcluir" layoutX="428.0" layoutY="522.0" mnemonicParsing="false" onAction="#onClickExcluir" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #080908; -fx-opacity: 0.6;" textFill="WHITE">
                <font>
                   <Font name="Verdana Bold" size="48.0" />
                </font>
@@ -51,7 +51,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label layoutX="70.0" layoutY="473.0" text="Fornecedor" textFill="WHITE">
+            <Label layoutX="493.0" layoutY="547.0" text="Excluir" textFill="WHITE">
                <font>
                   <Font name="Verdana Bold" size="48.0" />
                </font>
@@ -59,7 +59,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Label>
-            <Button fx:id="btnUsuario" layoutX="65.0" layoutY="611.0" mnemonicParsing="false" onAction="#onClickUsuario" onMouseEntered="#onMouseEteredUser" onMouseExited="#onMouseExitedUser" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #A13C33; -fx-opacity: 0.6;" textFill="WHITE">
+            <Button fx:id="btnRelatorio" layoutX="801.0" layoutY="311.0" mnemonicParsing="false" onAction="#onClickRelatorio" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #454728; -fx-opacity: 0.6;" textFill="WHITE">
                <font>
                   <Font name="Verdana Bold" size="48.0" />
                </font>
@@ -67,7 +67,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label fx:id="lblUser" layoutX="118.0" layoutY="635.0" text="Usúario" textFill="WHITE">
+            <Label layoutX="835.0" layoutY="337.0" text="Relatório" textFill="WHITE">
                <font>
                   <Font name="Verdana Bold" size="48.0" />
                </font>
@@ -75,7 +75,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Label>
-            <Button fx:id="btnCliente" layoutX="446.0" layoutY="285.0" mnemonicParsing="false" onAction="#onClickCliente" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #D3D848; -fx-opacity: 0.6;" textFill="WHITE">
+            <Button fx:id="btnPesquisa" layoutX="425.0" layoutY="311.0" mnemonicParsing="false" onAction="#onClickPesquisar" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #CC26AD; -fx-opacity: 0.6;" textFill="WHITE">
                <font>
                   <Font name="Verdana Bold" size="48.0" />
                </font>
@@ -83,7 +83,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label layoutX="511.0" layoutY="310.0" text="Cliente" textFill="WHITE">
+            <Label layoutX="465.0" layoutY="336.0" text="Pesquisa" textFill="WHITE">
                <font>
                   <Font name="Verdana Bold" size="48.0" />
                </font>
@@ -91,7 +91,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Label>
-            <Button fx:id="btnAtualizar" layoutX="453.0" layoutY="447.0" mnemonicParsing="false" onAction="#onClickAtualizar" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #FFFFFF; -fx-opacity: 0.6;" textFill="WHITE">
+            <Button fx:id="btnSair" layoutX="801.0" layoutY="522.0" mnemonicParsing="false" onAction="#onClickSair" onMouseEntered="#onMouseEteredSair" onMouseExited="#onMouseExitedSair" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #0085A3; -fx-opacity: 0.6;" textFill="WHITE">
                <font>
                   <Font name="Verdana Bold" size="48.0" />
                </font>
@@ -99,78 +99,27 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label layoutX="488.0" layoutY="473.0" text="Atualizar" textFill="WHITE">
+            <Label fx:id="lblSair" layoutX="904.0" layoutY="547.0" text="Sair" textFill="WHITE">
                <font>
                   <Font name="Verdana Bold" size="48.0" />
                </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Label>
-            <Button fx:id="btnExcluir" layoutX="453.0" layoutY="610.0" mnemonicParsing="false" onAction="#onClickExcluir" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #080908; -fx-opacity: 0.6;" textFill="WHITE">
-               <font>
-                  <Font name="Verdana Bold" size="48.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Label layoutX="518.0" layoutY="635.0" text="Excluir" textFill="WHITE">
-               <font>
-                  <Font name="Verdana Bold" size="48.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Label>
-            <Button fx:id="btnRelatorio" layoutX="823.0" layoutY="285.0" mnemonicParsing="false" onAction="#onClickRelatorio" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #454728; -fx-opacity: 0.6;" textFill="WHITE">
-               <font>
-                  <Font name="Verdana Bold" size="48.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Label layoutX="857.0" layoutY="311.0" text="Relatório" textFill="WHITE">
-               <font>
-                  <Font name="Verdana Bold" size="48.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Label>
-            <Button fx:id="btnPesquisa" layoutX="823.0" layoutY="441.0" mnemonicParsing="false" onAction="#onClickPesquisar" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #CC26AD; -fx-opacity: 0.6;" textFill="WHITE">
-               <font>
-                  <Font name="Verdana Bold" size="48.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Label layoutX="860.0" layoutY="466.0" text="Pesquisa" textFill="WHITE">
-               <font>
-                  <Font name="Verdana Bold" size="48.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Label>
-            <Button fx:id="btnSair" layoutX="823.0" layoutY="610.0" mnemonicParsing="false" onAction="#onClickSair" onMouseEntered="#onMouseEteredSair" onMouseExited="#onMouseExitedSair" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #0085A3; -fx-opacity: 0.6;" textFill="WHITE">
-               <font>
-                  <Font name="Verdana Bold" size="48.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Label fx:id="lblSair" layoutX="926.0" layoutY="635.0" text="Sair" textFill="WHITE">
-               <font>
-                  <Font name="Verdana Bold" size="48.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
               
+            </Label>
+            <Button fx:id="btnCadastrar" layoutX="59.0" layoutY="311.0" mnemonicParsing="false" onAction="#onClickCadastrar" onMouseEntered="#onMouseEnteredCadastrar" onMouseExited="#onMouseExitedCadastrar" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #5E9769; -fx-opacity: 0.6;" textFill="WHITE">
+               <font>
+                  <Font name="Verdana Bold" size="48.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Label fx:id="lblCadastrar" layoutX="84.0" layoutY="337.0" text="Cadastrar" textFill="WHITE">
+               <font>
+                  <Font name="Verdana Bold" size="48.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Label>
          </children>
       </AnchorPane>
