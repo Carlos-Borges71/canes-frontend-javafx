@@ -35,6 +35,9 @@ public class MenuController {
 
     @FXML
     private Label lblAtualizar;
+
+    @FXML
+    private Label lblExcluir;
     
 
     @FXML
@@ -59,6 +62,11 @@ public class MenuController {
     @FXML
     void onClickExcluir(ActionEvent event) {
 
+        try {
+            ScreenUtils.changeScreen(event,"/com/canes/excluir.fxml", "Exclusão", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     
@@ -147,6 +155,23 @@ public class MenuController {
         
 
     }
+
+     @FXML
+    void onMouseExitedExcluir(MouseEvent event) {
+
+        HouverEffectUtil.apllyHouverSair(btnExcluir);
+
+    }
+
+    @FXML
+    void onMouseEnteredExcluir(MouseEvent event) {
+
+        HouverEffectUtil.apllyHouverSobre(btnExcluir);
+        lblExcluir.setMouseTransparent(true);
+        
+
+    }
+
 
   
 

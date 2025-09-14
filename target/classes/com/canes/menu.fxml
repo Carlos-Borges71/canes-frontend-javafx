@@ -43,7 +43,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Label>
-            <Button fx:id="btnExcluir" layoutX="428.0" layoutY="522.0" mnemonicParsing="false" onAction="#onClickExcluir" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #080908; -fx-opacity: 0.6;" textFill="WHITE">
+            <Button fx:id="btnExcluir" layoutX="428.0" layoutY="522.0" mnemonicParsing="false" onAction="#onClickExcluir" onMouseEntered="#onMouseEnteredExcluir" onMouseExited="#onMouseExitedExcluir" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #080908; -fx-opacity: 0.6;" textFill="WHITE">
                <font>
                   <Font name="Verdana Bold" size="48.0" />
                </font>
@@ -51,7 +51,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label layoutX="493.0" layoutY="547.0" text="Excluir" textFill="WHITE">
+            <Label fx:id="lblExcluir" layoutX="493.0" layoutY="547.0" text="Excluir" textFill="WHITE">
                <font>
                   <Font name="Verdana Bold" size="48.0" />
                </font>
