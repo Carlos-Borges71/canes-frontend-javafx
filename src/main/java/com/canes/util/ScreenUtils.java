@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -42,12 +43,21 @@ public class ScreenUtils {
 
         // stage.show();
 
+
+
+
+
+
+
          Parent root = FXMLLoader.load(ScreenUtils.class.getResource(fxmlFile));
             Stage stage = new Stage();
             stage.setTitle(title);
             stage.setScene(new Scene(root));
 
             stage.setMaximized(true);
+
+            
+        
 
             stage.show();
 
@@ -57,16 +67,17 @@ public class ScreenUtils {
         
         // Animação Fade-in
         
-        FadeTransition ft = new FadeTransition(Duration.millis(1500), root);
+        FadeTransition ft = new FadeTransition(Duration.millis(1800), root);
         ft.setFromValue(0);
         ft.setToValue(1);
         ft.play();
 
-        // TranslateTransition slide = new TranslateTransition(Duration.millis(1600), root);
-        // slide.setFromX(-300);
+        // TranslateTransition slide = new TranslateTransition(Duration.millis(3600), root);
+        // slide.setFromX(-1300);
         // slide.setToX(0);
         // slide.play();
 
+        
         // ScaleTransition scale = new ScaleTransition(Duration.millis(1600), root);
         // scale.setFromX(0.5);
         // scale.setFromY(0.5);
@@ -86,7 +97,9 @@ public class ScreenUtils {
         // pathTransition.play();
 
         Stage stageFc = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            stageFc.close();
+        stageFc.close();
+
+        
     }
 
     /**

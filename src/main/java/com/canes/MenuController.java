@@ -32,6 +32,9 @@ public class MenuController {
 
     @FXML
     private Label lblCadastrar;
+
+    @FXML
+    private Label lblAtualizar;
     
 
     @FXML
@@ -43,6 +46,12 @@ public class MenuController {
     @FXML
     void onClickAtualizar(ActionEvent event) {
 
+        
+         try {
+            ScreenUtils.changeScreen(event,"/com/canes/atualizar.fxml", "Atualização", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
    
@@ -119,6 +128,22 @@ public class MenuController {
 
         HouverEffectUtil.apllyHouverSobre(btnCadastrar);
         lblCadastrar.setMouseTransparent(true);
+        
+
+    }
+
+    @FXML
+    void onMouseExitedAtualizar(MouseEvent event) {
+
+        HouverEffectUtil.apllyHouverSair(btnAtualizar);
+
+    }
+
+    @FXML
+    void onMouseEnteredAtualizar(MouseEvent event) {
+
+        HouverEffectUtil.apllyHouverSobre(btnAtualizar);
+        lblAtualizar.setMouseTransparent(true);
         
 
     }

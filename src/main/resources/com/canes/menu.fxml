@@ -27,7 +27,7 @@
                   <Font name="Verdana Bold" size="40.0" />
                </font>
             </Label>
-            <Button fx:id="btnAtualizar" layoutX="59.0" layoutY="521.0" mnemonicParsing="false" onAction="#onClickAtualizar" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #FFFFFF; -fx-opacity: 0.6;" textFill="WHITE">
+            <Button fx:id="btnAtualizar" layoutX="59.0" layoutY="521.0" mnemonicParsing="false" onAction="#onClickAtualizar" onMouseEntered="#onMouseEnteredAtualizar" onMouseExited="#onMouseExitedAtualizar" prefHeight="113.0" prefWidth="313.0" style="-fx-background-radius: 50; -fx-background-color: #FFFFFF; -fx-opacity: 0.6;" textFill="WHITE">
                <font>
                   <Font name="Verdana Bold" size="48.0" />
                </font>

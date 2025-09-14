@@ -266,7 +266,7 @@ public class UsuarioController implements Initializable{
         campos.add(newText);
 
         MaskTextField.applyPhoneMask(newText);
-        MaskTextField.limitarCaracteresFixos(newText, 15, btnCadastrar);
+        MaskTextField.limitarCaracteresFixos(newText, 15);
     
 
         Image imgExcluir = new Image(getClass().getResourceAsStream("img/excluir.png"));
@@ -339,8 +339,7 @@ public class UsuarioController implements Initializable{
     public void initialize(URL url, ResourceBundle resources) {
 
 
-        MaskTextField.limitarCaracteresFixos(txtcel, 15, btnCadastrar);
-        MaskTextField.limitarCaracteresFixos(txtCep, 9, btnCadastrar);
+       
        
         MaskTextField.validarNaoVazio(txtNome, btnCadastrar);
         MaskTextField.validarNaoVazio(txtLogradouro, btnCadastrar);

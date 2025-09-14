@@ -31,14 +31,32 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public class CadastroController implements Initializable{
+public class AtualizarController implements Initializable{
 
     
      @FXML
     private Button btnCadastrar;
 
     @FXML
+    private Button btnAtualizar;
+
+    @FXML
     private Button btnLimpar;
+
+    @FXML
+    private Button btnClient;
+    
+    @FXML
+    private Button btnBuscar;
+
+   @FXML
+    private Button btnAtualizarProduto;
+
+    @FXML
+    private Button btnBuscarFornec;
+
+    @FXML
+    private Button btnBuscarProduto;
 
     @FXML
     private ImageView btnNoVisivelReSenha;
@@ -121,11 +139,14 @@ public class CadastroController implements Initializable{
     @FXML
     private Button btnCadastrarClient;
 
-    @FXML
-    private Button btnClient;
+   
 
     @FXML
     private Button btnFornec;
+
+    @FXML
+    private Button btnProduto;
+
 
 
     @FXML
@@ -138,6 +159,7 @@ public class CadastroController implements Initializable{
 
     @FXML
     private Button btnLimparFornec;
+    
 
    
 
@@ -157,6 +179,9 @@ public class CadastroController implements Initializable{
 
     @FXML
     private TextField txtCelFornec;
+
+    @FXML
+    private TextField txtCelFornec1;
 
     @FXML
     private TextField txtCidadeFornec;
@@ -223,6 +248,9 @@ public class CadastroController implements Initializable{
     @FXML
     private Pane paneFornec;
 
+    @FXML
+    private Pane paneProduto;
+
    
     @FXML
     private TextField txtBairroClient;
@@ -260,22 +288,71 @@ public class CadastroController implements Initializable{
     @FXML
     private TextField txtNumeroClient;
 
-   
+   @FXML
+   private Button btnBuscarCliente;
 
-    
+    @FXML
+   private Button btnLimparProduto;
+
+    @FXML
+    private TextField txtCelClient1;
 
    
 
     @FXML
     private TextField txtcelClient;
 
-    
+    @FXML
+    private TextField txtCelUsuario;
 
     @FXML
     private VBox vBoxTelClient;
 
     @FXML
     private VBox vBoxTelFornec;
+
+    @FXML
+    private Label lblProduto;
+
+    @FXML
+    void onActionProduto(ActionEvent event) {
+
+        paneProduto.setVisible(true);
+        lblProduto.setTextFill(Color.RED);
+        paneUser.setVisible(false);
+        paneCliente.setVisible(false);
+        lbluser.setTextFill(Color.WHITE);        
+        lblClient.setTextFill(Color.WHITE);
+        paneFornec.setVisible(false);
+        lblFornec.setTextFill(Color.WHITE);
+        
+
+    }
+
+    @FXML
+    void onClickBuscar(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onClickBuscarCliente(ActionEvent event) {
+
+    }
+
+     @FXML
+    void onClickBuscarClient(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onClickBuscarFornec(ActionEvent event) {
+
+    }
+
+     @FXML
+    void onClickBuscarProduto(ActionEvent event) {
+
+    }
 
     @FXML
     void onActionFornec(ActionEvent event) {
@@ -285,11 +362,23 @@ public class CadastroController implements Initializable{
         lblClient.setTextFill(Color.WHITE);
         paneFornec.setVisible(true);
         lblFornec.setTextFill(Color.RED);
+        paneProduto.setVisible(false);
+        lblProduto.setTextFill(Color.WHITE);
 
     }
 
     @FXML
     void onActionPedido(ActionEvent event) {
+
+        paneProduto.setVisible(true);
+        lblProduto.setTextFill(Color.RED);
+        paneUser.setVisible(false);
+        paneCliente.setVisible(false);
+        lbluser.setTextFill(Color.WHITE);        
+        lblClient.setTextFill(Color.WHITE);
+        paneFornec.setVisible(false);
+        lblFornec.setTextFill(Color.WHITE);
+        
 
     }
 
@@ -301,6 +390,8 @@ public class CadastroController implements Initializable{
         lblClient.setTextFill(Color.WHITE);
         paneFornec.setVisible(false);
         lblFornec.setTextFill(Color.WHITE);
+        paneProduto.setVisible(false);
+        lblProduto.setTextFill(Color.WHITE);
         
 
     }
@@ -325,6 +416,8 @@ public class CadastroController implements Initializable{
         lblClient.setTextFill(Color.RED);
         paneFornec.setVisible(false);
         lblFornec.setTextFill(Color.WHITE);
+        paneProduto.setVisible(false);
+        lblProduto.setTextFill(Color.WHITE);
     }
 
     //
@@ -773,6 +866,11 @@ public class CadastroController implements Initializable{
         txtNoSenha.clear();
 
     }
+
+    @FXML
+    void onclickBuscar(ActionEvent event) {       
+
+    }
     
 
     @FXML
@@ -889,7 +987,7 @@ public class CadastroController implements Initializable{
         lblClient.setMouseTransparent(true);
         lbluser.setMouseTransparent(true);
         lblFornec.setMouseTransparent(true);
-        
+        lblProduto.setMouseTransparent(true);
 
         btnClient.setOnMouseEntered(e -> {
             HouverEffectUtil.apllyHouverSobre(btnClient);
@@ -903,10 +1001,16 @@ public class CadastroController implements Initializable{
             HouverEffectUtil.apllyHouverSobre(btnFornec);
         });
 
-        
+        btnProduto.setOnMouseEntered(e -> {
+            HouverEffectUtil.apllyHouverSobre(btnProduto);
+        });
 
         btnClient.setOnMouseExited(e ->{
             HouverEffectUtil.apllyHouverSair(btnClient);
+        });
+
+        btnProduto.setOnMouseExited(e ->{
+            HouverEffectUtil.apllyHouverSair(btnProduto);
         });
 
         btnUser.setOnMouseExited(e -> {
@@ -959,6 +1063,54 @@ public class CadastroController implements Initializable{
             HouverEffectUtil.apllyHouverSair(btnCadastrarFornec);
         });
 
+        btnBuscar.setOnMouseEntered(e -> {
+            HouverEffectUtil.apllyHouverSobre(btnBuscar);
+        });
+
+        btnBuscar.setOnMouseExited(e -> {
+            HouverEffectUtil.apllyHouverSair(btnBuscar);
+        });
+
+        btnBuscarCliente.setOnMouseEntered(e -> {
+            HouverEffectUtil.apllyHouverSobre(btnBuscarCliente);
+        });
+
+        btnBuscarCliente.setOnMouseExited(e -> {
+            HouverEffectUtil.apllyHouverSair(btnBuscarCliente);
+        });
+
+        btnBuscarFornec.setOnMouseEntered(e -> {
+            HouverEffectUtil.apllyHouverSobre(btnBuscarFornec);
+        });
+
+        btnBuscarFornec.setOnMouseExited(e -> {
+            HouverEffectUtil.apllyHouverSair(btnBuscarFornec);
+        });
+
+        btnBuscarProduto.setOnMouseEntered(e -> {
+            HouverEffectUtil.apllyHouverSobre(btnBuscarProduto);
+        });
+
+        btnBuscarProduto.setOnMouseExited(e -> {
+            HouverEffectUtil.apllyHouverSair(btnBuscarProduto);
+        });
+
+         btnLimparProduto.setOnMouseExited(e -> {
+            HouverEffectUtil.apllyHouverSair(btnLimparProduto);
+        });
+
+        btnLimparProduto.setOnMouseEntered(e -> {
+            HouverEffectUtil.apllyHouverSobre(btnLimparProduto);
+        });
+
+        btnAtualizarProduto.setOnMouseExited(e -> {
+            HouverEffectUtil.apllyHouverSair(btnAtualizarProduto);
+        });
+
+        btnAtualizarProduto.setOnMouseEntered(e -> {
+            HouverEffectUtil.apllyHouverSobre(btnAtualizarProduto);
+        });
+
 
          MaskTextField.applyPhoneMask(txtcel);
 
@@ -972,6 +1124,7 @@ public class CadastroController implements Initializable{
          TextFieldUtil.aplicarCapitalizacao(txtCidade);
 
           MaskTextField.applyPhoneMask(txtcelClient);
+          MaskTextField.applyPhoneMask(txtCelClient1);
 
          MaskTextField.applyCepMask(txtCepClient);  
 
@@ -983,6 +1136,7 @@ public class CadastroController implements Initializable{
          TextFieldUtil.aplicarCapitalizacao(txtCidadeClient);
 
          MaskTextField.applyPhoneMask(txtCelFornec);
+         MaskTextField.applyPhoneMask(txtCelFornec1);
 
          MaskTextField.applyCepMask(txtCepFornec);  
 
@@ -1001,6 +1155,7 @@ public class CadastroController implements Initializable{
         MaskTextField.limitarCaracteresFixos(txtTamanhoFornec, 2);
         MaskTextField.quantNumbery(txtNotaFiscalFornec, 10);
         
+        MaskTextField.applyPhoneMask(txtCelUsuario);
 
          
 
