@@ -1,10 +1,7 @@
 package com.canes;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
-
 import com.canes.util.HouverEffectUtil;
 import com.canes.util.MaskTextField;
 import com.canes.util.ScreenUtils;
@@ -15,7 +12,6 @@ import com.canes.util.ValidadorSenha;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -31,7 +27,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public class AtualizarController implements Initializable{
+public class AtualizarController{
 
     
      @FXML
@@ -954,8 +950,7 @@ public class AtualizarController implements Initializable{
 
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle resources) {
+    public void initialize() {
 
 
         

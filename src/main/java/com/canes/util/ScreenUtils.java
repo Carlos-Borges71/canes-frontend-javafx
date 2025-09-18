@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 import javafx.animation.FadeTransition;
-import javafx.animation.TranslateTransition;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;

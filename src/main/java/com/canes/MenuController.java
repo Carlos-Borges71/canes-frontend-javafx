@@ -38,6 +38,9 @@ public class MenuController {
 
     @FXML
     private Label lblExcluir;
+
+    @FXML
+    private Label lblPesquisa;
     
 
     @FXML
@@ -73,6 +76,12 @@ public class MenuController {
 
     @FXML
     void onClickPesquisar(ActionEvent event) {
+
+         try {
+            ScreenUtils.changeScreen(event,"/com/canes/pesquisar.fxml", "Pesquisar", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -172,7 +181,21 @@ public class MenuController {
 
     }
 
+     @FXML
+    void onMouseExitedPesquisar(MouseEvent event) {
 
+        HouverEffectUtil.apllyHouverSair(btnPesquisa);
+
+    }
+
+    @FXML
+    void onMouseEnteredPesquisar(MouseEvent event) {
+
+        HouverEffectUtil.apllyHouverSobre(btnPesquisa);
+        lblPesquisa.setMouseTransparent(true);
+        
+
+    }
   
 
 }

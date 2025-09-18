@@ -604,7 +604,7 @@
                   <Insets bottom="20.0" />
                </padding>
             </Pane>
-            <Pane fx:id="paneProduto" layoutX="124.0" layoutY="300.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
+            <Pane fx:id="paneProduto" layoutX="114.0" layoutY="290.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
                <children>
                   <VBox fx:id="vBoxTelClient1" layoutX="164.0" layoutY="136.0" />
                   <Button fx:id="btnLimparProduto" layoutX="561.0" layoutY="275.0" mnemonicParsing="false" onAction="#onclickLimparClient" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Limpar" textFill="WHITE">
