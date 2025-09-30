@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" prefHeight="803.0" prefWidth="1457.0" spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #1B1A16, #141442); -fx-border-color: fff;" stylesheets="@pedido.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.PedidoController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <children>
+      <AnchorPane prefHeight="762.0" prefWidth="1342.0" style="-fx-border-color: fff; -fx-border-radius: 30; -fx-opacity: 60;">
+         <children>
+            <Pane layoutX="15.0" layoutY="14.0" prefHeight="63.0" prefWidth="1008.0" style="-fx-background-color: fff; -fx-background-radius: 20;">
+               <children>
+                  <Label layoutX="468.0" layoutY="11.0" text="Pedido" textFill="#123c6b">
+                     <font>
+                        <Font name="Verdana Bold" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <Pane layoutX="15.0" layoutY="86.0" prefHeight="452.0" prefWidth="304.0" style="-fx-border-radius: 0; -fx-border-color: fff;">
+               <children>
+                  <ImageView fitHeight="157.0" fitWidth="213.0" layoutX="11.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/Vector.png" />
+                     </image>
+                     
+                        </ImageView>
+                  <ImageView fitHeight="449.0" fitWidth="304.0" layoutX="4.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/imgFundo.png" />
+                     </image>
+                    
+                  </ImageView>
+                  
+               </children>
+            </Pane>
+            <TextField fx:id="txtCodigo" alignment="BOTTOM_CENTER" layoutX="353.0" layoutY="89.0" onAction="#onEnterAction" prefHeight="90.0" prefWidth="286.0" style="-fx-background-radius: 20;">
+               <font>
+                  <Font name="Verdana Bold" size="30.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" left="-5.0" />
+               </padding>
+            </TextField>
+            <TextField fx:id="txtQuant" alignment="BASELINE_RIGHT" layoutX="353.0" layoutY="324.0" prefHeight="90.0" prefWidth="286.0" style="-fx-background-radius: 20;" text="1">
+               <padding>
+                  <Insets bottom="15.0" right="10.0" />
+               </padding>
+               <font>
+                  <Font name="Verdana Bold" size="30.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtDesconto" alignment="BASELINE_RIGHT" layoutX="343.0" layoutY="438.0" onAction="#onEnterActionDesconto" prefHeight="90.0" prefWidth="304.0" style="-fx-background-radius: 20;" text="R$ 0,00">
+               <padding>
+                  <Insets bottom="15.0" right="10.0" />
+               </padding>
+               <font>
+                  <Font name="Verdana Bold" size="30.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtTelefone" alignment="BOTTOM_CENTER" layoutX="232.0" layoutY="548.0" prefHeight="78.0" prefWidth="203.0" style="-fx-background-radius: 20;" text="(21) 99999-5555">
+               <font>
+                  <Font name="Verdana Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" />
+               </padding></TextField>
+            <TextField fx:id="txtValorUnitario" alignment="BASELINE_RIGHT" editable="false" focusTraversable="false" layoutX="353.0" layoutY="203.0" prefHeight="90.0" prefWidth="286.0" style="-fx-background-radius: 20;" text="R$ 120,00">
+               <font>
+                  <Font name="Verdana Bold" size="30.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" right="10.0" />
+               </padding>
+            </TextField>
+            <Pane layoutX="666.0" layoutY="88.0" prefHeight="474.0" prefWidth="650.0" style="-fx-background-color: fff; -fx-background-radius: 20;">
+               <children>
+                  <TableView fx:id="tabelaPedido" focusTraversable="false" layoutX="13.0" layoutY="10.0" prefHeight="404.0" prefWidth="626.0">
+                    <columns>
+                      <TableColumn fx:id="colItem" prefWidth="55.20001220703125" text="Item" />
+                      <TableColumn fx:id="colProduto" prefWidth="228.800048828125" text="Produto" />
+                        <TableColumn fx:id="colQuant" prefWidth="91.199951171875" text="Quant" />
+                        <TableColumn fx:id="colValorUnitario" prefWidth="116.7998046875" text="V. unitário" />
+                        <TableColumn fx:id="colTotal" prefWidth="118.933349609375" text="Total" />
+                    </columns>
+                  </TableView>
+                  <Label layoutX="38.0" layoutY="430.0" text="Quantidade de Produtos:">
+                     <font>
+                        <Font name="Verdana Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="439.0" layoutY="430.0" text="Valor total:">
+                     <font>
+                        <Font name="Verdana Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblQuant" layoutX="227.0" layoutY="431.0" text="0">
+                     <font>
+                        <Font name="Verdana Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblTotal" layoutX="559.0" layoutY="431.0" text="0,00">
+                     <font>
+                        <Font name="Verdana Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="272.0" layoutY="429.0" text="Desconto:">
+                     <font>
+                        <Font name="Verdana Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblDesconto" layoutX="355.0" layoutY="430.0" text="R$ 0,00">
+                     <font>
+                        <Font name="Verdana Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblTotal1" layoutX="534.0" layoutY="431.0" text="R$">
+                     <font>
+                        <Font name="Verdana Bold" size="13.0" />
+                     </font>
+                  </Label>
+               </children></Pane>
+            <TextField fx:id="txtSubTotal" alignment="BOTTOM_RIGHT" editable="false" focusTraversable="false" layoutX="680.0" layoutY="580.0" prefHeight="78.0" prefWidth="628.0" style="-fx-background-radius: 20;">
+               <font>
+                  <Font name="Verdana Bold" size="36.0" />
+               </font>
+               <padding>
+                  <Insets right="10.0" />
+               </padding></TextField>
+            <TextField fx:id="txtTotalRecebido" alignment="BASELINE_RIGHT" layoutX="679.0" layoutY="671.0" onAction="#onEnterActionRecebido" prefHeight="78.0" prefWidth="306.0" style="-fx-background-radius: 20;">
+               <font>
+                  <Font name="Verdana Bold" size="36.0" />
+               </font>
+               <padding>
+                  <Insets right="10.0" />
+               </padding></TextField>
+            <Label alignment="BOTTOM_LEFT" layoutX="679.0" layoutY="671.0" prefHeight="26.0" prefWidth="306.0" style="-fx-background-color: #141442; -fx-background-radius: 20 20 0 0;" text="TOTAL RECEBIDO" textAlignment="CENTER" textFill="#f7f0f0">
+               <font>
+                  <Font name="Verdana Bold" size="20.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="txtTroco" alignment="BASELINE_RIGHT" editable="false" layoutX="1003.0" layoutY="671.0" prefHeight="78.0" prefWidth="306.0" style="-fx-background-radius: 20;">
+               <font>
+                  <Font name="Verdana Bold" size="36.0" />
+               </font>
+               <padding>
+                  <Insets right="10.0" />
+               </padding></TextField>
+            <Label alignment="BOTTOM_LEFT" layoutX="1003.0" layoutY="671.0" prefHeight="26.0" prefWidth="306.0" style="-fx-background-color: #141442; -fx-background-radius: 20 20 0 0;" text="TROCO" textAlignment="CENTER" textFill="#f7f0f0">
+               <font>
+                  <Font name="Verdana Bold" size="20.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="txtCliente" alignment="BASELINE_LEFT" editable="false" focusTraversable="false" layoutX="14.0" layoutY="549.0" prefHeight="78.0" prefWidth="203.0" style="-fx-background-radius: 20;" text="Catarina Soares">
+               <padding>
+                  <Insets bottom="15.0" left="5.0" />
+               </padding>
+               <font>
+                  <Font name="Verdana Bold Italic" size="18.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets></TextField>
+            <Pane layoutX="15.0" layoutY="635.0" prefHeight="106.0" prefWidth="299.0" style="-fx-background-color: fff;">
+               <children>
+                  <Label layoutX="44.0" layoutY="11.0" text="F1 - CADASTRAR CLIENTE">
+                     <font>
+                        <Font name="Verdana Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="74.0" layoutY="61.0" text="F2 - AGUARDANDO PAGAMENTO" />
+                  <Label layoutX="75.0" layoutY="80.0" text="F3 - PAGO" />
+                  <Label layoutX="78.0" layoutY="45.0" text="STATUS DE PAGAMENTO">
+                     <font>
+                        <Font name="Verdana Bold" size="12.0" />
+                     </font>
+                  </Label>
+               </children></Pane> 
+            <Pane layoutX="353.0" layoutY="635.0" prefHeight="106.0" prefWidth="299.0" style="-fx-background-color: fff;">
+               <children>
+                  <Label layoutX="27.0" layoutY="44.0" text="F4 - DINHEIRO" />
+                  <Label layoutX="27.0" layoutY="60.0" text="F5 - PIX" />
+                  <Label layoutX="29.0" layoutY="76.0" text="F6 - VISA ELECTRON" />
+                  <Label layoutX="183.0" layoutY="43.0" text="F7 - MAESTRO" />
+                  <Label layoutX="183.0" layoutY="60.0" text="F8 - MASTERCARD" />
+                  <Label layoutX="183.0" layoutY="76.0" text="F9 - VISA" />
+                  <Label layoutX="68.0" layoutY="19.0" text="FORMA DE PAGAMENTO">
+                     <font>
+                        <Font name="Verdana Bold" size="12.0" />
+                     </font>
+                  </Label>
+               </children></Pane>
+            <Label alignment="BOTTOM_LEFT" layoutX="353.0" layoutY="88.0" prefHeight="26.0" prefWidth="286.0" style="-fx-background-color: #141442; -fx-background-radius: 20 20 0 0;" text="CÓDIGO DE BARRAS" textAlignment="CENTER" textFill="#f7f0f0">
+               <font>
+                  <Font name="Verdana Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <Label alignment="BOTTOM_LEFT" layoutX="353.0" layoutY="202.0" prefHeight="26.0" prefWidth="286.0" style="-fx-background-color: #141442; -fx-background-radius: 20 20 0 0;" text="VALOR UNITÁRIO" textAlignment="CENTER" textFill="#f7f0f0">
+               <font>
+                  <Font name="Verdana Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <Label alignment="BOTTOM_LEFT" layoutX="353.0" layoutY="323.0" prefHeight="26.0" prefWidth="286.0" style="-fx-background-color: #141442; -fx-background-radius: 20 20 0 0;" text="QUANTIDADE" textAlignment="CENTER" textFill="#f7f0f0">
+               <font>
+                  <Font name="Verdana Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <Label alignment="BOTTOM_LEFT" layoutX="680.0" layoutY="580.0" prefHeight="26.0" prefWidth="628.0" style="-fx-background-color: #141442; -fx-background-radius: 20 20 0 0;" text="SUBTOTAL" textAlignment="CENTER" textFill="#f7f0f0">
+               <font>
+                  <Font name="Verdana Bold" size="20.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <Label alignment="BOTTOM_LEFT" layoutX="343.0" layoutY="437.0" prefHeight="26.0" prefWidth="304.0" style="-fx-background-color: #141442; -fx-background-radius: 20 20 0 0;" text="DESCONTO" textAlignment="CENTER" textFill="#f7f0f0">
+               <font>
+                  <Font name="Verdana Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="txtPagamento" alignment="BOTTOM_CENTER" editable="false" focusTraversable="false" layoutX="447.0" layoutY="548.0" prefHeight="78.0" prefWidth="203.0" style="-fx-background-radius: 20;" text="Visa Electron">
+               <font>
+                  <Font name="Verdana Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" />
+               </padding>
+            </TextField>
+            <Label alignment="BOTTOM_LEFT" layoutX="14.0" layoutY="549.0" prefHeight="26.0" prefWidth="203.0" style="-fx-background-color: #141442; -fx-background-radius: 20 20 0 0;" text="CLIENTE" textAlignment="CENTER" textFill="#f7f0f0">
+               <font>
+                  <Font name="Verdana Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <Label alignment="BOTTOM_LEFT" layoutX="232.0" layoutY="548.0" prefHeight="26.0" prefWidth="203.0" style="-fx-background-color: #141442; -fx-background-radius: 20 20 0 0;" text="TELEFONE" textAlignment="CENTER" textFill="#f7f0f0">
+               <font>
+                  <Font name="Verdana Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <Label alignment="BOTTOM_LEFT" layoutX="447.0" layoutY="548.0" prefHeight="26.0" prefWidth="203.0" style="-fx-background-color: #141442; -fx-background-radius: 20 20 0 0;" text="FORMA PAGAMENTO" textAlignment="CENTER" textFill="#f7f0f0">
+               <font>
+                  <Font name="Verdana Bold" size="16.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="txtStatus" alignment="BOTTOM_CENTER" editable="false" focusTraversable="false" layoutX="1031.0" layoutY="10.0" prefHeight="63.0" prefWidth="284.0" style="-fx-background-radius: 20;" text="AGUARDANDO PAGAMENTO">
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding>
+               <font>
+                  <Font name="Verdana Bold Italic" size="18.0" />
+               </font>
+            </TextField>
+            <Label alignment="BOTTOM_CENTER" layoutX="1031.0" layoutY="10.0" prefHeight="26.0" prefWidth="284.0" style="-fx-background-color: #141442; -fx-background-radius: 20 20 0 0;" text="STATUS" textAlignment="CENTER" textFill="#f7f0f0">
+               <font>
+                  <Font name="Verdana Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+         </children>
+      </AnchorPane>
+      <Label text="Valor total:">
+         <font>
+            <Font name="Verdana Bold" size="13.0" />
+         </font>
+      </Label>
+   </children>
+</VBox>

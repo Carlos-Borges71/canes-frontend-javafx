@@ -1,0 +1,18 @@
+.table-view .column-header .label{ 
+    -fx-alignment: CENTER;
+    -fx-text-fill:  #152266;
+    -fx-font-size:16px;
+
+
+}
+.table-view {
+      -fx-background-color: transparent;
+     -fx-control-inner-background: transparent;
+      -fx-table-cell-border-color: transparent; 
+      -fx-table-header-background: #000;
+}
+
+.table-column {
+    -fx-alignment:CENTER;
+    -fx-text-fill:  #152266;
+}

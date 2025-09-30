@@ -9,6 +9,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -186,6 +188,74 @@ public class ScreenUtils {
         // pathTransition.play();
 
         Stage stageFc = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            stageFc.close();
+    }
+
+
+    public static void changeScreenElement(TextField field,String fxmlFile, String title, Consumer<Object> controllerConsumer) throws IOException {
+ 
+        // FXMLLoader loader = new FXMLLoader(ScreenUtils.class.getResource(fxmlFile));
+        // Parent root = loader.load();
+
+        // Se quiser passar dados para o próximo controller
+        // if (controllerConsumer != null) {
+        //     Object controller = loader.getController();
+        //     controllerConsumer.accept(controller);
+        // }
+
+        // Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        // Scene scene = new Scene(root);
+        // stage.setTitle(title);
+        // stage.setScene(scene);        
+    
+
+        // stage.show();
+
+         Parent root = FXMLLoader.load(ScreenUtils.class.getResource(fxmlFile));
+            Stage stage = new Stage();
+            stage.setTitle(title);
+            stage.setScene(new Scene(root));
+
+            stage.setMaximized(true);
+
+            stage.show();
+
+            
+        
+
+        
+        // Animação Fade-in
+        
+        FadeTransition ft = new FadeTransition(Duration.millis(1500), root);
+        ft.setFromValue(0);
+        ft.setToValue(1);
+        ft.play();
+
+        // TranslateTransition slide = new TranslateTransition(Duration.millis(1600), root);
+        // slide.setFromX(-300);
+        // slide.setToX(0);
+        // slide.play();
+
+        // ScaleTransition scale = new ScaleTransition(Duration.millis(1600), root);
+        // scale.setFromX(0.5);
+        // scale.setFromY(0.5);
+        // scale.setToX(1);
+        // scale.setToY(1);
+        // scale.play();
+
+        // RotateTransition rotate = new RotateTransition(Duration.millis(800), root);
+        // rotate.setByAngle(360);
+        // rotate.play();
+
+        // Path path = new Path();
+        // path.getElements().add(new MoveTo(0, 0));
+        // path.getElements().add(new LineTo(200, 200));
+
+        // PathTransition pathTransition = new PathTransition(Duration.seconds(2), path, root);
+        // pathTransition.play();
+
+        
+           Stage stageFc = (Stage) field.getScene().getWindow();
             stageFc.close();
     }
 

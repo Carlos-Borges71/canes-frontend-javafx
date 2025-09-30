@@ -1,78 +1,58 @@
 package com.canes;
 
-import java.time.Instant;
+public class Fornecedor {
 
 
-public class Cliente {
-
-  
     private Integer id;
-    private String nome;
-    private Instant instante;
+    private String empresa;
+    private String cnpj;
     private String telefone;
+
     
-    public Cliente(){
+
+
+    public Fornecedor(){        
     }
 
-
-    public Cliente(Integer id, String nome, Instant instante, String telefone) {
-        
+    public Fornecedor(Integer id, String empresa, String cnpj, String telefone) {
         this.id = id;
-        this.nome = nome;
-        this.instante = instante;
+        this.empresa = empresa;
+        this.cnpj = cnpj;
         this.telefone = telefone;
-        
     }
-
 
     public Integer getId() {
         return id;
     }
 
-
     public void setId(Integer id) {
         this.id = id;
     }
 
-
-    public String getNome() {
-        return nome;
+    public String getEmpresa() {
+        return empresa;
     }
 
-
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
     }
 
-
-    public Instant getInstante() {
-        return instante;
+    public String getCnpj() {
+        return cnpj;
     }
 
-
-    public void setInstante(Instant instante) {
-        this.instante = instante;
-    }    
-
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
+       
      public String getTelefone() {
         return telefone;
     }
-
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
     
-      
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
-    }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -82,7 +62,7 @@ public class Cliente {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Cliente other = (Cliente) obj;
+        Fornecedor other = (Fornecedor) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
@@ -91,8 +71,6 @@ public class Cliente {
         return true;
     }
 
-
    
 
-    
 }

@@ -1,8 +1,13 @@
 package com.canes;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 import com.canes.util.HouverEffectUtil;
 import com.canes.util.ScreenUtils;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -28,10 +33,44 @@ public class PesquisaController{
     private TableColumn<Usuario, String> colNome;
 
     @FXML
+    private TableColumn<Usuario, String> colData;
+
+
+    @FXML
     private TableColumn<Usuario, String> colSetor;
 
     @FXML
     private TableColumn<Usuario, String> colTelefone;
+
+    @FXML
+    private TableColumn<Cliente, String> colTelefoneCliente;
+
+    @FXML
+    private TableColumn<Cliente, String> colNomeCliente;
+
+    @FXML
+    private TableColumn<Cliente, String> colDataCliente;
+
+    @FXML
+    private TableColumn<Fornecedor, String> colFornec;
+
+    @FXML
+    private TableColumn<Fornecedor, String> colTelefoneFornec;
+
+    @FXML
+    private TableColumn<Fornecedor, String> colCnpj;
+
+    @FXML
+    private TableColumn<Produto, String> colNomeProduto;
+
+    @FXML
+    private TableColumn<Produto, Long> colCodigoProduto;
+
+    @FXML
+    private TableColumn<Produto, Double> colValorProduto;
+
+     @FXML
+    private TableColumn<Produto, Integer> colEstoqueProduto;
 
     @FXML
     private TableView<Usuario> tabelaUsuario;
@@ -40,10 +79,10 @@ public class PesquisaController{
     private TableView<Cliente> tabelaCliente;
 
     @FXML
-    private TableView<?> tabelaFornec;
+    private TableView<Fornecedor> tabelaFornec;
 
     @FXML
-    private TableView<?> tabelaProduto;
+    private TableView<Produto> tabelaProduto;
 
     @FXML
     private Button btnFiltrar;
@@ -55,6 +94,13 @@ public class PesquisaController{
     private TextField txtFiltrar;
 
     private FilteredList<Usuario> listaFiltrada;
+
+    private FilteredList<Cliente> listaFiltradaCliente;
+
+    private FilteredList<Fornecedor> listaFiltradaFornecedor;
+
+    private FilteredList<Produto> listaFiltradaProduto;
+
 
     @FXML
     private Pane paneCliente;
@@ -114,6 +160,12 @@ public class PesquisaController{
     @FXML
     private TextField txtFiltrarProduto;
 
+    private DateTimeFormatter formatter;
+
+    private Fornecedor fornecedor;
+
+
+    
 
     
     @FXML
@@ -218,8 +270,16 @@ public class PesquisaController{
 
     private ObservableList<Usuario> listaUsuarios;
 
+    private ObservableList<Cliente> listaClientes;
+
+    private ObservableList<Fornecedor> listaFornecedores;
+
+    private ObservableList<Produto> listaProdutos;
+
     @FXML
     public void initialize(){
+
+        formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").withZone(ZoneId.systemDefault());
 
         lbluser.setMouseTransparent(true);
         lblClient.setMouseTransparent(true);
@@ -305,18 +365,23 @@ public class PesquisaController{
         colSetor.setCellValueFactory(new PropertyValueFactory<>("setor"));
         colLogin.setCellValueFactory(new PropertyValueFactory<>("login"));
         colTelefone.setCellValueFactory(new PropertyValueFactory<>("Telefone"));
+        colData.setCellValueFactory(cellData -> {
+            Instant data = cellData.getValue().getInstante();
+            String formatada = data == null ? "" : formatter.format(data);
+            return new SimpleStringProperty(formatada);
+        });
         
 
         listaUsuarios = FXCollections.observableArrayList( 
-        new Usuario("Carlos Borges", "ADM", "Carlos", "(99) 88888-0000"), 
-        new Usuario("Karla", "ADM", "GRU", "43434343"),
-        new Usuario("Karla", "ADM", "GRU", "43434343"),
-        new Usuario("Karla", "ADM", "GRU", "43434343"),
-        new Usuario("Karla", "ADM", "GRU", "43434343"),
-        new Usuario("Karla", "ADM", "GRU", "43434343"),
-        new Usuario("Karla", "ADM", "GRU", "43434343"),
-        new Usuario("Karla", "ADM", "GRU", "43434343"),
-        new Usuario("Karla", "ADM", "GRU", "43434343"));
+        new Usuario(1,"Carlos Borges", "ADM", "Carlos", Instant.parse("2025-09-10T12:00:09Z"),"(99) 88888-0000"), 
+        new Usuario(2, "Cintia Yellon", "ADMINISTRATIVO", "GRU",Instant.now(), "(99)43434343"),
+        new Usuario(3,"Joâo Pedro", "ADM", "GRU", Instant.now(),"(65)43434343"),
+        new Usuario(4,"Terla Gomes", "ADM", "GRU", Instant.now(),"43434343"),
+        new Usuario(5, "Joana Black", "ADM", "GRU",Instant.now(), "43434343"),
+        new Usuario(6, "Flavio Blue", "ADM", "GRU", Instant.now(),"43434343"),
+        new Usuario(7, "Yasmin Red", "ADM", "GRU", Instant.now(),"43434343"),
+        new Usuario(8, "Washington Pink", "ADM", "GRU",Instant.now(), "43434343"),
+        new Usuario(9,"Karla Khaki", "ADM", "GRU", Instant.now(),"43434343"));
 
     
     
@@ -325,16 +390,22 @@ public class PesquisaController{
 
         tabelaUsuario.setItems(listaFiltrada);
 
+        tabelaUsuario.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         txtFiltrar.textProperty().addListener((obs, oldValue, newValue) -> {
             String filtro = newValue.toLowerCase();
             listaFiltrada.setPredicate(usuario -> {
              if(filtro == null || filtro.isEmpty()) {
                 return true;
             }
+
+            String dataString = usuario.getInstante() == null ? "" : formatter.format(usuario.getInstante()).toLowerCase();
+            
             return usuario.getNome().toLowerCase().contains(filtro) || 
             usuario.getSetor().toLowerCase().contains(filtro) ||
             usuario.getLogin().toLowerCase().contains(filtro) ||
-            usuario.getTelefone().toLowerCase().contains(filtro);
+            usuario.getTelefone().toLowerCase().contains(filtro) ||
+            dataString.contains(filtro);
             });
         });
 
@@ -343,16 +414,159 @@ public class PesquisaController{
         placeholderCliente.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
 
         tabelaCliente.setPlaceholder(placeholderCliente);
+        tabelaCliente.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        colNomeCliente.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        colTelefoneCliente.setCellValueFactory(new PropertyValueFactory<>("Telefone")); 
+        
+        colDataCliente.setCellValueFactory(cellData -> {
+            Instant instante = cellData.getValue().getInstante();
+            String formatada = instante == null ? "" : formatter.format(instante);
+            return new SimpleStringProperty(formatada);
+        });
+        // colDataCliente.setCellValueFactory(new PropertyValueFactory<>("instante"));
+      
+        
+
+        listaClientes = FXCollections.observableArrayList( 
+        new Cliente(1, "João Dias", Instant.parse("2025-05-10T10:00:00Z"), "(21) 99999-0000"),
+        new Cliente(2, "João Dias", Instant.parse("2025-05-10T10:00:00Z"), "(21) 99999-0000"),
+        new Cliente(3, "João Dias", Instant.now(), "(21) 99999-0000"),
+        new Cliente(4, "João Dias", Instant.now(), "(21) 99999-0000")
+        );
+
+    
+    
+
+        listaFiltradaCliente = new FilteredList<>(listaClientes, p -> true);
+
+        tabelaCliente.setItems(listaFiltradaCliente);
+        
+        txtFiltrarCliente.textProperty().addListener((obs, oldValue, newValue) -> {
+            String filtro = newValue.toLowerCase();
+            listaFiltradaCliente.setPredicate(cliente -> {
+             if(filtro == null || filtro.isEmpty()) {
+                return true;
+            }
+
+            String dataString = cliente.getInstante() == null ? "" : formatter.format(cliente.getInstante()).toLowerCase();
+            
+            return cliente.getNome().toLowerCase().contains(filtro) ||             
+            cliente.getTelefone().toLowerCase().contains(filtro)||
+            dataString.contains(filtro);
+            
+            });
+        });
 
 
         Label placeholderFornec = new Label("Nenhum Fornecedor encontrado!");
         placeholderFornec.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
         tabelaFornec.setPlaceholder(placeholderFornec);
 
+        
+        tabelaFornec.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        colFornec.setCellValueFactory(new PropertyValueFactory<>("empresa"));
+        colTelefoneFornec.setCellValueFactory(new PropertyValueFactory<>("Telefone"));
+        colCnpj.setCellValueFactory(new PropertyValueFactory<>("cnpj"));
+        
+      
+        
+
+        listaFornecedores = FXCollections.observableArrayList( 
+        new Fornecedor(1, "Cia Roupas", "11.111.222/0001-09", "(88) 88888-0000"),
+        new Fornecedor(2, "Roupas Cia", "22.333.444/0001-07", "(21) 22222-4444")
+        
+        );
+
+        
+    
+    
+
+        listaFiltradaFornecedor = new FilteredList<>(listaFornecedores, p -> true);
+
+        tabelaFornec.setItems(listaFiltradaFornecedor);
+        
+        txtFiltrarFornec.textProperty().addListener((obs, oldValue, newValue) -> {
+            String filtro = newValue.toLowerCase();
+            listaFiltradaFornecedor.setPredicate(fornecedor -> {
+             if(filtro == null || filtro.isEmpty()) {
+                return true;
+            }
+
+            
+            
+            return fornecedor.getEmpresa().toLowerCase().contains(filtro) ||             
+            fornecedor.getTelefone().toLowerCase().contains(filtro) ||
+            fornecedor.getCnpj().toLowerCase().contains(filtro);
+            
+            
+            });
+        });
+
+
     
         Label placeholderProduto = new Label("Nenhum Produto encontrado!");
         placeholderProduto.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
         tabelaProduto.setPlaceholder(placeholderProduto);
+
+        tabelaProduto.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        colNomeProduto.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        colCodigoProduto.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        colEstoqueProduto.setCellValueFactory(new PropertyValueFactory<>("estoque"));
+        colValorProduto.setCellValueFactory(new PropertyValueFactory<>("valorVenda"));
+        
+      
+        
+
+        listaProdutos = FXCollections.observableArrayList( 
+           new Produto(1,876577777L, "Vestido", 10, 123.9, 660.8, 10),
+            new Produto(2,8333564598L, "Calça Jeans", 6, 123.9, 760.8, 6),
+             new Produto(3,2457665598L, "Vestido Rusti", 4, 123.9, 160.8, 4)
+        
+        );
+
+        
+    
+    
+
+        listaFiltradaProduto = new FilteredList<>(listaProdutos, p -> true);
+
+        tabelaProduto.setItems(listaFiltradaProduto);
+        
+        txtFiltrarProduto.textProperty().addListener((obs, oldValue, newValue) -> {
+            String filtro = newValue.toLowerCase();
+            listaFiltradaProduto.setPredicate(produto -> {
+             if(filtro == null || filtro.isEmpty()) {
+                return true;
+            }
+
+            String codigoStr = String.valueOf(produto.getCodigo());
+            String estoqueStr = String.valueOf(produto.getEstoque());
+            String valorStr = String.valueOf(produto.getValorVenda());
+            
+            
+            return produto.getNome().toLowerCase().contains(filtro) ||             
+            codigoStr.toLowerCase().contains(filtro) ||
+            estoqueStr.toLowerCase().contains(filtro) ||
+            valorStr.toLowerCase().contains(filtro);
+            
+            
+            });
+        });
+
+        tabelaProduto.setOnMouseClicked(e -> {
+
+            if (e.getClickCount() == 2){ 
+            Produto produtoSelecionado = tabelaProduto.getSelectionModel().getSelectedItem();
+
+                if (produtoSelecionado != null) {
+                    System.out.println("Selecionado: Código " + produtoSelecionado.getId()+ " Produto: "+ produtoSelecionado.getNome());
+                }
+
+            }
+        });
 
     
     }

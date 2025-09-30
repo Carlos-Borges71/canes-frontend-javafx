@@ -31,6 +31,9 @@ public class MenuController {
     private Button btnSair;
 
     @FXML
+    private Button btnPedido;
+
+    @FXML
     private Label lblCadastrar;
 
     @FXML
@@ -41,6 +44,9 @@ public class MenuController {
 
     @FXML
     private Label lblPesquisa;
+
+    @FXML
+    private Label lblPedido;
     
 
     @FXML
@@ -67,6 +73,16 @@ public class MenuController {
 
         try {
             ScreenUtils.changeScreen(event,"/com/canes/excluir.fxml", "Exclusão", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void onClickPedido(ActionEvent event) {
+
+        try {
+            ScreenUtils.changeScreen(event,"/com/canes/pedido.fxml", "Pedido", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -177,6 +193,22 @@ public class MenuController {
 
         HouverEffectUtil.apllyHouverSobre(btnExcluir);
         lblExcluir.setMouseTransparent(true);
+        
+
+    }
+
+    @FXML
+    void onMouseExitedPedido(MouseEvent event) {
+
+        HouverEffectUtil.apllyHouverSair(btnPedido);
+
+    }
+
+    @FXML
+    void onMouseEnteredPedido(MouseEvent event) {
+
+        HouverEffectUtil.apllyHouverSobre(btnPedido);
+        lblPedido.setMouseTransparent(true);
         
 
     }

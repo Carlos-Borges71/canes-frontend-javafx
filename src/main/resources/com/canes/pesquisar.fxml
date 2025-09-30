@@ -96,16 +96,20 @@
                <children>
                   <TableView fx:id="tabelaUsuario" layoutX="16.0" layoutY="66.0" prefHeight="292.0" prefWidth="888.0">
                     <columns>
-                      <TableColumn fx:id="colNome" prefWidth="300.00001525878906" style="-fx-font-size: 16px" text="Nome" />
-                      <TableColumn fx:id="colSetor" prefWidth="208.80001831054688" style="-fx-font-size: 16px" text="Setor" />
-                        <TableColumn fx:id="colLogin" prefWidth="188.7999267578125" style="-fx-font-size: 16px" text="Login" />
-                        <TableColumn fx:id="colTelefone" prefWidth="167.99993896484375" style="-fx-font-size: 16px" text="Telefone" />
+                      <TableColumn fx:id="colNome" prefWidth="249.60009765625" style="-fx-font-size: 16px" text="Nome" />
+                      <TableColumn fx:id="colSetor" prefWidth="199.20001220703125" style="-fx-font-size: 16px" text="Setor" />
+                        <TableColumn fx:id="colLogin" prefWidth="132.0" style="-fx-font-size: 16px" text="Login" />
+                        <TableColumn fx:id="colTelefone" prefWidth="191.199951171875" style="-fx-font-size: 16px" text="Telefone" />
+                        <TableColumn fx:id="colData" maxWidth="350.0" prefWidth="258.3997802734375" style="-fx-font-size: 16px" text="Data" />
                     </columns>
                   </TableView>
                   <TextField fx:id="txtFiltrar" layoutX="24.0" layoutY="14.0" prefHeight="37.0" prefWidth="323.0" promptText="Digite para filtrar" style="-fx-background-color: Transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;">
                      <font>
-                        <Font name="Verdana Bold" size="18.0" />
+                        <Font name="Verdana" size="16.0" />
                      </font>
+                     <padding>
+                        <Insets left="35.0" />
+                     </padding>
                   </TextField>
                   <Button fx:id="btnLimparUsuario" layoutX="368.0" layoutY="13.0" mnemonicParsing="false" onAction="#limparUsuario" onMouseEntered="#onMouseEteredFiltrar" onMouseExited="#onMouseExitedFiltrar" prefHeight="25.0" prefWidth="124.0" style="-fx-border-color: fff; -fx-background-color: transparent; -fx-border-radius: 7;" text="Limpar" textFill="WHITE">
                      <font>
@@ -115,6 +119,11 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
+                  <ImageView fitHeight="26.0" fitWidth="29.0" layoutX="28.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/search.png" />
+                     </image>
+                  </ImageView>
                </children>
             </Pane>
             <Pane fx:id="paneCliente" layoutX="124.0" layoutY="300.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="367.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
@@ -124,16 +133,18 @@
                <children>
                   <TableView fx:id="tabelaCliente" layoutX="16.0" layoutY="66.0" prefHeight="292.0" prefWidth="888.0">
                      <columns>
-                        <TableColumn fx:id="colNome1" prefWidth="300.00001525878906" style="-fx-font-size: 16px" text="Nome" />
-                        <TableColumn fx:id="colSetor1" prefWidth="208.80001831054688" style="-fx-font-size: 16px" text="Setor" />
-                        <TableColumn fx:id="colLogin1" prefWidth="188.7999267578125" style="-fx-font-size: 16px" text="Login" />
-                        <TableColumn fx:id="colTelefone1" prefWidth="167.99993896484375" style="-fx-font-size: 16px" text="Telefone" />
+                        <TableColumn fx:id="colNomeCliente" prefWidth="300.00001525878906" style="-fx-font-size: 16px" text="Nome" />
+                        <TableColumn fx:id="colTelefoneCliente" prefWidth="208.80001831054688" style="-fx-font-size: 16px" text="Telefone" />
+                        <TableColumn fx:id="colDataCliente" prefWidth="167.99993896484375" style="-fx-font-size: 16px" text="Data" />
                      </columns>
                   </TableView>
                   <TextField fx:id="txtFiltrarCliente" layoutX="24.0" layoutY="14.0" prefHeight="37.0" prefWidth="323.0" promptText="Digite para filtrar" style="-fx-background-color: Transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;">
                      <font>
-                        <Font name="Verdana Bold" size="18.0" />
+                        <Font name="Verdana" size="16.0" />
                      </font>
+                     <padding>
+                        <Insets left="35.0" />
+                     </padding>
                   </TextField>
                   <Button fx:id="btnLimparCliente" layoutX="368.0" layoutY="13.0" mnemonicParsing="false" onAction="#limparCliente" onMouseEntered="#onMouseEteredFiltrar" onMouseExited="#onMouseExitedFiltrar" prefHeight="25.0" prefWidth="124.0" style="-fx-border-color: fff; -fx-background-color: transparent; -fx-border-radius: 7;" text="Limpar" textFill="WHITE">
                      <font>
@@ -143,6 +154,11 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
+                  <ImageView fitHeight="26.0" fitWidth="29.0" layoutX="28.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/search.png" />
+                     </image>
+                  </ImageView>
                </children>
             </Pane>
             <Pane fx:id="paneFornec" layoutX="124.0" layoutY="300.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="367.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
@@ -152,16 +168,18 @@
                <children>
                   <TableView fx:id="tabelaFornec" layoutX="16.0" layoutY="66.0" prefHeight="292.0" prefWidth="888.0">
                      <columns>
-                        <TableColumn fx:id="colNome11" prefWidth="300.00001525878906" style="-fx-font-size: 16px" text="Nome" />
-                        <TableColumn fx:id="colSetor11" prefWidth="208.80001831054688" style="-fx-font-size: 16px" text="Setor" />
-                        <TableColumn fx:id="colLogin11" prefWidth="188.7999267578125" style="-fx-font-size: 16px" text="Login" />
-                        <TableColumn fx:id="colTelefone11" prefWidth="167.99993896484375" style="-fx-font-size: 16px" text="Telefone" />
+                        <TableColumn fx:id="colFornec" prefWidth="300.00001525878906" style="-fx-font-size: 16px" text="Empresa" />
+                        <TableColumn fx:id="colCnpj" prefWidth="208.80001831054688" style="-fx-font-size: 16px" text="Cnpj" />
+                        <TableColumn fx:id="colTelefoneFornec" prefWidth="167.99993896484375" style="-fx-font-size: 16px" text="Telefone" />
                      </columns>
                   </TableView>
                   <TextField fx:id="txtFiltrarFornec" layoutX="24.0" layoutY="14.0" prefHeight="37.0" prefWidth="323.0" promptText="Digite para filtrar" style="-fx-background-color: Transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;">
                      <font>
-                        <Font name="Verdana Bold" size="18.0" />
+                        <Font name="Verdana" size="16.0" />
                      </font>
+                     <padding>
+                        <Insets left="35.0" />
+                     </padding>
                   </TextField>
                   <Button fx:id="btnLimparFornec" layoutX="368.0" layoutY="13.0" mnemonicParsing="false" onAction="#limparFornec" onMouseEntered="#onMouseEteredFiltrar" onMouseExited="#onMouseExitedFiltrar" prefHeight="25.0" prefWidth="124.0" style="-fx-border-color: fff; -fx-background-color: transparent; -fx-border-radius: 7;" text="Limpar" textFill="WHITE">
                      <font>
@@ -171,6 +189,11 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
+                  <ImageView fitHeight="26.0" fitWidth="29.0" layoutX="28.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/search.png" />
+                     </image>
+                  </ImageView>
                </children>
             </Pane>
             <Pane fx:id="paneProduto" layoutX="124.0" layoutY="300.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="367.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
@@ -180,16 +203,19 @@
                <children>
                   <TableView fx:id="tabelaProduto" layoutX="16.0" layoutY="66.0" prefHeight="292.0" prefWidth="888.0">
                      <columns>
-                        <TableColumn fx:id="colNome111" prefWidth="300.00001525878906" style="-fx-font-size: 16px" text="Nome" />
-                        <TableColumn fx:id="colSetor111" prefWidth="208.80001831054688" style="-fx-font-size: 16px" text="Setor" />
-                        <TableColumn fx:id="colLogin111" prefWidth="188.7999267578125" style="-fx-font-size: 16px" text="Login" />
-                        <TableColumn fx:id="colTelefone111" prefWidth="167.99993896484375" style="-fx-font-size: 16px" text="Telefone" />
+                        <TableColumn fx:id="colNomeProduto" prefWidth="300.00001525878906" style="-fx-font-size: 16px" text="Produto" />
+                        <TableColumn fx:id="colCodigoProduto" prefWidth="208.80001831054688" style="-fx-font-size: 16px" text="Código" />
+                        <TableColumn fx:id="colValorProduto" prefWidth="161.5999755859375" style="-fx-font-size: 16px" text="Valor" />
+                        <TableColumn fx:id="colEstoqueProduto" prefWidth="195.199951171875" style="-fx-font-size: 16px" text="Quantidade Estoque" />
                      </columns>
                   </TableView>
                   <TextField fx:id="txtFiltrarProduto" layoutX="24.0" layoutY="14.0" prefHeight="37.0" prefWidth="323.0" promptText="Digite para filtrar" style="-fx-background-color: Transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;">
                      <font>
-                        <Font name="Verdana Bold" size="18.0" />
+                        <Font name="Verdana Bold" size="16.0" />
                      </font>
+                     <padding>
+                        <Insets left="35.0" />
+                     </padding>
                   </TextField>
                   <Button fx:id="btnLimparProduto" layoutX="368.0" layoutY="13.0" mnemonicParsing="false" onAction="#limparProduto" onMouseEntered="#onMouseEteredFiltrar" onMouseExited="#onMouseExitedFiltrar" prefHeight="25.0" prefWidth="124.0" style="-fx-border-color: fff; -fx-background-color: transparent; -fx-border-radius: 7;" text="Limpar" textFill="WHITE">
                      <font>
@@ -199,6 +225,11 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
+                  <ImageView fitHeight="26.0" fitWidth="29.0" layoutX="28.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/search.png" />
+                     </image>
+                  </ImageView>
                </children>
             </Pane>
          </children>

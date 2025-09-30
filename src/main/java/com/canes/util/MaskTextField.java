@@ -1,5 +1,6 @@
 package com.canes.util;
 
+
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -237,6 +238,8 @@ public class MaskTextField {
         valor(field, new Locale("pt", "BR"), 2);
     }
 
+    
+
     /**
      * Aplica máscara de moeda configurável (locale e casas decimais).
      */
@@ -292,6 +295,9 @@ public class MaskTextField {
             return BigDecimal.ZERO;
         }
     }
+
+    
+   
 }
 
 
