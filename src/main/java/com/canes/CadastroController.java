@@ -435,56 +435,13 @@ public class CadastroController implements Initializable{
         
 
     }
-
+    
+    
+    
     @FXML
     void onClickcadastrarClient(ActionEvent event) {
 
-        if(txtNomeClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro( "O campo nome não pode ficar vazio!." );
-            return;
-        }
-        else if(txtLogradouroClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro( "O campo Logradouro não \npode ficar vazio!." );
-            return;
-        }
-        else if(txtNumeroClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro( "O campo número não \npode ficar vazio!." );
-            return;
-        }
-        else if(txtBairroClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Bairro não \npode ficar vazio!." );
-            return;
-        }
-        
-        else if(txtCidadeClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Cidade não \npode ficar vazio!." );
-            return;
-        }
-        
-        else if(txtEstadoClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Estado não \npode ficar vazio!." );
-            return;
-        }
-        
-        else if(txtCepClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo CEP não \npode ficar vazio!." );
-            return;
-        }
-        
-        else if(txtcelClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Celular não \npode ficar vazio!." );
-            return;
-        }
-        else {
-            AlertUtil.mostrarSucesso("Cadastro do Cliente " + txtNomeClient.getText() + "\nSalvo com sucesso");
-
-            try{ 
-            ScreenUtils.changeScreen(event, "/com/canes/menu.fxml", "Menu", null);
-            }catch(Exception e) {
-
-            e.printStackTrace();
-            }
-        }
+       
 
     }
    

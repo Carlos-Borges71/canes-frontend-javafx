@@ -97,6 +97,8 @@ public class PedidoController {
 
     private DecimalFormat df;
 
+   // private CadastroController cadastroController;
+
     NumberFormat nf =  NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
     DecimalFormatSymbols simbols = new DecimalFormatSymbols(new Locale("pt", "BR"));
@@ -205,17 +207,85 @@ public class PedidoController {
                 newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN), () -> 
                 
                 {
-                    try {
-                        statusPagamento();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
+                    try{ 
+                        ScreenUtils.changeScreenController(txtStatus, "/com/canes/statusPagamento.fxml", "Selecionar Status de Pagamento", controller -> {
+                            if(controller instanceof StatusPagamentoController) {
+
+                                StatusPagamentoController statusPagamentoController = (StatusPagamentoController) controller;                            
+
+                                String formaEscolhida = ((StatusPagamentoController)controller).getFormaSelecionada();
+                                
+                                System.out.println(formaEscolhida);
+                                if (formaEscolhida != null) {
+                                    txtStatus.setText(formaEscolhida);
+                                }
+
+
+                            }
+                    
+                        });
+
+                        
+
+                    }catch(IOException e) {
+                        // 4
                         e.printStackTrace();
                     }
-                }
+
+
+                });
                 
                 
                 
-                );
+                
+            }
+        });
+
+        txtTotalRecebido.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if(newScene != null) {
+                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN), () -> 
+                
+                {
+                    try{ 
+                        ScreenUtils.changeScreenController(txtCliente, "/com/canes/cadastroCliente.fxml", "Cadastro Cliente", controller -> {
+                            if(controller instanceof CadastroClienteController) {
+
+                                 //CadastroClienteController cadastroClienteController = (CadastroClienteController) controller;                                
+                                                               
+                                Cliente cliente = ((CadastroClienteController)controller).getClienteSalvo();
+                                Telefone telefone = ((CadastroClienteController)controller).getTelefoneSalvo();
+                                Endereco enderco = ((CadastroClienteController)controller).getEnderecoSalvo();
+                        
+                                if(cliente != null){
+                                    txtCliente.setText(cliente.getNome());                                    
+                                }if (telefone != null)  {
+                                    txtTelefone.setText(telefone.getNumero());
+                                }if(enderco != null) {
+
+                                }                      
+                                                      
+
+
+                            }
+                           
+                                
+                            
+                    
+                        });
+
+                        
+
+                    }catch(IOException e) {
+                        // 4
+                        e.printStackTrace();
+                    }
+
+
+                });
+                
+                
+                
+                
             }
         });
     
@@ -250,7 +320,7 @@ public class PedidoController {
         stage.showAndWait();
 
         // Recupera a escolha feita
-        String formaEscolhida = controller.getFormaSelecionada();
+        String formaEscolhida = controller.getFormaSelecionada();        
         if (formaEscolhida != null) {
             txtStatus.setText(formaEscolhida);
         }

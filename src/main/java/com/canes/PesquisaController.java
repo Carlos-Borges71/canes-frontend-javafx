@@ -417,7 +417,7 @@ public class PesquisaController{
         tabelaCliente.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         colNomeCliente.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        colTelefoneCliente.setCellValueFactory(new PropertyValueFactory<>("Telefone")); 
+        //colTelefoneCliente.setCellValueFactory(new PropertyValueFactory<>("Telefone")); 
         
         colDataCliente.setCellValueFactory(cellData -> {
             Instant instante = cellData.getValue().getInstante();
@@ -429,10 +429,10 @@ public class PesquisaController{
         
 
         listaClientes = FXCollections.observableArrayList( 
-        new Cliente(1, "João Dias", Instant.parse("2025-05-10T10:00:00Z"), "(21) 99999-0000"),
-        new Cliente(2, "João Dias", Instant.parse("2025-05-10T10:00:00Z"), "(21) 99999-0000"),
-        new Cliente(3, "João Dias", Instant.now(), "(21) 99999-0000"),
-        new Cliente(4, "João Dias", Instant.now(), "(21) 99999-0000")
+        new Cliente(1, "João Dias", Instant.parse("2025-05-10T10:00:00Z")),
+        new Cliente(2, "João Dias", Instant.parse("2025-05-10T10:00:00Z")),
+        new Cliente(3, "João Dias", Instant.now()),
+        new Cliente(4, "João Dias", Instant.now())
         );
 
     
@@ -452,7 +452,7 @@ public class PesquisaController{
             String dataString = cliente.getInstante() == null ? "" : formatter.format(cliente.getInstante()).toLowerCase();
             
             return cliente.getNome().toLowerCase().contains(filtro) ||             
-            cliente.getTelefone().toLowerCase().contains(filtro)||
+           
             dataString.contains(filtro);
             
             });
