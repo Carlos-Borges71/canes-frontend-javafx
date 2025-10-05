@@ -4,6 +4,9 @@ module com.canes {
     requires java.desktop;
     requires javafx.graphics;
 
-    opens com.canes to javafx.fxml;
+    opens com.canes.controller to javafx.fxml;
     exports com.canes;
+    exports com.canes.model;
+    exports com.canes.model.dpo;
+
 }

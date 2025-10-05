@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" prefHeight="803.0" prefWidth="1457.0" spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #1B1A16, #141442); -fx-border-color: fff;" stylesheets="@pedido.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.PedidoController">
+<VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" prefHeight="803.0" prefWidth="1457.0" spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #1B1A16, #141442); -fx-border-color: fff;" stylesheets="@pedido.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.controller.PedidoController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -86,7 +86,7 @@
             </TextField>
             <Pane layoutX="666.0" layoutY="88.0" prefHeight="474.0" prefWidth="650.0" style="-fx-background-color: fff; -fx-background-radius: 20;">
                <children>
-                  <TableView fx:id="tabelaPedido" focusTraversable="false" layoutX="13.0" layoutY="10.0" prefHeight="404.0" prefWidth="626.0">
+                  <TableView fx:id="tabelaPedido" editable="true" focusTraversable="false" layoutX="13.0" layoutY="10.0" prefHeight="404.0" prefWidth="626.0">
                     <columns>
                       <TableColumn fx:id="colItem" prefWidth="55.20001220703125" text="Item" />
                       <TableColumn fx:id="colProduto" prefWidth="228.800048828125" text="Produto" />
@@ -180,30 +180,42 @@
                </opaqueInsets></TextField>
             <Pane layoutX="15.0" layoutY="635.0" prefHeight="106.0" prefWidth="299.0" style="-fx-background-color: fff;">
                <children>
-                  <Label layoutX="44.0" layoutY="11.0" text="F1 - CADASTRAR CLIENTE">
+                  <Label layoutX="21.0" layoutY="11.0" text="CTRL+L  CADASTRAR CLIENTE">
                      <font>
-                        <Font name="Verdana Bold" size="14.0" />
+                        <Font name="Verdana" size="14.0" />
                      </font>
                   </Label>
-                  <Label layoutX="74.0" layoutY="61.0" text="F2 - AGUARDANDO PAGAMENTO" />
-                  <Label layoutX="75.0" layoutY="80.0" text="F3 - PAGO" />
-                  <Label layoutX="78.0" layoutY="45.0" text="STATUS DE PAGAMENTO">
+                  <Label layoutX="21.0" layoutY="29.0" text="CTRL+D  DESCONTO">
                      <font>
-                        <Font name="Verdana Bold" size="12.0" />
+                        <Font name="Verdana" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="21.0" layoutY="49.0" text="CTRL+Q  QUANTIDADE">
+                     <font>
+                        <Font name="Verdana" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="21.0" layoutY="70.0" text="CTRL+F  FORMA PAGAMENTO">
+                     <font>
+                        <Font name="Verdana" size="14.0" />
                      </font>
                   </Label>
                </children></Pane> 
             <Pane layoutX="353.0" layoutY="635.0" prefHeight="106.0" prefWidth="299.0" style="-fx-background-color: fff;">
                <children>
-                  <Label layoutX="27.0" layoutY="44.0" text="F4 - DINHEIRO" />
-                  <Label layoutX="27.0" layoutY="60.0" text="F5 - PIX" />
-                  <Label layoutX="29.0" layoutY="76.0" text="F6 - VISA ELECTRON" />
-                  <Label layoutX="183.0" layoutY="43.0" text="F7 - MAESTRO" />
-                  <Label layoutX="183.0" layoutY="60.0" text="F8 - MASTERCARD" />
-                  <Label layoutX="183.0" layoutY="76.0" text="F9 - VISA" />
-                  <Label layoutX="68.0" layoutY="19.0" text="FORMA DE PAGAMENTO">
+                  <Label layoutX="26.0" layoutY="48.0" text="CTRL+S  STATUS">
                      <font>
-                        <Font name="Verdana Bold" size="12.0" />
+                        <Font name="Verdana" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="26.0" layoutY="67.0" text="CTRL+R  TOTAL RECEBIDO">
+                     <font>
+                        <Font name="Verdana" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="26.0" layoutY="14.0" text="ESC SAIR">
+                     <font>
+                        <Font name="Verdana Bold" size="14.0" />
                      </font>
                   </Label>
                </children></Pane>

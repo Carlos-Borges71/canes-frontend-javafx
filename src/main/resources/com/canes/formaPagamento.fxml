@@ -6,7 +6,7 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane prefHeight="371.0" prefWidth="598.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.FormaPagamentoController">
+<Pane prefHeight="371.0" prefWidth="598.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.controller.FormaPagamentoController">
    <children>
       
       <Label layoutX="219.0" layoutY="34.0" text="Escolha a foma de Pagamento" />

@@ -4,7 +4,7 @@ package com.canes.util;
 import java.io.IOException;
 import java.util.function.Consumer;
 
-import com.canes.StatusPagamentoController;
+import com.canes.controller.StatusPagamentoController;
 
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXMLLoader;
