@@ -175,6 +175,7 @@ public class PedidoController {
                             tabelaPedido.getItems().remove(selecionado);
                             totalValor();
                             totalQuant();
+                            desconto();
                         
                         }
                     });
@@ -190,6 +191,7 @@ public class PedidoController {
             if(newScene != null) {
                 newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN), () -> 
                 txtDesconto.requestFocus());
+                
             }
         });
 
@@ -426,23 +428,10 @@ public class PedidoController {
 
      @FXML
     void onEnterActionDesconto(ActionEvent event) {
-         if(lblDesconto != null){         
-
-            BigDecimal desconto = MaskTextField.getValue(txtDesconto);
-            BigDecimal subTotal = getValueLbl(lblTotal);
-            BigDecimal result = subTotal.subtract(desconto);
-            
-            if(subTotal.compareTo(desconto) <= 0){
-            lblTotal.setText("0");
-            return;
-            }else{ 
-            String resultFor = df.format(result);
-            lblTotal.setText(resultFor.toString());
-    
-            }
-            
-        }
+                   
+        
         lblDesconto.setText(txtDesconto.getText());
+        desconto();
     
     }
     
@@ -481,6 +470,9 @@ public class PedidoController {
 
         totalQuant();           
         totalValor();
+        desconto();
+
+
 
         
 
@@ -516,6 +508,17 @@ public class PedidoController {
     
     }
 
+    private void desconto(){
+      double total= tabelaPedido.getItems().stream().mapToDouble(tblExibirPedido :: getTotal).sum();
+      BigDecimal totalBig = BigDecimal.valueOf(total);
+      BigDecimal desc = new BigDecimal(lblDesconto.getText().replace("R$ ", "").replaceAll("[^\\d,\\.]", "").replace(",",".").trim());
+      
+      BigDecimal resultado = totalBig.subtract(desc);
+      
+      lblTotal.setText(nf.format(resultado));
+      
+    }
+ 
 
 
     private void  realColuna(TableColumn<tblExibirPedido,Double> coluna){

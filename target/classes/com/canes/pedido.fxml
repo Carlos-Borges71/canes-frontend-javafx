@@ -115,12 +115,12 @@
                         <Font name="Verdana Bold" size="13.0" />
                      </font>
                   </Label>
-                  <Label layoutX="272.0" layoutY="429.0" text="Desconto:">
+                  <Label layoutX="263.0" layoutY="429.0" text="Desconto:">
                      <font>
                         <Font name="Verdana Bold" size="13.0" />
                      </font>
                   </Label>
-                  <Label fx:id="lblDesconto" layoutX="355.0" layoutY="430.0" text="R$ 0,00">
+                  <Label fx:id="lblDesconto" layoutX="346.0" layoutY="430.0" text="R$ 0,00" textFill="RED">
                      <font>
                         <Font name="Verdana Bold" size="13.0" />
                      </font>
