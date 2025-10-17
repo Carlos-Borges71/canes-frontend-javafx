@@ -27,6 +27,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -105,17 +106,15 @@ public class PedidoController {
 
     private DecimalFormat df;
 
-   // private CadastroController cadastroController;
+    // private CadastroController cadastroController;
 
-    NumberFormat nf =  NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+    NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
     DecimalFormatSymbols simbols = new DecimalFormatSymbols(new Locale("pt", "BR"));
-    
 
-    public void initialize(){
+    public void initialize() {
 
-        
-        MaskTextField.valor(txtDesconto);    
+        MaskTextField.valor(txtDesconto);
         MaskTextField.valor(txtSubTotal);
         MaskTextField.valor(txtTotalRecebido);
         MaskTextField.valor(txtTroco);
@@ -129,15 +128,52 @@ public class PedidoController {
 
         tabelaPedido.setPlaceholder(placeholder);
 
-       simbols.setDecimalSeparator(',');
-       simbols.setGroupingSeparator('.');
-       df = new DecimalFormat("#,##0.00", simbols);
+       
 
+        // Zebrando a tabela
+        tabelaPedido.setRowFactory(tv -> new TableRow<>() {
+            @Override
+            protected void updateItem(tblExibirPedido item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setStyle("");
+                } else {
+                    
+                    if (getIndex() % 2 == 0) {
+                        setStyle("-fx-background-color: #d2cbcbff;"); // cinza claro
+                    } else {
+                        setStyle("-fx-background-color: #f2f2f2;");
+                    }
+                }
+            }
+        });
+
+         // alterando a cor quando selecionada a linha
+        // tabelaPedido.setRowFactory(tv -> new TableRow<>() {
+        //     @Override
+        //     protected void updateItem(tblExibirPedido item, boolean empty) {
+        //         super.updateItem(item, empty);
+
+        //         if (empty || item == null) {
+        //             setStyle("");
+
+        //         } else if (isSelected()) {
+        //             setStyle("-fx-background-color: #90caf9");
+
+        //         } else {
+        //             setStyle("");
+        //         }
+        //     }
+        // });
+
+        simbols.setDecimalSeparator(',');
+        simbols.setGroupingSeparator('.');
+        df = new DecimalFormat("#,##0.00", simbols);
 
         lblTotal.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(lblTotal != null){ 
-            String totalValor = lblTotal.getText();
-            txtSubTotal.setText(totalValor);
+            if (lblTotal != null) {
+                String totalValor = lblTotal.getText();
+                txtSubTotal.setText(totalValor);
             }
         });
 
@@ -145,221 +181,197 @@ public class PedidoController {
             Scene scene = txtCodigo.getScene();
 
             scene.setOnKeyPressed(e -> {
-                if (e.getCode() == KeyCode.ESCAPE){
+                if (e.getCode() == KeyCode.ESCAPE) {
 
                     try {
-                        ScreenUtils.changeScreenElement(txtCodigo, "/com/canes/menu.fxml", "MENU",  null);
-                        } catch (Exception event) {
-                            event.printStackTrace();
-                        }
+                        ScreenUtils.changeScreenElement(txtCodigo, "/com/canes/menu.fxml", "MENU", null);
+                    } catch (Exception event) {
+                        event.printStackTrace();
+                    }
                 }
             });
         });
 
         tabelaPedido.sceneProperty().addListener((obs, oldScene, newScene) -> {
 
-            if(newScene != null){
+            if (newScene != null) {
                 newScene.addEventFilter(KeyEvent.KEY_PRESSED, evet -> {
-                    if(evet.getCode() == KeyCode.DELETE){
+                    if (evet.getCode() == KeyCode.DELETE) {
 
-                    tblExibirPedido selecionado = tabelaPedido.getSelectionModel().getSelectedItem();
-                
-                if(selecionado != null){
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Confirmação");
-                    alert.setHeaderText("Excluir Produto");
-                    alert.setContentText("Tem Certeza que deseja excluir produto do item " + selecionado.getItem() +  "?\nAo confirma este produto será excluído permanentemente.");
+                        tblExibirPedido selecionado = tabelaPedido.getSelectionModel().getSelectedItem();
 
-                    alert.showAndWait().ifPresent(resposta -> {
-                        if(resposta == ButtonType.OK){
-                            tabelaPedido.getItems().remove(selecionado);
-                            totalValor();
-                            totalQuant();
-                            desconto();
-                        
+                        if (selecionado != null) {
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.setTitle("Confirmação");
+                            alert.setHeaderText("Excluir Produto");
+                            alert.setContentText(
+                                    "Tem Certeza que deseja excluir produto do item " + selecionado.getItem()
+                                            + "?\nAo confirma este produto será excluído permanentemente.");
+
+                            alert.showAndWait().ifPresent(resposta -> {
+                                if (resposta == ButtonType.OK) {
+                                    tabelaPedido.getItems().remove(selecionado);
+                                    totalValor();
+                                    totalQuant();
+                                    desconto();
+
+                                }
+                            });
                         }
-                    });
-                }
 
                     }
                 });
-                
+
             }
         });
 
         txtCodigo.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if(newScene != null) {
-                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN), () -> 
-                txtDesconto.requestFocus());
-                
+            if (newScene != null) {
+                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN),
+                        () -> txtDesconto.requestFocus());
+
             }
         });
 
         txtCodigo.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if(newScene != null) {
-                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.T, KeyCombination.CONTROL_DOWN), () -> 
-                txtTelefone.requestFocus());
+            if (newScene != null) {
+                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.T, KeyCombination.CONTROL_DOWN),
+                        () -> txtTelefone.requestFocus());
             }
         });
 
         txtCodigo.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if(newScene != null) {
-                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN), () -> 
-                txtQuant.requestFocus());
+            if (newScene != null) {
+                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN),
+                        () -> txtQuant.requestFocus());
             }
         });
 
         txtCodigo.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if(newScene != null) {
-                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN), () -> 
-                txtTotalRecebido.requestFocus());
+            if (newScene != null) {
+                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN),
+                        () -> txtTotalRecebido.requestFocus());
             }
         });
 
         txtDesconto.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if(newScene != null) {
-                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN), () -> 
-                txtCodigo.requestFocus());
+            if (newScene != null) {
+                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN),
+                        () -> txtCodigo.requestFocus());
             }
         });
 
         txtDesconto.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if(newScene != null) {
-                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN), () -> 
-                
+            if (newScene != null) {
+                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN), () ->
+
                 {
-                    try{ 
-                        ScreenUtils.changeScreenController(txtPagamento, "/com/canes/formaPagamento.fxml", "Selecionar forma de Pagamento", controller -> {
-                            if(controller instanceof FormaPagamentoController) {
+                    try {
+                        ScreenUtils.changeScreenController(txtPagamento, "/com/canes/formaPagamento.fxml",
+                                "Selecionar forma de Pagamento", controller -> {
+                                    if (controller instanceof FormaPagamentoController) {
 
-                                FormaPagamentoController formaPagamentoController = (FormaPagamentoController) controller;                            
+                                        FormaPagamentoController formaPagamentoController = (FormaPagamentoController) controller;
 
-                                String formaEscolhida = ((FormaPagamentoController)controller).getFormaSelecionada();
-                                
-                                // Recupera a escolha feita
-                                
-                                
-                                if (formaEscolhida != null) {
-                                txtPagamento.setText(formaEscolhida);
-                                        
+                                        String formaEscolhida = ((FormaPagamentoController) controller)
+                                                .getFormaSelecionada();
 
-                                }
-                            }
-                        });
+                                        // Recupera a escolha feita
+
+                                        if (formaEscolhida != null) {
+                                            txtPagamento.setText(formaEscolhida);
+
+                                        }
+                                    }
+                                });
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }
-                
-                
-                
+
                 );
             }
         });
 
         txtTotalRecebido.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if(newScene != null) {
-                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN), () -> 
-                
+            if (newScene != null) {
+                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN), () ->
+
                 {
-                    try{ 
-                        ScreenUtils.changeScreenController(txtStatus, "/com/canes/statusPagamento.fxml", "Selecionar Status de Pagamento", controller -> {
-                            if(controller instanceof StatusPagamentoController) {
+                    try {
+                        ScreenUtils.changeScreenController(txtStatus, "/com/canes/statusPagamento.fxml",
+                                "Selecionar Status de Pagamento", controller -> {
+                                    if (controller instanceof StatusPagamentoController) {
 
-                                StatusPagamentoController statusPagamentoController = (StatusPagamentoController) controller;                            
+                                        StatusPagamentoController statusPagamentoController = (StatusPagamentoController) controller;
 
-                                String formaEscolhida = ((StatusPagamentoController)controller).getFormaSelecionada();
-                                
-                                System.out.println(formaEscolhida);
-                                if (formaEscolhida != null) {
-                                    txtStatus.setText(formaEscolhida);
-                                }
+                                        String formaEscolhida = ((StatusPagamentoController) controller)
+                                                .getFormaSelecionada();
 
+                                        System.out.println(formaEscolhida);
+                                        if (formaEscolhida != null) {
+                                            txtStatus.setText(formaEscolhida);
+                                        }
 
-                            }
-                    
-                        });
+                                    }
 
-                        
+                                });
 
-                    }catch(IOException e) {
+                    } catch (IOException e) {
                         // 4
                         e.printStackTrace();
                     }
 
-
                 });
-                
-                
-                
-                
+
             }
         });
 
         txtTotalRecebido.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if(newScene != null) {
-                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN), () -> 
-                
+            if (newScene != null) {
+                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN), () ->
+
                 {
-                    try{ 
-                        ScreenUtils.changeScreenController(txtCliente, "/com/canes/cadastroCliente.fxml", "Cadastro Cliente", controller -> {
-                            if(controller instanceof CadastroClienteController) {
+                    try {
+                        ScreenUtils.changeScreenController(txtCliente, "/com/canes/cadastroCliente.fxml",
+                                "Cadastro Cliente", controller -> {
+                                    if (controller instanceof CadastroClienteController) {
 
-                                 //CadastroClienteController cadastroClienteController = (CadastroClienteController) controller;                                
-                                                               
-                                Cliente cliente = ((CadastroClienteController)controller).getClienteSalvo();
-                                Telefone telefone = ((CadastroClienteController)controller).getTelefoneSalvo();
-                                Endereco enderco = ((CadastroClienteController)controller).getEnderecoSalvo();
-                        
-                                if(cliente != null){
-                                    txtCliente.setText(cliente.getNome());                                    
-                                }if (telefone != null)  {
-                                    txtTelefone.setText(telefone.getNumero());
-                                }if(enderco != null) {
+                                        // CadastroClienteController cadastroClienteController =
+                                        // (CadastroClienteController) controller;
 
-                                }                      
-                                                      
+                                        Cliente cliente = ((CadastroClienteController) controller).getClienteSalvo();
+                                        Telefone telefone = ((CadastroClienteController) controller).getTelefoneSalvo();
+                                        Endereco enderco = ((CadastroClienteController) controller).getEnderecoSalvo();
 
+                                        if (cliente != null) {
+                                            txtCliente.setText(cliente.getNome());
+                                        }
+                                        if (telefone != null) {
+                                            txtTelefone.setText(telefone.getNumero());
+                                        }
+                                        if (enderco != null) {
 
-                            }
-                           
-                                
-                            
-                    
-                        });
+                                        }
 
-                        
+                                    }
 
-                    }catch(IOException e) {
+                                });
+
+                    } catch (IOException e) {
                         // 4
                         e.printStackTrace();
                     }
 
-
                 });
-                
-                
-                
-                
+
             }
         });
-    
-        
-   
-
 
     }
-    
 
-
-
-   
-
-
-
-
-    private void statusPagamento() throws IOException{
+    private void statusPagamento() throws IOException {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("statusPagamento.fxml"));
         Parent root = loader.load();
@@ -370,28 +382,21 @@ public class PedidoController {
         stage.setScene(new Scene(root));
         stage.initModality(Modality.APPLICATION_MODAL); // bloqueia a tela principal até fechar
         stage.setTitle("Selecionar Status de Pagamento");
-        
 
         // Mostra e espera fechar
         stage.showAndWait();
 
         // Recupera a escolha feita
-        String formaEscolhida = controller.getFormaSelecionada();        
+        String formaEscolhida = controller.getFormaSelecionada();
         if (formaEscolhida != null) {
             txtStatus.setText(formaEscolhida);
         }
-        
+
     }
-
-
-
 
     @FXML
     private void formaPagamento() throws IOException {
-    
 
-
-    
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FormaPagamento.fxml"));
         Parent root = loader.load();
 
@@ -403,7 +408,6 @@ public class PedidoController {
         stage.setScene(new Scene(root));
         stage.initModality(Modality.APPLICATION_MODAL); // bloqueia a tela principal até fechar
         stage.setTitle("Selecionar Forma de Pagamento");
-        
 
         // Mostra e espera fechar
         stage.showAndWait();
@@ -413,37 +417,25 @@ public class PedidoController {
         if (formaEscolhida != null) {
             txtPagamento.setText(formaEscolhida);
         }
-    
-
-
 
     }
-
-
-
-
 
     Integer item = 1;
 
-
-     @FXML
+    @FXML
     void onEnterActionDesconto(ActionEvent event) {
-                   
-        
+
         lblDesconto.setText(txtDesconto.getText());
         desconto();
-    
+
     }
-    
-    
+
     @FXML
     void onEnterAction(ActionEvent event) {
 
-
         colItem.setCellValueFactory(new PropertyValueFactory<>("item"));
 
-        colProduto.setCellValueFactory( new PropertyValueFactory<>("produto"));
-
+        colProduto.setCellValueFactory(new PropertyValueFactory<>("produto"));
 
         colQuant.setCellValueFactory(new PropertyValueFactory<>("quant"));
 
@@ -452,76 +444,67 @@ public class PedidoController {
 
         colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
         realColuna(colTotal);
-       
+
         String produt = txtCodigo.getText();
-        int quant = Integer.parseInt(txtQuant.getText());        
-        double unitario = Double.parseDouble(txtValorUnitario.getText().replace(",", ".").trim().replace("R$", ""));      
+        int quant = Integer.parseInt(txtQuant.getText());
+        double unitario = Double.parseDouble(txtValorUnitario.getText().replace(",", ".").trim().replace("R$", ""));
         double total = quant * unitario;
 
-    
-        
-
-        tblExibirPedido p = new tblExibirPedido(item,produt,quant,unitario,total);
+        tblExibirPedido p = new tblExibirPedido(item, produt, quant, unitario, total);
         tabelaPedido.getItems().add(p);
 
         tabelaPedido.scrollTo(p);
 
         item += 1;
 
-        totalQuant();           
+        totalQuant();
         totalValor();
         desconto();
 
-
-
-        
-
         txtCodigo.clear();
-    
 
     }
-    
 
-     @FXML
+    @FXML
     void onEnterActionRecebido(ActionEvent event) {
 
         BigDecimal total = MaskTextField.getValue(txtTotalRecebido);
-        BigDecimal subtotal = MaskTextField.getValue(txtSubTotal); 
-        
+        BigDecimal subtotal = MaskTextField.getValue(txtSubTotal);
+
         BigDecimal soma = total.subtract(subtotal);
-        if(total.compareTo(subtotal) <= 0){
+        if (total.compareTo(subtotal) <= 0) {
             txtTroco.setText("0");
-        }else{ 
-        txtTroco.setText(soma.toString());
+        } else {
+            txtTroco.setText(soma.toString());
         }
     }
 
-    private void totalQuant(){
-        int total = tabelaPedido.getItems().stream().mapToInt(tblExibirPedido :: getQuant).sum();
+    private void totalQuant() {
+        int total = tabelaPedido.getItems().stream().mapToInt(tblExibirPedido::getQuant).sum();
         String totalString = String.valueOf(total);
         lblQuant.setText(totalString);
     }
-    private void totalValor(){
-        double total = tabelaPedido.getItems().stream().mapToDouble(tblExibirPedido :: getTotal).sum();
+
+    private void totalValor() {
+        double total = tabelaPedido.getItems().stream().mapToDouble(tblExibirPedido::getTotal).sum();
         String totalString = String.valueOf(nf.format(total));
-        lblTotal.setText(totalString.replace("R$",""));
-    
+        lblTotal.setText(totalString.replace("R$", ""));
+
     }
 
-    private void desconto(){
-      double total= tabelaPedido.getItems().stream().mapToDouble(tblExibirPedido :: getTotal).sum();
-      BigDecimal totalBig = BigDecimal.valueOf(total);
-      BigDecimal desc = new BigDecimal(lblDesconto.getText().replace("R$ ", "").replaceAll("[^\\d,\\.]", "").replace(",",".").trim());
-      
-      BigDecimal resultado = totalBig.subtract(desc);
-      
-      lblTotal.setText(nf.format(resultado));
-      
+    private void desconto() {
+        double total = tabelaPedido.getItems().stream().mapToDouble(tblExibirPedido::getTotal).sum();
+        BigDecimal totalBig = BigDecimal.valueOf(total);
+        BigDecimal desc = new BigDecimal(
+                lblDesconto.getText().replace("R$ ", "").replaceAll("[^\\d,\\.]", "").replace(",", ".").trim());
+
+        BigDecimal resultado = totalBig.subtract(desc);
+
+        lblTotal.setText(nf.format(resultado));
+
     }
- 
 
-
-    private void  realColuna(TableColumn<tblExibirPedido,Double> coluna){
+    private void realColuna(TableColumn<tblExibirPedido, Double> coluna) {
 
         coluna.setCellFactory(col -> new TableCell<tblExibirPedido, Double>() {
             @Override
@@ -534,26 +517,21 @@ public class PedidoController {
                 }
             }
         });
-        
+
     }
 
-     public static BigDecimal getValueLbl(Label label) {
-        
+    public static BigDecimal getValueLbl(Label label) {
+
         String text = label.getText();
-        if (text == null || text.isBlank()) return BigDecimal.ZERO;
+        if (text == null || text.isBlank())
+            return BigDecimal.ZERO;
         String digits = text.replaceAll("\\D", "");
         try {
             return new BigDecimal(digits).movePointLeft(2);
         } catch (NumberFormatException e) {
             return BigDecimal.ZERO;
         }
-        
-    }
-    
 
-    
-    
+    }
 
 }
-
-
