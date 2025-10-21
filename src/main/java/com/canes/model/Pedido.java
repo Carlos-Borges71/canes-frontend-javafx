@@ -1,34 +1,26 @@
 package com.canes.model;
 
 import java.time.Instant;
-
+import java.util.List;
 
 public class Pedido {
-    
+
     private Integer id;
-    private Produto produto;
-   
+    private List<Produto> produtos;
     private String status;
-    
     private Double valor;
-    private Instant data;    
-    private String cliente;
+    private Instant data;
 
-    
-
-    public Pedido(){
+    public Pedido() {
     }
 
-    public Pedido(Integer id, String status, Produto produto,Double valor, Instant data, String cliente) {
+    public Pedido(Integer id, String status,  Double valor, Instant data, List<Produto> produtos) {
         this.id = id;
         this.status = status;
         this.valor = valor;
         this.data = data;
-        this.cliente = cliente;
-        this.produto = produto;
-    }   
-
-    
+        this.produtos = produtos;
+    }
 
     public Integer getId() {
         return id;
@@ -42,15 +34,9 @@ public class Pedido {
         return status;
     }
 
-     public Produto getProduto() {
-        return produto;
+    public List<Produto> getProduto() {
+        return produtos;
     }
-
-    public void setProduto(Produto produto) {
-        this.produto = produto;
-    }
-
-
 
     public void setStatus(String status) {
         this.status = status;
@@ -70,18 +56,6 @@ public class Pedido {
 
     public void setData(Instant data) {
         this.data = data;
-    }
-    
-    
-   
-    
-
-    public String getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(String cliente) {
-        this.cliente = cliente;
     }
 
     @Override
@@ -109,7 +83,4 @@ public class Pedido {
         return true;
     }
 
-   
-   
-    
 }

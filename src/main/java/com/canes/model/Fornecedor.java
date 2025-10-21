@@ -1,12 +1,14 @@
 package com.canes.model;
 
+import java.util.List;
+
 public class Fornecedor {
 
 
     private Integer id;
     private String empresa;
     private String cnpj;
-    private String telefone;
+    private List<Telefone> telefones;
 
     
 
@@ -14,11 +16,11 @@ public class Fornecedor {
     public Fornecedor(){        
     }
 
-    public Fornecedor(Integer id, String empresa, String cnpj, String telefone) {
-        this.id = id;
+    public Fornecedor(String empresa, String cnpj, List<Telefone> telefones) {
+        
         this.empresa = empresa;
         this.cnpj = cnpj;
-        this.telefone = telefone;
+        this.telefones = telefones;
     }
 
     public Integer getId() {
@@ -45,13 +47,11 @@ public class Fornecedor {
         this.cnpj = cnpj;
     }
        
-     public String getTelefone() {
-        return telefone;
+     public List<Telefone> getTelefone() {
+        return telefones;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
+    
     
 
     @Override

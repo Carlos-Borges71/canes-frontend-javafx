@@ -89,10 +89,11 @@
                   <TableView fx:id="tabelaPedido" editable="true" focusTraversable="false" layoutX="13.0" layoutY="10.0" prefHeight="404.0" prefWidth="626.0">
                     <columns>
                       <TableColumn fx:id="colItem" prefWidth="55.20001220703125" text="Item" />
-                      <TableColumn fx:id="colProduto" prefWidth="228.800048828125" text="Produto" />
-                        <TableColumn fx:id="colQuant" prefWidth="91.199951171875" text="Quant" />
-                        <TableColumn fx:id="colValorUnitario" prefWidth="116.7998046875" text="V. unitário" />
-                        <TableColumn fx:id="colTotal" prefWidth="118.933349609375" text="Total" />
+                        <TableColumn fx:id="colCodigo" prefWidth="100.0" text="Código" />
+                      <TableColumn fx:id="colProduto" prefWidth="152.0" text="Produto" />
+                        <TableColumn fx:id="colQuant" prefWidth="52.7999267578125" text="Qt" />
+                        <TableColumn fx:id="colValorUnitario" prefWidth="118.39990234375" text="V. unitário" />
+                        <TableColumn fx:id="colTotal" prefWidth="192.0001220703125" text="Total" />
                     </columns>
                   </TableView>
                   <Label layoutX="38.0" layoutY="430.0" text="Quantidade de Produtos:">

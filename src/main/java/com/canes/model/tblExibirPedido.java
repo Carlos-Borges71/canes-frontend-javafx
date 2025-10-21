@@ -3,14 +3,16 @@ package com.canes.model;
 public class tblExibirPedido {
 
     private Integer item;
+    private String codigo;
     private String produto;
     private Integer quant;
     private Double valorUnitario;
     private Double total;
 
 
-    public tblExibirPedido(Integer item, String produto, Integer quant, Double valorUnitario, Double total) {
+    public tblExibirPedido(Integer item, String codigo,  String produto, Integer quant, Double valorUnitario, Double total) {
         this.item = item;
+        this.codigo = codigo;
         this.produto = produto;
         this.quant = quant;
         this.valorUnitario = valorUnitario;
@@ -20,6 +22,10 @@ public class tblExibirPedido {
 
     public Integer getItem() {
         return item;
+    }
+
+    public String getCodigo() {
+        return codigo;
     }
 
 

@@ -20,9 +20,9 @@ public class Endereco {
 
     
 
-    public Endereco (Integer id, String logradouro, String numero, String bairro, String cidade, String estado,
+    public Endereco (String logradouro, String numero, String bairro, String cidade, String estado,
             String cep) {
-        this.id = id;
+        
         this.logradouro = logradouro;
         this.numero = numero;
         this.bairro = bairro;

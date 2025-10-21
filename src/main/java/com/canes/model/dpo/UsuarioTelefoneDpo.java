@@ -1,26 +1,24 @@
-package com.canes.model;
+package com.canes.model.dpo;
 
 import java.time.Instant;
-import java.util.List;
 
-public class Usuario {
+public class UsuarioTelefoneDpo {
 
     
-    private Integer id;
     private String nome;    
     private String login;
     private String setor;   
     private Instant instante;
     
-    private List<Telefone> telefones;
-    private List<Endereco> enderecos;
+    private String telefones;
+    private String enderecos;
 
    
 
-    public Usuario(){        
+    public UsuarioTelefoneDpo(){        
     }
 
-    public Usuario( Integer id,String nome, String setor,  String login, Instant instante,  List<Telefone> telefones, List<Endereco> enderecos) {
+    public UsuarioTelefoneDpo( String nome, String setor,  String login, Instant instante, String telefones, String enderecos) {
         
         this.setor = setor;
         this.nome = nome;
@@ -69,20 +67,18 @@ public class Usuario {
 
     
     
-    public List<Telefone> getTelefone() {
+    public String getTelefone() {
         return telefones;
     }
 
-    public void setTelefone(List<Telefone> telefones) {
+    public void setTelefone(String telefones) {
         this.telefones = telefones;
     }
 
-    public List<Endereco> getEnderecos() {
+    public String getEnderecos() {
         return enderecos;
     }
-     
-    
-    
- 
-    
+
+
+
 }

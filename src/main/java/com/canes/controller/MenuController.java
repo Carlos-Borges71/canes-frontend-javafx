@@ -110,7 +110,7 @@ public class MenuController {
     void onClickSair(ActionEvent event) {
 
          try {
-            ScreenUtils.changeScreen(event,"/com/canes/login.fxml", "Login", null);
+            ScreenUtils.changeScreen(event,"/com/canes/view/login.fxml", "Login", null);
         } catch (Exception e) {
             e.printStackTrace();
         }

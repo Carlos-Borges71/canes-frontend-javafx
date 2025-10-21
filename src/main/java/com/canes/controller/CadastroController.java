@@ -221,7 +221,7 @@ public class CadastroController implements Initializable{
     private Pane paneUser;
     
     @FXML
-    private Pane paneFornec;
+    public Pane paneFornec;
 
    
     @FXML
@@ -277,6 +277,8 @@ public class CadastroController implements Initializable{
     @FXML
     private VBox vBoxTelFornec;
 
+   
+
     @FXML
     void onActionFornec(ActionEvent event) {
         paneUser.setVisible(false);
@@ -310,7 +312,7 @@ public class CadastroController implements Initializable{
 
 
          try {
-            ScreenUtils.changeScreenMouse(event, "/com/canes/menu.fxml", "Menu", null);
+            ScreenUtils.changeScreenMouse(event, "/com/canes/view/menu.fxml", "Menu", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -387,7 +389,7 @@ public class CadastroController implements Initializable{
             AlertUtil.mostrarSucesso("Cadastro do Cliente " + txtNomeFornec.getText() + "\nSalvo com sucesso");
 
             try{ 
-            ScreenUtils.changeScreen(event, "/com/canes/menu.fxml", "Menu", null);
+            ScreenUtils.changeScreen(event, "/com/canes/view/menu.fxml", "Menu", null);
             }catch(Exception e) {
 
             e.printStackTrace();
@@ -686,7 +688,7 @@ public class CadastroController implements Initializable{
             AlertUtil.mostrarSucesso("Cadastro do Usuário " + txtNome.getText() + "\nSalvo com sucesso");
 
             try{ 
-            ScreenUtils.changeScreen(event, "/com/canes/menu.fxml", "Menu", null);
+            ScreenUtils.changeScreen(event, "/com/canes/view/menu.fxml", "Menu", null);
             }catch(Exception e) {
 
             e.printStackTrace();

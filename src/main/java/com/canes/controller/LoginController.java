@@ -87,7 +87,7 @@ public class LoginController {
 
 
         try {
-            ScreenUtils.changeScreen(event,"/com/canes/menu.fxml", "Menu", null);
+            ScreenUtils.changeScreen(event,"/com/canes/view/menu.fxml", "Menu", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -172,7 +172,7 @@ public class LoginController {
     void onClickUser(MouseEvent event) {
 
         try {
-            ScreenUtils.openNewWindow("/com/canes/menu.fxml", "Menu", null);
+            ScreenUtils.openNewWindow("/com/canes/view/menu.fxml", "Menu", null);
         } catch (Exception e) {
             e.printStackTrace();
         }

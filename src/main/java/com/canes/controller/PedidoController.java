@@ -35,6 +35,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -44,6 +45,8 @@ public class PedidoController {
 
     @FXML
     private TableColumn<tblExibirPedido, Integer> colItem;
+    @FXML
+    private TableColumn<tblExibirPedido, Integer> colCodigo;
 
     @FXML
     private TableColumn<tblExibirPedido, String> colProduto;
@@ -102,6 +105,9 @@ public class PedidoController {
     @FXML
     private TextField txtValorUnitario;
 
+    @FXML
+    private AnchorPane root;
+
     private ObservableList<tblExibirPedido> listaPedidos;
 
     private DecimalFormat df;
@@ -113,6 +119,8 @@ public class PedidoController {
     DecimalFormatSymbols simbols = new DecimalFormatSymbols(new Locale("pt", "BR"));
 
     public void initialize() {
+
+        System.out.println("Root:" + root);
 
         MaskTextField.valor(txtDesconto);
         MaskTextField.valor(txtSubTotal);
@@ -128,8 +136,6 @@ public class PedidoController {
 
         tabelaPedido.setPlaceholder(placeholder);
 
-       
-
         // Zebrando a tabela
         tabelaPedido.setRowFactory(tv -> new TableRow<>() {
             @Override
@@ -138,9 +144,10 @@ public class PedidoController {
                 if (item == null || empty) {
                     setStyle("");
                 } else {
-                    
+
                     if (getIndex() % 2 == 0) {
                         setStyle("-fx-background-color: #d2cbcbff;"); // cinza claro
+
                     } else {
                         setStyle("-fx-background-color: #f2f2f2;");
                     }
@@ -148,22 +155,22 @@ public class PedidoController {
             }
         });
 
-         // alterando a cor quando selecionada a linha
+        // alterando a cor quando selecionada a linha
         // tabelaPedido.setRowFactory(tv -> new TableRow<>() {
-        //     @Override
-        //     protected void updateItem(tblExibirPedido item, boolean empty) {
-        //         super.updateItem(item, empty);
+        // @Override
+        // protected void updateItem(tblExibirPedido item, boolean empty) {
+        // super.updateItem(item, empty);
 
-        //         if (empty || item == null) {
-        //             setStyle("");
+        // if (empty || item == null) {
+        // setStyle("");
 
-        //         } else if (isSelected()) {
-        //             setStyle("-fx-background-color: #90caf9");
+        // } else if (isSelected()) {
+        // setStyle("-fx-background-color: #90caf9");
 
-        //         } else {
-        //             setStyle("");
-        //         }
-        //     }
+        // } else {
+        // setStyle("");
+        // }
+        // }
         // });
 
         simbols.setDecimalSeparator(',');
@@ -184,7 +191,7 @@ public class PedidoController {
                 if (e.getCode() == KeyCode.ESCAPE) {
 
                     try {
-                        ScreenUtils.changeScreenElement(txtCodigo, "/com/canes/menu.fxml", "MENU", null);
+                        ScreenUtils.changeScreenElement(txtCodigo, "/com/canes/view/menu.fxml", "MENU", null);
                     } catch (Exception event) {
                         event.printStackTrace();
                     }
@@ -229,6 +236,16 @@ public class PedidoController {
             if (newScene != null) {
                 newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN),
                         () -> txtDesconto.requestFocus());
+
+            }
+        });
+
+        txtCodigo.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN),
+                        () ->
+
+                        carregarPaneExterna());
 
             }
         });
@@ -285,7 +302,7 @@ public class PedidoController {
                                     }
                                 });
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
+
                         e.printStackTrace();
                     }
                 }
@@ -319,7 +336,7 @@ public class PedidoController {
                                 });
 
                     } catch (IOException e) {
-                        // 4
+
                         e.printStackTrace();
                     }
 
@@ -369,6 +386,24 @@ public class PedidoController {
             }
         });
 
+    }
+
+    private void carregarPaneExterna() {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/canes/view/produto.fxml"));
+            Scene scene = new Scene(loader.load());
+            ProdutoController controller = loader.getController();
+            controller.setPedidoController(this);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Produto");
+            stage.show();
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
     }
 
     private void statusPagamento() throws IOException {
@@ -432,37 +467,85 @@ public class PedidoController {
 
     @FXML
     void onEnterAction(ActionEvent event) {
+        try {
+            colItem.setCellValueFactory(new PropertyValueFactory<>("item"));
 
-        colItem.setCellValueFactory(new PropertyValueFactory<>("item"));
+            colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
 
-        colProduto.setCellValueFactory(new PropertyValueFactory<>("produto"));
+            colProduto.setCellValueFactory(new PropertyValueFactory<>("produto"));
 
-        colQuant.setCellValueFactory(new PropertyValueFactory<>("quant"));
+            colQuant.setCellValueFactory(new PropertyValueFactory<>("quant"));
 
-        colValorUnitario.setCellValueFactory(new PropertyValueFactory<>("valorUnitario"));
-        realColuna(colValorUnitario);
+            colValorUnitario.setCellValueFactory(new PropertyValueFactory<>("valorUnitario"));
+            realColuna(colValorUnitario);
 
-        colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
-        realColuna(colTotal);
+            colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+            realColuna(colTotal);
 
-        String produt = txtCodigo.getText();
-        int quant = Integer.parseInt(txtQuant.getText());
-        double unitario = Double.parseDouble(txtValorUnitario.getText().replace(",", ".").trim().replace("R$", ""));
-        double total = quant * unitario;
+            String codigo = txtCodigo.getText();
+            String produt = "Calça";
+            int quant = Integer.parseInt(txtQuant.getText());
+            double unitario = Double.parseDouble(
+                    txtValorUnitario.getText().replace(",", ".").replace("R$", "").replaceAll("[^0-9.,-]", ""));
+            double total = quant * unitario;
+            tblExibirPedido p = new tblExibirPedido(item, codigo, produt, quant, unitario, total);
 
-        tblExibirPedido p = new tblExibirPedido(item, produt, quant, unitario, total);
-        tabelaPedido.getItems().add(p);
+            tabelaPedido.getItems().add(p);
 
-        tabelaPedido.scrollTo(p);
+            tabelaPedido.scrollTo(p);
 
-        item += 1;
+            item += 1;
 
-        totalQuant();
-        totalValor();
-        desconto();
+            totalQuant();
+            totalValor();
+            desconto();
 
-        txtCodigo.clear();
+            txtCodigo.clear();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
+    }
+
+    public void receberProduto(Produto produto) {
+        if (produto != null) {
+
+            colItem.setCellValueFactory(new PropertyValueFactory<>("item"));
+
+            colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+
+            colProduto.setCellValueFactory(new PropertyValueFactory<>("produto"));
+
+            colQuant.setCellValueFactory(new PropertyValueFactory<>("quant"));
+
+            colValorUnitario.setCellValueFactory(new PropertyValueFactory<>("valorUnitario"));
+            realColuna(colValorUnitario);
+
+            colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+            realColuna(colTotal);
+
+            String codigo = produto.getCodigo();
+            String produt = produto.getNome();
+            int quant = Integer.parseInt(txtQuant.getText());
+            double unitario = produto.getValorVenda();
+            String txtUnitario = String.valueOf(unitario);
+            System.out.println(txtUnitario);
+            txtValorUnitario.setText(nf.format(unitario));
+            double total = quant * unitario;
+            
+
+            tblExibirPedido p = new tblExibirPedido(item, codigo, produt, quant, unitario, total);
+            tabelaPedido.getItems().add(p);
+
+            tabelaPedido.scrollTo(p);
+
+            item += 1;
+
+            totalQuant();
+            totalValor();
+            desconto();
+
+        }
     }
 
     @FXML
@@ -504,7 +587,7 @@ public class PedidoController {
 
     }
 
-    private void realColuna(TableColumn<tblExibirPedido, Double> coluna) {
+    public void realColuna(TableColumn<tblExibirPedido, Double> coluna) {
 
         coluna.setCellFactory(col -> new TableCell<tblExibirPedido, Double>() {
             @Override

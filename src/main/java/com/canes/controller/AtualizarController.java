@@ -27,10 +27,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public class AtualizarController{
+public class AtualizarController {
 
-    
-     @FXML
+    @FXML
     private Button btnCadastrar;
 
     @FXML
@@ -41,11 +40,11 @@ public class AtualizarController{
 
     @FXML
     private Button btnClient;
-    
+
     @FXML
     private Button btnBuscar;
 
-   @FXML
+    @FXML
     private Button btnAtualizarProduto;
 
     @FXML
@@ -68,7 +67,7 @@ public class AtualizarController{
 
     @FXML
     private Label feedBackLabel2;
-     @FXML
+    @FXML
     private Label labelSenhaRepita;
 
     @FXML
@@ -107,7 +106,6 @@ public class AtualizarController{
     @FXML
     private TextField txtReNoSenha;
 
-       
     @FXML
     private ComboBox<?> txtSetor;
 
@@ -115,8 +113,8 @@ public class AtualizarController{
     private VBox vBoxMenos;
 
     @FXML
-    private TextField txtcel;  
-    
+    private TextField txtcel;
+
     @FXML
     private PasswordField passwordReSenha;
 
@@ -131,11 +129,8 @@ public class AtualizarController{
 
     private List<TextField> campos = new ArrayList<>();
 
-
     @FXML
     private Button btnCadastrarClient;
-
-   
 
     @FXML
     private Button btnFornec;
@@ -143,23 +138,14 @@ public class AtualizarController{
     @FXML
     private Button btnProduto;
 
-
-
     @FXML
     private Button btnCadastrarFornec;
-
-    
 
     @FXML
     private Button btnLimparClient;
 
     @FXML
     private Button btnLimparFornec;
-    
-
-   
-
-       
 
     @FXML
     private Label btnTelClient;
@@ -167,7 +153,7 @@ public class AtualizarController{
     @FXML
     private Button btnUser;
 
-   @FXML
+    @FXML
     private TextField txtBairroFornec;
 
     @FXML
@@ -188,19 +174,19 @@ public class AtualizarController{
     @FXML
     private TextField txtCodigoFornec;
 
-     @FXML
+    @FXML
     private TextField txtEstadoFornec;
 
     @FXML
     private TextField txtLogradouroFornec;
 
-     @FXML
+    @FXML
     private TextField txtNomeFornec;
 
     @FXML
     private TextField txtNotaFiscalFornec;
 
-     @FXML
+    @FXML
     private TextField txtNumeroFornec;
 
     @FXML
@@ -209,7 +195,7 @@ public class AtualizarController{
     @FXML
     private TextField txtQuantFornec;
 
-     @FXML
+    @FXML
     private TextField txtTamanhoFornec;
 
     @FXML
@@ -218,12 +204,8 @@ public class AtualizarController{
     @FXML
     private TextField txtValorVendaFornec;
 
-    
-
     @FXML
     private ImageView btnVoltar;
-
-    
 
     @FXML
     private Label lblClient;
@@ -231,7 +213,6 @@ public class AtualizarController{
     @FXML
     private Label lblFornec;
 
-    
     @FXML
     private Label lbluser;
 
@@ -240,60 +221,42 @@ public class AtualizarController{
 
     @FXML
     private Pane paneUser;
-    
+
     @FXML
     private Pane paneFornec;
 
     @FXML
     private Pane paneProduto;
 
-   
     @FXML
     private TextField txtBairroClient;
-
-    
 
     @FXML
     private TextField txtCepClient;
 
-    
-
     @FXML
     private TextField txtCidadeClient;
-
-   
 
     @FXML
     private TextField txtEstadoClient;
 
-    
-
-
     @FXML
     private TextField txtLogradouroClient;
-
-    
-
-    
 
     @FXML
     private TextField txtNomeClient;
 
-    
-
     @FXML
     private TextField txtNumeroClient;
 
-   @FXML
-   private Button btnBuscarCliente;
+    @FXML
+    private Button btnBuscarCliente;
 
     @FXML
-   private Button btnLimparProduto;
+    private Button btnLimparProduto;
 
     @FXML
     private TextField txtCelClient1;
-
-   
 
     @FXML
     private TextField txtcelClient;
@@ -317,11 +280,10 @@ public class AtualizarController{
         lblProduto.setTextFill(Color.RED);
         paneUser.setVisible(false);
         paneCliente.setVisible(false);
-        lbluser.setTextFill(Color.WHITE);        
+        lbluser.setTextFill(Color.WHITE);
         lblClient.setTextFill(Color.WHITE);
         paneFornec.setVisible(false);
         lblFornec.setTextFill(Color.WHITE);
-        
 
     }
 
@@ -335,7 +297,7 @@ public class AtualizarController{
 
     }
 
-     @FXML
+    @FXML
     void onClickBuscarClient(ActionEvent event) {
 
     }
@@ -345,16 +307,26 @@ public class AtualizarController{
 
     }
 
-     @FXML
+    @FXML
     void onClickBuscarProduto(ActionEvent event) {
 
+    }
+
+    @FXML
+    void onclickLimparProduto(ActionEvent event) {
+        txtCodigoFornec.clear();
+        txtProdutoFornec.clear();
+        txtNotaFiscalFornec.clear();
+        txtTamanhoFornec.clear();
+        txtValorCompraFornec.clear();
+        txtQuantFornec.clear();
     }
 
     @FXML
     void onActionFornec(ActionEvent event) {
         paneUser.setVisible(false);
         paneCliente.setVisible(false);
-        lbluser.setTextFill(Color.WHITE);        
+        lbluser.setTextFill(Color.WHITE);
         lblClient.setTextFill(Color.WHITE);
         paneFornec.setVisible(true);
         lblFornec.setTextFill(Color.RED);
@@ -370,11 +342,10 @@ public class AtualizarController{
         lblProduto.setTextFill(Color.RED);
         paneUser.setVisible(false);
         paneCliente.setVisible(false);
-        lbluser.setTextFill(Color.WHITE);        
+        lbluser.setTextFill(Color.WHITE);
         lblClient.setTextFill(Color.WHITE);
         paneFornec.setVisible(false);
         lblFornec.setTextFill(Color.WHITE);
-        
 
     }
 
@@ -382,27 +353,24 @@ public class AtualizarController{
     void onActionUser(ActionEvent event) {
         paneUser.setVisible(true);
         paneCliente.setVisible(false);
-        lbluser.setTextFill(Color.RED);        
+        lbluser.setTextFill(Color.RED);
         lblClient.setTextFill(Color.WHITE);
         paneFornec.setVisible(false);
         lblFornec.setTextFill(Color.WHITE);
         paneProduto.setVisible(false);
         lblProduto.setTextFill(Color.WHITE);
-        
 
     }
 
     @FXML
     void onActionVoltar(MouseEvent event) {
 
-
-         try {
-            ScreenUtils.changeScreenMouse(event, "/com/canes/menu.fxml", "Menu", null);
+        try {
+            ScreenUtils.changeScreenMouse(event, "/com/canes/view/menu.fxml", "Menu", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-   
 
     @FXML
     void onactionClient(ActionEvent event) {
@@ -417,11 +385,10 @@ public class AtualizarController{
     }
 
     //
-     @FXML
+    @FXML
     void onclickLimparFornec(ActionEvent event) {
 
-        
-        txtNomeFornec.clear();        
+        txtNomeFornec.clear();
         txtCelFornec.clear();
         txtLogradouroFornec.clear();
         txtNumeroFornec.clear();
@@ -429,57 +396,52 @@ public class AtualizarController{
         txtCidadeFornec.clear();
         txtEstadoFornec.clear();
         txtCepFornec.clear();
-        
 
     }
 
     @FXML
     void onClickCadastrarFornec(ActionEvent event) {
 
-        if(txtNomeFornec.getText().trim().isEmpty()) {
-            AlertUtil.mostrarErro( "O campo nome não pode ficar vazio!." );
+        if (txtNomeFornec.getText().trim().isEmpty()) {
+            AlertUtil.mostrarErro("O campo nome não pode ficar vazio!.");
+            return;
+        } else if (txtLogradouroFornec.getText().trim().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Logradouro não \npode ficar vazio!.");
+            return;
+        } else if (txtNumeroFornec.getText().trim().isEmpty()) {
+            AlertUtil.mostrarErro("O campo número não \npode ficar vazio!.");
+            return;
+        } else if (txtBairroFornec.getText().trim().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Bairro não \npode ficar vazio!.");
             return;
         }
-        else if(txtLogradouroFornec.getText().trim().isEmpty()) {
-            AlertUtil.mostrarErro( "O campo Logradouro não \npode ficar vazio!." );
+
+        else if (txtCidadeFornec.getText().trim().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Cidade não \npode ficar vazio!.");
             return;
         }
-        else if(txtNumeroFornec.getText().trim().isEmpty()) {
-            AlertUtil.mostrarErro( "O campo número não \npode ficar vazio!." );
+
+        else if (txtEstadoFornec.getText().trim().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Estado não \npode ficar vazio!.");
             return;
         }
-        else if(txtBairroFornec.getText().trim().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Bairro não \npode ficar vazio!." );
+
+        else if (txtCepFornec.getText().trim().isEmpty()) {
+            AlertUtil.mostrarErro("O campo CEP não \npode ficar vazio!.");
             return;
         }
-        
-        else if(txtCidadeFornec.getText().trim().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Cidade não \npode ficar vazio!." );
+
+        else if (txtCelFornec.getText().trim().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Celular não \npode ficar vazio!.");
             return;
-        }
-        
-        else if(txtEstadoFornec.getText().trim().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Estado não \npode ficar vazio!." );
-            return;
-        }
-        
-        else if(txtCepFornec.getText().trim().isEmpty()) {
-            AlertUtil.mostrarErro("O campo CEP não \npode ficar vazio!." );
-            return;
-        }
-        
-        else if(txtCelFornec.getText().trim().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Celular não \npode ficar vazio!." );
-            return;
-        }
-        else {
+        } else {
             AlertUtil.mostrarSucesso("Cadastro do Cliente " + txtNomeFornec.getText() + "\nSalvo com sucesso");
 
-            try{ 
-            ScreenUtils.changeScreen(event, "/com/canes/menu.fxml", "Menu", null);
-            }catch(Exception e) {
+            try {
+                ScreenUtils.changeScreen(event, "/com/canes/menu.fxml", "Menu", null);
+            } catch (Exception e) {
 
-            e.printStackTrace();
+                e.printStackTrace();
             }
         }
 
@@ -489,8 +451,7 @@ public class AtualizarController{
     @FXML
     void onClickLimparFornec(ActionEvent event) {
 
-        
-        txtNomeFornec.clear();        
+        txtNomeFornec.clear();
         txtCelFornec.clear();
         txtLogradouroFornec.clear();
         txtNumeroFornec.clear();
@@ -505,15 +466,15 @@ public class AtualizarController{
         txtTamanhoFornec.clear();
         txtCodigoFornec.clear();
         txtNotaFiscalFornec.clear();
-        
+        txtCelFornec.clear();
+        txtCelFornec1.clear();
 
     }
 
     @FXML
     void onclickLimparClient(ActionEvent event) {
 
-        
-        txtNomeClient.clear();        
+        txtNomeClient.clear();
         txtcelClient.clear();
         txtLogradouroClient.clear();
         txtNumeroClient.clear();
@@ -521,74 +482,67 @@ public class AtualizarController{
         txtCidadeClient.clear();
         txtEstadoClient.clear();
         txtCepClient.clear();
-        
 
     }
 
     @FXML
     void onClickcadastrarClient(ActionEvent event) {
 
-        if(txtNomeClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro( "O campo nome não pode ficar vazio!." );
+        if (txtNomeClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo nome não pode ficar vazio!.");
+            return;
+        } else if (txtLogradouroClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Logradouro não \npode ficar vazio!.");
+            return;
+        } else if (txtNumeroClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo número não \npode ficar vazio!.");
+            return;
+        } else if (txtBairroClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Bairro não \npode ficar vazio!.");
             return;
         }
-        else if(txtLogradouroClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro( "O campo Logradouro não \npode ficar vazio!." );
+
+        else if (txtCidadeClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Cidade não \npode ficar vazio!.");
             return;
         }
-        else if(txtNumeroClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro( "O campo número não \npode ficar vazio!." );
+
+        else if (txtEstadoClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Estado não \npode ficar vazio!.");
             return;
         }
-        else if(txtBairroClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Bairro não \npode ficar vazio!." );
+
+        else if (txtCepClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo CEP não \npode ficar vazio!.");
             return;
         }
-        
-        else if(txtCidadeClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Cidade não \npode ficar vazio!." );
+
+        else if (txtcelClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Celular não \npode ficar vazio!.");
             return;
-        }
-        
-        else if(txtEstadoClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Estado não \npode ficar vazio!." );
-            return;
-        }
-        
-        else if(txtCepClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo CEP não \npode ficar vazio!." );
-            return;
-        }
-        
-        else if(txtcelClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Celular não \npode ficar vazio!." );
-            return;
-        }
-        else {
+        } else {
             AlertUtil.mostrarSucesso("Cadastro do Cliente " + txtNomeClient.getText() + "\nSalvo com sucesso");
 
-            try{ 
-            ScreenUtils.changeScreen(event, "/com/canes/menu.fxml", "Menu", null);
-            }catch(Exception e) {
+            try {
+                ScreenUtils.changeScreen(event, "/com/canes/menu.fxml", "Menu", null);
+            } catch (Exception e) {
 
-            e.printStackTrace();
+                e.printStackTrace();
             }
         }
 
     }
-   
+
     @FXML
     void onClickTelClient(MouseEvent event) {
-         TextField newText = new TextField();
+        TextField newText = new TextField();
         newText.setMaxWidth(133);
         newText.setStyle("-fx-background-color: transparent;" + "-fx-border-color: fff;" +
-        "-fx-border-radius: 7;" + "-fx-text-fill: fff;" );
+                "-fx-border-radius: 7;" + "-fx-text-fill: fff;");
 
         campos.add(newText);
 
         MaskTextField.applyPhoneMask(newText);
-        
-    
 
         Image imgExcluir = new Image(getClass().getResourceAsStream("img/excluir.png"));
 
@@ -599,42 +553,37 @@ public class AtualizarController{
         img.setFitWidth(19);
         img.setPickOnBounds(true);
 
-        //Label labelRemover = new Label("Remover");
-        //labelRemover.setStyle("-fx-text-fill: red;" +
-        //    "-fx-font-size: 14;" +
-            //"-fx-font-weight: bold ;" +
-            //"-fx-alignment: center;" +
-        //    "-fx-padding: 4 0 0 0;" +
-        //    "-fx-cursor: hand; ");
+        // Label labelRemover = new Label("Remover");
+        // labelRemover.setStyle("-fx-text-fill: red;" +
+        // "-fx-font-size: 14;" +
+        // "-fx-font-weight: bold ;" +
+        // "-fx-alignment: center;" +
+        // "-fx-padding: 4 0 0 0;" +
+        // "-fx-cursor: hand; ");
 
-
-         HBox linha = new HBox(10, newText,img);
-         linha.setAlignment(Pos.CENTER);
+        HBox linha = new HBox(10, newText, img);
+        linha.setAlignment(Pos.CENTER);
 
         vBoxTelClient.setMargin(linha, new Insets(0, 0, 10, -10));
 
-         
-
-         img.setOnMouseClicked(e -> {
-            vBoxTelClient.getChildren().remove(linha);     
+        img.setOnMouseClicked(e -> {
+            vBoxTelClient.getChildren().remove(linha);
             campos.remove(newText);
         });
 
-         vBoxTelClient.getChildren().add(linha);
+        vBoxTelClient.getChildren().add(linha);
     }
 
     @FXML
     void onClickTelFornec(MouseEvent event) {
-         TextField newText = new TextField();
+        TextField newText = new TextField();
         newText.setMaxWidth(133);
         newText.setStyle("-fx-background-color: transparent;" + "-fx-border-color: fff;" +
-        "-fx-border-radius: 7;" + "-fx-text-fill: fff;" );
+                "-fx-border-radius: 7;" + "-fx-text-fill: fff;");
 
         campos.add(newText);
 
         MaskTextField.applyPhoneMask(newText);
-       
-    
 
         Image imgExcluir = new Image(getClass().getResourceAsStream("img/excluir.png"));
 
@@ -645,31 +594,26 @@ public class AtualizarController{
         img.setFitWidth(19);
         img.setPickOnBounds(true);
 
-        //Label labelRemover = new Label("Remover");
-        //labelRemover.setStyle("-fx-text-fill: red;" +
-        //    "-fx-font-size: 14;" +
-            //"-fx-font-weight: bold ;" +
-            //"-fx-alignment: center;" +
-        //    "-fx-padding: 4 0 0 0;" +
-        //    "-fx-cursor: hand; ");
+        // Label labelRemover = new Label("Remover");
+        // labelRemover.setStyle("-fx-text-fill: red;" +
+        // "-fx-font-size: 14;" +
+        // "-fx-font-weight: bold ;" +
+        // "-fx-alignment: center;" +
+        // "-fx-padding: 4 0 0 0;" +
+        // "-fx-cursor: hand; ");
 
-
-         HBox linha = new HBox(10, newText,img);
-         linha.setAlignment(Pos.CENTER);
+        HBox linha = new HBox(10, newText, img);
+        linha.setAlignment(Pos.CENTER);
 
         vBoxTelFornec.setMargin(linha, new Insets(0, 0, 10, -10));
 
-         
-
-         img.setOnMouseClicked(e -> {
-            vBoxTelFornec.getChildren().remove(linha);     
+        img.setOnMouseClicked(e -> {
+            vBoxTelFornec.getChildren().remove(linha);
             campos.remove(newText);
         });
 
-         vBoxTelFornec.getChildren().add(linha);
+        vBoxTelFornec.getChildren().add(linha);
     }
-
-
 
     @FXML
     void onClickEnviar(MouseEvent event) {
@@ -679,44 +623,41 @@ public class AtualizarController{
     @FXML
     void onClickNoVisivelReSenha(MouseEvent event) {
 
-        
+        passwordReSenha.setText(passwordReSenha.getText());
 
-         passwordReSenha.setText(passwordReSenha.getText());
+        passwordReSenha.setVisible(true);
+        passwordReSenha.setManaged(true);
+        btnVisivelReSenha.setVisible(true);
+        btnVisivelReSenha.setManaged(true);
 
-            passwordReSenha.setVisible(true);
-            passwordReSenha.setManaged(true);
-            btnVisivelReSenha.setVisible(true);
-            btnVisivelReSenha.setManaged(true);
-
-            txtReNoSenha.setVisible(false);
-            txtReNoSenha.setManaged(false);
-            btnNoVisivelReSenha.setVisible(false);
-            btnNoVisivelReSenha.setManaged(false);  
+        txtReNoSenha.setVisible(false);
+        txtReNoSenha.setManaged(false);
+        btnNoVisivelReSenha.setVisible(false);
+        btnNoVisivelReSenha.setManaged(false);
 
     }
 
     @FXML
     void onClickNoVisivelSenha(MouseEvent event) {
 
-        
-         passwordSenha.setText(txtNoSenha.getText());
+        passwordSenha.setText(txtNoSenha.getText());
 
-            passwordSenha.setVisible(true);
-            passwordSenha.setManaged(true);
-            btnVisivelSenha.setVisible(true);
-            btnVisivelSenha.setManaged(true);
+        passwordSenha.setVisible(true);
+        passwordSenha.setManaged(true);
+        btnVisivelSenha.setVisible(true);
+        btnVisivelSenha.setManaged(true);
 
-            txtNoSenha.setVisible(false);
-            txtNoSenha.setManaged(false);
-            btnNoVisivelSenha.setVisible(false);
-            btnNoVisivelSenha.setManaged(false);    
+        txtNoSenha.setVisible(false);
+        txtNoSenha.setManaged(false);
+        btnNoVisivelSenha.setVisible(false);
+        btnNoVisivelSenha.setManaged(false);
 
     }
 
     @FXML
     void onClickVisivelReSenha(MouseEvent event) {
 
-         if(passwordReSenha.isVisible()){
+        if (passwordReSenha.isVisible()) {
             txtReNoSenha.setText(passwordReSenha.getText());
 
             passwordReSenha.setVisible(false);
@@ -724,22 +665,19 @@ public class AtualizarController{
             btnVisivelReSenha.setVisible(false);
             btnVisivelReSenha.setManaged(false);
 
-
             txtReNoSenha.setVisible(true);
             txtReNoSenha.setManaged(true);
             btnNoVisivelReSenha.setVisible(true);
             btnNoVisivelReSenha.setManaged(true);
 
-            
-         }
+        }
 
     }
 
     @FXML
     void onClickVisivelSenha(MouseEvent event) {
 
-        
-         if(passwordSenha.isVisible()){
+        if (passwordSenha.isVisible()) {
             txtNoSenha.setText(passwordSenha.getText());
 
             passwordSenha.setVisible(false);
@@ -747,85 +685,72 @@ public class AtualizarController{
             btnVisivelSenha.setVisible(false);
             btnVisivelSenha.setManaged(false);
 
-
             txtNoSenha.setVisible(true);
             txtNoSenha.setManaged(true);
             btnNoVisivelSenha.setVisible(true);
             btnNoVisivelSenha.setManaged(true);
 
-            
-         }
+        }
 
     }
 
     @FXML
     void onClickcadastrar(ActionEvent event) {
 
-    
-        if(txtNome.getText().isEmpty()) {
-            AlertUtil.mostrarErro( "O campo nome não pode ficar vazio!." );
+        if (txtNome.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo nome não pode ficar vazio!.");
+            return;
+        } else if (txtLogradouro.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Logradouro não \npode ficar vazio!.");
+            return;
+        } else if (txtNumero.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo número não \npode ficar vazio!.");
+            return;
+        } else if (txtBairro.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Bairro não \npode ficar vazio!.");
             return;
         }
-         else if(txtLogradouro.getText().isEmpty()) {
-            AlertUtil.mostrarErro( "O campo Logradouro não \npode ficar vazio!." );
+
+        else if (txtCidade.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Cidade não \npode ficar vazio!.");
             return;
         }
-         else if(txtNumero.getText().isEmpty()) {
-            AlertUtil.mostrarErro( "O campo número não \npode ficar vazio!." );
+
+        else if (txtEstado.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Estado não \npode ficar vazio!.");
             return;
         }
-         else if(txtBairro.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Bairro não \npode ficar vazio!." );
+
+        else if (txtCep.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo CEP não \npode ficar vazio!.");
             return;
         }
-        
-         else if(txtCidade.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Cidade não \npode ficar vazio!." );
+
+        else if (txtcel.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Celular não \npode ficar vazio!.");
             return;
-        }
-        
-         else if(txtEstado.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Estado não \npode ficar vazio!." );
+        } else if (txtSetor.getValue() == null) {
+            AlertUtil.mostrarErro("O campo Setor não \npode ficar vazio! \nselecione uma opção");
             return;
-        }
-        
-         else if(txtCep.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo CEP não \npode ficar vazio!." );
+        } else if (txtLogin.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo login não \npode ficar vazio!.");
             return;
-        }
-        
-         else if(txtcel.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Celular não \npode ficar vazio!." );
+        } else if (passwordSenha.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo senha não \npode ficar vazio!.");
             return;
-        }
-        else if(txtSetor.getValue() == null) {
-            AlertUtil.mostrarErro("O campo Setor não \npode ficar vazio! \nselecione uma opção" );
+        } else if (passwordReSenha.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo repita a senha não \npode ficar vazio!.");
             return;
-        }
-        else if(txtLogin.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo login não \npode ficar vazio!." );
-            return;
-        }
-        else if(passwordSenha.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo senha não \npode ficar vazio!." );
-            return;
-        }
-        else if(passwordReSenha.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo repita a senha não \npode ficar vazio!." );
-            return;
-        }
-        else{
+        } else {
             AlertUtil.mostrarSucesso("Cadastro do Usuário " + txtNome.getText() + "\nSalvo com sucesso");
 
-            try{ 
-            ScreenUtils.changeScreen(event, "/com/canes/menu.fxml", "Menu", null);
-            }catch(Exception e) {
+            try {
+                ScreenUtils.changeScreen(event, "/com/canes/menu.fxml", "Menu", null);
+            } catch (Exception e) {
 
-            e.printStackTrace();
+                e.printStackTrace();
             }
         }
-       
-       
 
         System.out.println("Dados coletados");
         System.out.println(txtSetor.getValue());
@@ -836,10 +761,9 @@ public class AtualizarController{
         System.out.println(txtEstado.getText());
         System.out.println(txtNome.getText());
         System.out.println(txtCidade.getText());
-        for (TextField campo : campos){
+        for (TextField campo : campos) {
             System.out.println(campo.getText());
         }
-
 
     }
 
@@ -860,29 +784,26 @@ public class AtualizarController{
         txtCep.clear();
         txtReNoSenha.clear();
         txtNoSenha.clear();
+        txtCelUsuario.clear();
 
     }
 
     @FXML
-    void onclickBuscar(ActionEvent event) {       
+    void onclickBuscar(ActionEvent event) {
 
     }
-    
 
     @FXML
     void onclickTel(MouseEvent event) {
 
-       
         TextField newText = new TextField();
         newText.setMaxWidth(133);
         newText.setStyle("-fx-background-color: transparent;" + "-fx-border-color: fff;" +
-        "-fx-border-radius: 7;" + "-fx-text-fill: fff;" );
+                "-fx-border-radius: 7;" + "-fx-text-fill: fff;");
 
         campos.add(newText);
 
         MaskTextField.applyPhoneMask(newText);
-       
-    
 
         Image imgExcluir = new Image(getClass().getResourceAsStream("img/excluir.png"));
 
@@ -893,35 +814,29 @@ public class AtualizarController{
         img.setFitWidth(19);
         img.setPickOnBounds(true);
 
-        //Label labelRemover = new Label("Remover");
-        //labelRemover.setStyle("-fx-text-fill: red;" +
-        //    "-fx-font-size: 14;" +
-            //"-fx-font-weight: bold ;" +
-            //"-fx-alignment: center;" +
-        //    "-fx-padding: 4 0 0 0;" +
-        //    "-fx-cursor: hand; ");
+        // Label labelRemover = new Label("Remover");
+        // labelRemover.setStyle("-fx-text-fill: red;" +
+        // "-fx-font-size: 14;" +
+        // "-fx-font-weight: bold ;" +
+        // "-fx-alignment: center;" +
+        // "-fx-padding: 4 0 0 0;" +
+        // "-fx-cursor: hand; ");
 
-
-         HBox linha = new HBox(10, newText,img);
-         linha.setAlignment(Pos.CENTER);
+        HBox linha = new HBox(10, newText, img);
+        linha.setAlignment(Pos.CENTER);
 
         vBoxTel.setMargin(linha, new Insets(0, 0, 10, -10));
 
-         
-
-         img.setOnMouseClicked(e -> {
-            vBoxTel.getChildren().remove(linha);     
+        img.setOnMouseClicked(e -> {
+            vBoxTel.getChildren().remove(linha);
             campos.remove(newText);
         });
 
-         vBoxTel.getChildren().add(linha);
-
-                
+        vBoxTel.getChildren().add(linha);
 
     }
 
-
-     @FXML
+    @FXML
     void onMouseEntered(MouseEvent event) {
 
         HouverEffectUtil.apllyHouverSobre(btnCadastrar);
@@ -936,25 +851,19 @@ public class AtualizarController{
     @FXML
     void onclickLimparExited(MouseEvent event) {
 
-        //HouverEffectUtil.apllyHouverSair(btnLimpar);
+        // HouverEffectUtil.apllyHouverSair(btnLimpar);
 
     }
 
     @FXML
     void onclickLimparEntered(ActionEvent event) {
 
-        //HouverEffectUtil.apllyHouverSobre(btnLimpar);
+        // HouverEffectUtil.apllyHouverSobre(btnLimpar);
 
     }
 
-
-
-
     public void initialize() {
 
-
-        
-       
         // MaskTextField.validarNaoVazio(txtNome, btnCadastrar);
         // MaskTextField.validarNaoVazio(txtLogradouro, btnCadastrar);
         // MaskTextField.validarNaoVazio(txtLogin, btnCadastrar);
@@ -968,16 +877,15 @@ public class AtualizarController{
         // MaskTextField.validarNaoVazio(passwordReSenha, btnCadastrar);
 
         // MaskTextField.limitarCaracteresFixos(txtcelClient, 15, btnCadastrarClient);
-        // MaskTextField.limitarCaracteresFixos(txtCepClient, 9, btnCadastrarClient);       
+        // MaskTextField.limitarCaracteresFixos(txtCepClient, 9, btnCadastrarClient);
         // MaskTextField.validarNaoVazio(txtNomeClient, btnCadastrarClient);
-        // MaskTextField.validarNaoVazio(txtLogradouroClient, btnCadastrarClient);        
+        // MaskTextField.validarNaoVazio(txtLogradouroClient, btnCadastrarClient);
         // MaskTextField.validarNaoVazio(txtNumeroClient, btnCadastrarClient);
         // MaskTextField.validarNaoVazio(txtBairroClient, btnCadastrarClient);
         // MaskTextField.validarNaoVazio(txtCidadeClient, btnCadastrarClient);
         // MaskTextField.validarNaoVazio(txtEstadoClient, btnCadastrarClient);
         // MaskTextField.validarNaoVazio(txtCepClient, btnCadastrarClient);
         // MaskTextField.validarNaoVazio(txtcelClient, btnCadastrarClient);
-      
 
         lblClient.setMouseTransparent(true);
         lbluser.setMouseTransparent(true);
@@ -1000,11 +908,11 @@ public class AtualizarController{
             HouverEffectUtil.apllyHouverSobre(btnProduto);
         });
 
-        btnClient.setOnMouseExited(e ->{
+        btnClient.setOnMouseExited(e -> {
             HouverEffectUtil.apllyHouverSair(btnClient);
         });
 
-        btnProduto.setOnMouseExited(e ->{
+        btnProduto.setOnMouseExited(e -> {
             HouverEffectUtil.apllyHouverSair(btnProduto);
         });
 
@@ -1016,8 +924,6 @@ public class AtualizarController{
             HouverEffectUtil.apllyHouverSair(btnFornec);
         });
 
-        
-
         btnLimpar.setOnMouseEntered(e -> {
             HouverEffectUtil.apllyHouverSobre(btnLimpar);
         });
@@ -1026,7 +932,7 @@ public class AtualizarController{
             HouverEffectUtil.apllyHouverSair(btnLimpar);
         });
 
-         btnCadastrarClient.setOnMouseEntered(e -> {
+        btnCadastrarClient.setOnMouseEntered(e -> {
             HouverEffectUtil.apllyHouverSobre(btnCadastrarClient);
         });
 
@@ -1034,7 +940,7 @@ public class AtualizarController{
             HouverEffectUtil.apllyHouverSair(btnCadastrarClient);
         });
 
-         btnLimparClient.setOnMouseEntered(e -> {
+        btnLimparClient.setOnMouseEntered(e -> {
             HouverEffectUtil.apllyHouverSobre(btnLimparClient);
         });
 
@@ -1090,7 +996,7 @@ public class AtualizarController{
             HouverEffectUtil.apllyHouverSair(btnBuscarProduto);
         });
 
-         btnLimparProduto.setOnMouseExited(e -> {
+        btnLimparProduto.setOnMouseExited(e -> {
             HouverEffectUtil.apllyHouverSair(btnLimparProduto);
         });
 
@@ -1106,187 +1012,164 @@ public class AtualizarController{
             HouverEffectUtil.apllyHouverSobre(btnAtualizarProduto);
         });
 
+        MaskTextField.applyPhoneMask(txtcel);
 
-         MaskTextField.applyPhoneMask(txtcel);
+        MaskTextField.applyCepMask(txtCep);
 
-         MaskTextField.applyCepMask(txtCep);  
+        MaskTextField.applyStateMask(txtEstado);
 
-         MaskTextField.applyStateMask(txtEstado);
+        TextFieldUtil.aplicarCapitalizacao(txtNome);
+        TextFieldUtil.aplicarCapitalizacao(txtLogradouro);
+        TextFieldUtil.aplicarCapitalizacao(txtBairro);
+        TextFieldUtil.aplicarCapitalizacao(txtCidade);
 
-         TextFieldUtil.aplicarCapitalizacao(txtNome);
-         TextFieldUtil.aplicarCapitalizacao(txtLogradouro);
-         TextFieldUtil.aplicarCapitalizacao(txtBairro);
-         TextFieldUtil.aplicarCapitalizacao(txtCidade);
+        MaskTextField.applyPhoneMask(txtcelClient);
+        MaskTextField.applyPhoneMask(txtCelClient1);
 
-          MaskTextField.applyPhoneMask(txtcelClient);
-          MaskTextField.applyPhoneMask(txtCelClient1);
+        MaskTextField.applyCepMask(txtCepClient);
 
-         MaskTextField.applyCepMask(txtCepClient);  
+        MaskTextField.applyStateMask(txtEstadoClient);
 
-         MaskTextField.applyStateMask(txtEstadoClient);
+        TextFieldUtil.aplicarCapitalizacao(txtNomeClient);
+        TextFieldUtil.aplicarCapitalizacao(txtLogradouroClient);
+        TextFieldUtil.aplicarCapitalizacao(txtBairroClient);
+        TextFieldUtil.aplicarCapitalizacao(txtCidadeClient);
 
-         TextFieldUtil.aplicarCapitalizacao(txtNomeClient);
-         TextFieldUtil.aplicarCapitalizacao(txtLogradouroClient);
-         TextFieldUtil.aplicarCapitalizacao(txtBairroClient);
-         TextFieldUtil.aplicarCapitalizacao(txtCidadeClient);
+        MaskTextField.applyPhoneMask(txtCelFornec);
+        MaskTextField.applyPhoneMask(txtCelFornec1);
 
-         MaskTextField.applyPhoneMask(txtCelFornec);
-         MaskTextField.applyPhoneMask(txtCelFornec1);
+        MaskTextField.applyCepMask(txtCepFornec);
 
-         MaskTextField.applyCepMask(txtCepFornec);  
+        MaskTextField.applyStateMask(txtEstadoFornec);
 
-         MaskTextField.applyStateMask(txtEstadoFornec);
-
-         TextFieldUtil.aplicarCapitalizacao(txtNomeFornec);
-         TextFieldUtil.aplicarCapitalizacao(txtLogradouroFornec);
-         TextFieldUtil.aplicarCapitalizacao(txtBairroFornec);
-         TextFieldUtil.aplicarCapitalizacao(txtCidadeFornec);
-         TextFieldUtil.aplicarCapitalizacao(txtProdutoFornec);
+        TextFieldUtil.aplicarCapitalizacao(txtNomeFornec);
+        TextFieldUtil.aplicarCapitalizacao(txtLogradouroFornec);
+        TextFieldUtil.aplicarCapitalizacao(txtBairroFornec);
+        TextFieldUtil.aplicarCapitalizacao(txtCidadeFornec);
+        TextFieldUtil.aplicarCapitalizacao(txtProdutoFornec);
         MaskTextField.applyCnpjMask(txtCnpjFornec);
-        MaskTextField.quantNumbery(txtCodigoFornec,13);
-        MaskTextField.quantNumbery(txtQuantFornec,2);
+        MaskTextField.quantNumbery(txtCodigoFornec, 13);
+        MaskTextField.quantNumbery(txtQuantFornec, 2);
         MaskTextField.valor(txtValorCompraFornec);
         MaskTextField.valor(txtValorVendaFornec);
         MaskTextField.limitarCaracteresFixos(txtTamanhoFornec, 2);
         MaskTextField.quantNumbery(txtNotaFiscalFornec, 10);
-        
+
         MaskTextField.applyPhoneMask(txtCelUsuario);
 
-         
+        String nome = UserSession.getInstance().getNomeUsuario();
+        String login = UserSession.getInstance().getlogin();
 
+        txtOperador.setText("Operador: " + nome);
 
-         String nome = UserSession.getInstance().getNomeUsuario();
-         String login = UserSession.getInstance().getlogin();
-
-         txtOperador.setText("Operador: "+ nome);
-
-         
-
-
-
-
-
-
-
-          passwordSenha.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(newVal.isEmpty()) {
+        passwordSenha.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.isEmpty()) {
                 feedBackLabel.setText("");
-            } else if(ValidadorSenha.isSenhaValida(newVal)){
+            } else if (ValidadorSenha.isSenhaValida(newVal)) {
                 feedBackLabel.setText("Senha Válida :D");
                 feedBackLabel2.setText("");
                 feedBackLabel.setStyle("-fx-text-fill: green;");
-                passwordSenha.setStyle("-fx-border-color: fff;" + "-fx-background-color: transparent;" + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
+                passwordSenha.setStyle("-fx-border-color: fff;" + "-fx-background-color: transparent;"
+                        + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
             } else {
                 feedBackLabel.setText("Senha deve ter letras, números e");
                 feedBackLabel2.setText("no mínimo 8 caracteres!!");
                 feedBackLabel.setStyle("-fx-text-fill: red;");
-                feedBackLabel2.setStyle("-fx-text-fill: red;"); 
-                passwordSenha.setStyle("-fx-border-color: red;" + "-fx-background-color: transparent;" + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
+                feedBackLabel2.setStyle("-fx-text-fill: red;");
+                passwordSenha.setStyle("-fx-border-color: red;" + "-fx-background-color: transparent;"
+                        + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
             }
 
         });
 
-
         txtNoSenha.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(newVal.isEmpty()) {
+            if (newVal.isEmpty()) {
                 feedBackLabel.setText("");
                 feedBackLabel2.setText("");
-            } else if(ValidadorSenha.isSenhaValida(newVal)){
+            } else if (ValidadorSenha.isSenhaValida(newVal)) {
                 feedBackLabel.setText("Senha Válida :D");
                 feedBackLabel2.setText("");
                 feedBackLabel.setStyle("-fx-text-fill: green;");
-                txtNoSenha.setStyle("-fx-border-color: fff;" + "-fx-background-color: transparent;" + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
+                txtNoSenha.setStyle("-fx-border-color: fff;" + "-fx-background-color: transparent;"
+                        + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
             } else {
                 feedBackLabel.setText("Senha deve ter letras, números e");
                 feedBackLabel2.setText("no mínimo 8 caracteres!!");
-                feedBackLabel.setStyle("-fx-text-fill: red;"); 
+                feedBackLabel.setStyle("-fx-text-fill: red;");
                 feedBackLabel2.setStyle("-fx-text-fill: red;");
-                txtNoSenha.setStyle("-fx-border-color: red;" + "-fx-background-color: transparent;" + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
-                
+                txtNoSenha.setStyle("-fx-border-color: red;" + "-fx-background-color: transparent;"
+                        + "-fx-border-radius: 7;" + "-fx-text-fill: fff");
+
             }
 
         });
-        
-        
 
-         //não vendo senha
-         //não vendo senha - repita vendo senha
-         passwordReSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+        // não vendo senha
+        // não vendo senha - repita vendo senha
+        passwordReSenha.textProperty().addListener((obs, oldVal, newVal) -> {
 
-            
-            if(newVal.isEmpty()) {
+            if (newVal.isEmpty()) {
                 labelSenhaRepita.setText("");
-           
-            }else if(passwordSenha.getText().equals(passwordReSenha.getText())) {
+
+            } else if (passwordSenha.getText().equals(passwordReSenha.getText())) {
                 labelSenhaRepita.setText("A senha concidem ;D");
                 labelSenhaRepita.setStyle("-fx-text-fill: green");
-                
+
             } else {
-               labelSenhaRepita.setText("A senha deve ser igual!");
+                labelSenhaRepita.setText("A senha deve ser igual!");
                 labelSenhaRepita.setStyle("-fx-text-fill: red;");
             }
 
-        
-         });
+        });
 
-          
-         txtReNoSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+        txtReNoSenha.textProperty().addListener((obs, oldVal, newVal) -> {
 
-                if(newVal.isEmpty()) {
+            if (newVal.isEmpty()) {
                 labelSenhaRepita.setText("");
-           
-            }else if(passwordSenha.getText().equals(txtReNoSenha.getText())) {
+
+            } else if (passwordSenha.getText().equals(txtReNoSenha.getText())) {
                 labelSenhaRepita.setText("A senha concidem ;D");
                 labelSenhaRepita.setStyle("-fx-text-fill: green");
-                
+
             } else {
-               labelSenhaRepita.setText("A senha deve ser igual!");
+                labelSenhaRepita.setText("A senha deve ser igual!");
                 labelSenhaRepita.setStyle("-fx-text-fill: red;");
             }
 
-        
-         });
+        });
 
-         passwordReSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+        passwordReSenha.textProperty().addListener((obs, oldVal, newVal) -> {
 
-                if(newVal.isEmpty()) {
+            if (newVal.isEmpty()) {
                 labelSenhaRepita.setText("");
-           
-            }else if(txtReNoSenha.getText().equals(passwordReSenha.getText())) {
+
+            } else if (txtReNoSenha.getText().equals(passwordReSenha.getText())) {
                 labelSenhaRepita.setText("A senha concidem ;D");
                 labelSenhaRepita.setStyle("-fx-text-fill: green");
-                
+
             } else {
-               labelSenhaRepita.setText("A senha deve ser igual!");
+                labelSenhaRepita.setText("A senha deve ser igual!");
                 labelSenhaRepita.setStyle("-fx-text-fill: red;");
             }
 
-        
-         });
+        });
 
-         passwordReSenha.textProperty().addListener((obs,oldVal, newVal) -> {
+        passwordReSenha.textProperty().addListener((obs, oldVal, newVal) -> {
 
-                if(newVal.isEmpty()) {
+            if (newVal.isEmpty()) {
                 labelSenhaRepita.setText("");
-           
-            }else if(passwordSenha.getText().equals(passwordReSenha.getText())) {
+
+            } else if (passwordSenha.getText().equals(passwordReSenha.getText())) {
                 labelSenhaRepita.setText("A senha concidem ;D");
                 labelSenhaRepita.setStyle("-fx-text-fill: green");
-                
+
             } else {
-               labelSenhaRepita.setText("A senha deve ser igual!");
+                labelSenhaRepita.setText("A senha deve ser igual!");
                 labelSenhaRepita.setStyle("-fx-text-fill: red;");
             }
 
-        
-         });
+        });
 
-
-         
- 
-        
     }
-
-   
 
 }

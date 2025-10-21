@@ -3,7 +3,7 @@ package com.canes.model;
 public class Produto {
 
     private Integer id;
-    private Long codigo;
+    private String codigo;
     private String nome;
     private Integer estoque;
     private Double valorCompra;
@@ -14,9 +14,9 @@ public class Produto {
     public Produto(){
     }
 
-    public Produto(Integer id, Long codigo, String nome, Integer estoque, Double valorCompra,
+    public Produto(String codigo, String nome, Integer estoque, Double valorCompra,
             Double valorVenda, Integer quantcompra) {
-        this.id = id;
+        
         this.codigo = codigo;
         this.nome = nome;
         this.estoque = estoque;
@@ -34,11 +34,11 @@ public class Produto {
         this.id = id;
     }
 
-    public Long getCodigo() {
+    public String getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(Long codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 

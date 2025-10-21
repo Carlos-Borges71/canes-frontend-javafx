@@ -1,18 +1,22 @@
 package com.canes.controller;
 
-import java.text.Format;
+import java.text.NumberFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 import com.canes.model.Cliente;
+import com.canes.model.Endereco;
 import com.canes.model.Fornecedor;
+import com.canes.model.Pedido;
 import com.canes.model.Produto;
 import com.canes.model.Telefone;
 import com.canes.model.Usuario;
 import com.canes.model.dpo.ClienteTelefoneDpo;
+import com.canes.model.dpo.FornecedorTelefoneDpo;
+import com.canes.model.dpo.UsuarioTelefoneDpo;
 import com.canes.util.HouverEffectUtil;
 import com.canes.util.ScreenUtils;
 
@@ -33,62 +37,70 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public class PesquisaController{
+public class PesquisaController {
 
     @FXML
-    private TableColumn<Usuario, String> colLogin;
+    private TableColumn<UsuarioTelefoneDpo, String> colLogin;
 
     @FXML
-    private TableColumn<Usuario, String> colNome;
+    private TableColumn<UsuarioTelefoneDpo, String> colNome;
 
     @FXML
-    private TableColumn<Usuario, String> colData;
-
-
-    @FXML
-    private TableColumn<Usuario, String> colSetor;
+    private TableColumn<UsuarioTelefoneDpo, String> colData;
 
     @FXML
-    private TableColumn<Usuario, String> colTelefone;
+    private TableColumn<UsuarioTelefoneDpo, String> colSetor;
 
     @FXML
-    private TableColumn<Cliente, String> colTelefoneCliente;
+    private TableColumn<UsuarioTelefoneDpo, String> colTelefone;
 
     @FXML
-    private TableColumn<Cliente, String> colNomeCliente;
+    private TableColumn<UsuarioTelefoneDpo, String> colEndereco;
 
     @FXML
-    private TableColumn<Cliente, String> colDataCliente;
+    private TableColumn<ClienteTelefoneDpo, String> colTelefoneCliente;
 
     @FXML
-    private TableColumn<Fornecedor, String> colFornec;
+    private TableColumn<ClienteTelefoneDpo, String> colNomeCliente;
 
     @FXML
-    private TableColumn<Fornecedor, String> colTelefoneFornec;
+    private TableColumn<ClienteTelefoneDpo, String> colDataCliente;
 
     @FXML
-    private TableColumn<Fornecedor, String> colCnpj;
+    private TableColumn<ClienteTelefoneDpo, String> colEnderecoCliente;
+
+    @FXML
+    private TableColumn<ClienteTelefoneDpo, String> colPedidoCliente;
+
+    @FXML
+    private TableColumn<FornecedorTelefoneDpo, String> colFornec;
+
+    @FXML
+    private TableColumn<FornecedorTelefoneDpo, String> colTelefoneFornec;
+
+    @FXML
+    private TableColumn<FornecedorTelefoneDpo, String> colCnpj;
 
     @FXML
     private TableColumn<Produto, String> colNomeProduto;
 
     @FXML
-    private TableColumn<Produto, Long> colCodigoProduto;
+    private TableColumn<Produto, String> colCodigoProduto;
 
     @FXML
     private TableColumn<Produto, Double> colValorProduto;
 
-     @FXML
+    @FXML
     private TableColumn<Produto, Integer> colEstoqueProduto;
 
     @FXML
-    private TableView<Usuario> tabelaUsuario;
+    private TableView<UsuarioTelefoneDpo> tabelaUsuario;
 
     @FXML
     private TableView<ClienteTelefoneDpo> tabelaCliente;
 
     @FXML
-    private TableView<Fornecedor> tabelaFornec;
+    private TableView<FornecedorTelefoneDpo> tabelaFornec;
 
     @FXML
     private TableView<Produto> tabelaProduto;
@@ -102,14 +114,13 @@ public class PesquisaController{
     @FXML
     private TextField txtFiltrar;
 
-    private FilteredList<Usuario> listaFiltrada;
+    private FilteredList<UsuarioTelefoneDpo> listaFiltrada;
 
     private FilteredList<ClienteTelefoneDpo> listaFiltradaCliente;
 
-    private FilteredList<Fornecedor> listaFiltradaFornecedor;
+    private FilteredList<FornecedorTelefoneDpo> listaFiltradaFornecedor;
 
     private FilteredList<Produto> listaFiltradaProduto;
-
 
     @FXML
     private Pane paneCliente;
@@ -141,10 +152,10 @@ public class PesquisaController{
     @FXML
     private Button btnProduto;
 
-     @FXML
+    @FXML
     private Label lblFornec;
 
-     @FXML
+    @FXML
     private Label lblProduto;
 
     @FXML
@@ -159,7 +170,6 @@ public class PesquisaController{
     @FXML
     private Button btnLimparUsuario;
 
-   
     @FXML
     private TextField txtFiltrarCliente;
 
@@ -175,15 +185,23 @@ public class PesquisaController{
 
     private Cliente cliente;
     private Telefone telefone;
-    
 
-    
+    private ObservableList<Usuario> listaUsuarios;
+
+    private ObservableList<Cliente> listaClientes;
+
+    private ObservableList<Fornecedor> listaFornecedores;
+
+    private ObservableList<Produto> listaProdutos;
+
+    NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+
     @FXML
     void onactionClient(ActionEvent event) {
 
         paneUser.setVisible(false);
         paneCliente.setVisible(true);
-        lbluser.setTextFill(Color.WHITE);        
+        lbluser.setTextFill(Color.WHITE);
         lblClient.setTextFill(Color.RED);
         paneFornec.setVisible(false);
         lblFornec.setTextFill(Color.WHITE);
@@ -196,7 +214,7 @@ public class PesquisaController{
 
         paneUser.setVisible(true);
         paneCliente.setVisible(false);
-        lbluser.setTextFill(Color.RED);        
+        lbluser.setTextFill(Color.RED);
         lblClient.setTextFill(Color.WHITE);
         paneFornec.setVisible(false);
         lblFornec.setTextFill(Color.WHITE);
@@ -204,14 +222,12 @@ public class PesquisaController{
         lblProduto.setTextFill(Color.WHITE);
     }
 
-   
-
     @FXML
     void onActionFornec(ActionEvent event) {
 
         paneUser.setVisible(false);
         paneCliente.setVisible(false);
-        lbluser.setTextFill(Color.WHITE);        
+        lbluser.setTextFill(Color.WHITE);
         lblClient.setTextFill(Color.WHITE);
         paneFornec.setVisible(true);
         lblFornec.setTextFill(Color.RED);
@@ -220,22 +236,22 @@ public class PesquisaController{
     }
 
     @FXML
-    void  onActionVoltar(MouseEvent event) {
+    void onActionVoltar(MouseEvent event) {
 
-         try {
-            ScreenUtils.changeScreenMouse(event, "/com/canes/menu.fxml", "Menu", null);
+        try {
+            ScreenUtils.changeScreenMouse(event, "/com/canes/view/menu.fxml", "Menu", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-
     }
+
     @FXML
     void onActionProduto(ActionEvent event) {
 
         paneUser.setVisible(false);
         paneCliente.setVisible(false);
-        lbluser.setTextFill(Color.WHITE);        
+        lbluser.setTextFill(Color.WHITE);
         lblClient.setTextFill(Color.WHITE);
         paneFornec.setVisible(false);
         lblFornec.setTextFill(Color.WHITE);
@@ -267,8 +283,7 @@ public class PesquisaController{
     @FXML
     void onMouseEteredFiltrar(MouseEvent event) {
 
-    HouverEffectUtil.apllyHouverSobre(btnFiltrar);
-    
+        HouverEffectUtil.apllyHouverSobre(btnFiltrar);
 
     }
 
@@ -278,16 +293,8 @@ public class PesquisaController{
         HouverEffectUtil.apllyHouverSair(btnFiltrar);
     }
 
-    private ObservableList<Usuario> listaUsuarios;
-
-    private ObservableList<ClienteTelefoneDpo> listaClientes;
-
-    private ObservableList<Fornecedor> listaFornecedores;
-
-    private ObservableList<Produto> listaProdutos;
-
     @FXML
-    public void initialize(){
+    public void initialize() {
 
         formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").withZone(ZoneId.systemDefault());
 
@@ -302,7 +309,7 @@ public class PesquisaController{
 
         btnUser.setOnMouseEntered(e -> {
             HouverEffectUtil.apllyHouverSobre(btnUser);
-            
+
         });
 
         btnClient.setOnMouseExited(e -> {
@@ -353,8 +360,6 @@ public class PesquisaController{
             HouverEffectUtil.apllyHouverSobre(btnLimparFornec);
         });
 
-        
-
         btnLimparProduto.setOnMouseExited(e -> {
             HouverEffectUtil.apllyHouverSair(btnLimparProduto);
         });
@@ -363,13 +368,10 @@ public class PesquisaController{
             HouverEffectUtil.apllyHouverSobre(btnLimparProduto);
         });
 
-        
-
         Label placeholder = new Label("Nenhum usuário encontrado!");
         placeholder.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
 
         tabelaUsuario.setPlaceholder(placeholder);
-        
 
         colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colSetor.setCellValueFactory(new PropertyValueFactory<>("setor"));
@@ -380,24 +382,54 @@ public class PesquisaController{
             String formatada = data == null ? "" : formatter.format(data);
             return new SimpleStringProperty(formatada);
         });
-        
+        colEndereco.setCellValueFactory(new PropertyValueFactory<>("enderecos"));
 
-        listaUsuarios = FXCollections.observableArrayList( 
-        new Usuario(1,"Carlos Borges", "ADM", "Carlos", Instant.parse("2025-09-10T12:00:09Z"),"(99) 88888-0000"), 
-        new Usuario(2, "Cintia Yellon", "ADMINISTRATIVO", "GRU",Instant.now(), "(99)43434343"),
-        new Usuario(3,"Joâo Pedro", "ADM", "GRU", Instant.now(),"(65)43434343"),
-        new Usuario(4,"Terla Gomes", "ADM", "GRU", Instant.now(),"43434343"),
-        new Usuario(5, "Joana Black", "ADM", "GRU",Instant.now(), "43434343"),
-        new Usuario(6, "Flavio Blue", "ADM", "GRU", Instant.now(),"43434343"),
-        new Usuario(7, "Yasmin Red", "ADM", "GRU", Instant.now(),"43434343"),
-        new Usuario(8, "Washington Pink", "ADM", "GRU",Instant.now(), "43434343"),
-        new Usuario(9,"Karla Khaki", "ADM", "GRU", Instant.now(),"43434343"));
+        Usuario u1 = new Usuario(1, "Carlos Borges", "ADM", "Carlos", Instant.parse("2025-09-10T12:00:09Z"),
+                Arrays.asList(new Telefone(1, "(99) 88888-0000")),
+                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")));
+        Usuario u2 = new Usuario(2, "Cintia Yellon", "ADMINISTRATIVO", "GRU", Instant.now(),
+                Arrays.asList(new Telefone(1, "(99) 99988-0000"), new Telefone(2, "(21) 99888-8776")),
+                Arrays.asList(new Endereco("Rua Alan", "234", "Centro", "Rio", "RJ", "26.000-000")));
+        Usuario u3 = new Usuario(3, "Joâo Pedro", "ADM", "GRU", Instant.now(),
+                Arrays.asList(new Telefone(3, "(65)4343-4343")),
+                Arrays.asList(new Endereco("Rua Orca", "234", "Centro", "Rio de Janeiro", "RJ", "26.000-000")));
+        Usuario u4 = new Usuario(4, "Terla Gomes", "ADM", "GRU", Instant.now(),
+                Arrays.asList(new Telefone(1, "(99) 823888-0000")),
+                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")));
+        Usuario u5 = new Usuario(5, "Joana Black", "ADM", "GRU", Instant.now(),
+                Arrays.asList(new Telefone(1, "(99) 88888-0000")),
+                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")));
+        Usuario u6 = new Usuario(6, "Flavio Blue", "ADM", "GRU", Instant.now(),
+                Arrays.asList(new Telefone(1, "(99) 877788-0000")),
+                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")));
+        Usuario u7 = new Usuario(7, "Yasmin Red", "ADM", "GRU", Instant.now(),
+                Arrays.asList(new Telefone(1, "(99) 88888-0000")),
+                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")));
+        Usuario u8 = new Usuario(8, "Washington Pink", "ADM", "GRU", Instant.now(),
+                Arrays.asList(new Telefone(1, "(99) 76588-0000")),
+                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")));
+        Usuario u9 = new Usuario(9, "Karla Khaki", "ADM", "GRU", Instant.now(),
+                Arrays.asList(new Telefone(1, "(99) 09038-0000")),
+                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")));
 
-    
-    
+        ObservableList<UsuarioTelefoneDpo> listaUsuarios = FXCollections.observableArrayList();
+
+        for (Usuario u : Arrays.asList(u1, u2, u3, u4, u5, u6, u7, u8, u9)) {
+            for (Telefone t : u.getTelefone()) {
+                for (Endereco e : u.getEnderecos()) {
+
+                    String enderecoCompleto = String.format("%s, %s - %s, %s/%s (%s)",
+                            e.getLogradouro(), e.getNumero(), e.getBairro(), e.getCidade(), e.getEstado(), e.getCep());
+
+                    listaUsuarios.add(new UsuarioTelefoneDpo(u.getNome(), u.getLogin(), u.getSetor(), u.getInstante(),
+                            t.getNumero(), enderecoCompleto));
+
+                }
+
+            }
+        }
 
         listaFiltrada = new FilteredList<>(listaUsuarios, p -> true);
-
         tabelaUsuario.setItems(listaFiltrada);
 
         tabelaUsuario.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -405,20 +437,22 @@ public class PesquisaController{
         txtFiltrar.textProperty().addListener((obs, oldValue, newValue) -> {
             String filtro = newValue.toLowerCase();
             listaFiltrada.setPredicate(usuario -> {
-             if(filtro == null || filtro.isEmpty()) {
-                return true;
-            }
+                if (filtro == null || filtro.isEmpty()) {
+                    return true;
+                }
 
-            String dataString = usuario.getInstante() == null ? "" : formatter.format(usuario.getInstante()).toLowerCase();
-            
-            return usuario.getNome().toLowerCase().contains(filtro) || 
-            usuario.getSetor().toLowerCase().contains(filtro) ||
-            usuario.getLogin().toLowerCase().contains(filtro) ||
-            usuario.getTelefone().toLowerCase().contains(filtro) ||
-            dataString.contains(filtro);
+                String dataString = usuario.getInstante() == null ? ""
+                        : formatter.format(usuario.getInstante()).toLowerCase();
+
+                return usuario.getNome().toLowerCase().contains(filtro) ||
+                        usuario.getSetor().toLowerCase().contains(filtro) ||
+                        usuario.getLogin().toLowerCase().contains(filtro) ||
+                        usuario.getTelefone().toLowerCase().contains(filtro) ||
+                        dataString.contains(filtro) ||
+                        usuario.getTelefone().contains(filtro) ||
+                        usuario.getEnderecos().toLowerCase().contains(filtro);
             });
         });
-
 
         Label placeholderCliente = new Label("Nenhum Cliente encontrado!");
         placeholderCliente.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
@@ -427,112 +461,124 @@ public class PesquisaController{
         tabelaCliente.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         colNomeCliente.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        colTelefoneCliente.setCellValueFactory(new PropertyValueFactory<>("telefones")); 
+        colTelefoneCliente.setCellValueFactory(new PropertyValueFactory<>("telefones"));
 
-                
         colDataCliente.setCellValueFactory(cellData -> {
             Instant data = cellData.getValue().getInstante();
-            String formatada = data == null ? "" : formatter.format(data);
-            return new SimpleStringProperty(formatada);
-
-            
+            if (data == null)
+                return new SimpleStringProperty("");
+            return new SimpleStringProperty(formatter.format(data));
         });
-        colDataCliente.setCellValueFactory(new PropertyValueFactory<>("instante")); 
-        
-        Cliente c1 = new Cliente(1,"Carlos borges", Instant.now(), Arrays.asList(new Telefone(1, "(21) 98989-0000"),new Telefone(2, "(21) 98989-9999")));
-        Cliente c2 = new Cliente(2,"Carlos ", Instant.now(), Arrays.asList(new Telefone(3, "(21) 98359-0550"),new Telefone(4, "(21) 98989-9999")));
-        Cliente c3 = new Cliente(3," borges", Instant.now(), Arrays.asList(new Telefone(5, "(21) 98989-0000"),new Telefone(6, "(21) 98989-9999")));
-         
+
+        colEnderecoCliente.setCellValueFactory(new PropertyValueFactory<>("enderecos"));
+        colPedidoCliente.setCellValueFactory(new PropertyValueFactory<>("pedidos"));
+
+        // colDataCliente.setCellValueFactory(new PropertyValueFactory<>("instante"));
+
+        Cliente c1 = new Cliente("Carlos borges", Instant.now(),
+                Arrays.asList(new Telefone(1, "(21) 98989-0000"), new Telefone(2, "(21) 98989-9999")),
+                Arrays.asList(new Endereco("Rua Abacaxi", "23234", "Centro", "Rio", "RJ", "26.000-000")),
+                Arrays.asList(new Pedido(1, "PAGO", 150.9, Instant.now(), Arrays.asList(new Produto()))));
+        Cliente c2 = new Cliente("Carlos ", Instant.now(),
+                Arrays.asList(new Telefone(3, "(21) 98359-0550"), new Telefone(4, "(21) 98989-9999")),
+                Arrays.asList(new Endereco("Rua Abc", "2w34", "Cuica", "São Paulo", "SP", "02.000-000")),
+                Arrays.asList(new Pedido(2, "CANCELADO", 150.9, Instant.now(), Arrays.asList(new Produto()))));
+        Cliente c3 = new Cliente(" borges", Instant.now(),
+                Arrays.asList(new Telefone(5, "(21) 98989-0000"), new Telefone(6, "(21) 98989-9999")),
+                Arrays.asList(new Endereco("Rua Abc", "2q34", "Centro", "Rio", "RJ", "26.000-000")), Arrays.asList(
+                        new Pedido(3, "AGARDANDO PAGAMENTO", 150.9, Instant.now(), Arrays.asList(new Produto()))));
+
         ObservableList<ClienteTelefoneDpo> listaClientes = FXCollections.observableArrayList();
 
-        for(Cliente c: Arrays.asList(c1, c2, c3)){
-            for(Telefone t : c.getTelefones()){
-                listaClientes.add(new ClienteTelefoneDpo( c.getNome(), t.getNumero(), c.getInstante()));
+        for (Cliente c : Arrays.asList(c1, c2, c3)) {
+            for (Telefone t : c.getTelefones()) {
+                for (Endereco e : c.getEnderecos()) {
+                    for (Pedido p : c.getPedidos()) {
+                        String enderecoCompleto = String.format("%s, %s - %s, %s/%s (%s)",
+                                e.getLogradouro(), e.getNumero(), e.getBairro(), e.getCidade(), e.getEstado(),
+                                e.getCep());
+
+                        String pedidosCompleto = String.format("%s - (%s) -  %s", p.getId(), p.getStatus(),
+                                nf.format(p.getValor()));
+
+                        listaClientes
+                                .add(new ClienteTelefoneDpo(c.getNome(), c.getInstante(), t.getNumero(),
+                                        enderecoCompleto, pedidosCompleto));
+
+                    }
+                }
+
             }
         }
-
-        
-
-        
-    
-    
 
         listaFiltradaCliente = new FilteredList<>(listaClientes, p -> true);
 
         tabelaCliente.setItems(listaFiltradaCliente);
-        
 
-        
-    
-
-        
         txtFiltrarCliente.textProperty().addListener((obs, oldValue, newValue) -> {
             String filtro = newValue.toLowerCase();
             listaFiltradaCliente.setPredicate(cliente -> {
-             if(filtro == null || filtro.isEmpty()) {
-                return true;
-            }
-            
-        
-            String dataString = cliente.getInstante() == null ? "" : formatter.format(cliente.getInstante()).toLowerCase();
-            
-            return cliente.getNome().toLowerCase().contains(filtro) ||             
-           
-            dataString.contains(filtro);
-            
+                if (filtro == null || filtro.isEmpty()) {
+                    return true;
+                }
+
+                String dataString = cliente.getInstante() == null ? ""
+                        : formatter.format(cliente.getInstante()).toLowerCase();
+
+                return cliente.getNome().toLowerCase().contains(filtro) ||
+
+                        dataString.contains(filtro) || cliente.getEnderecos().toLowerCase().contains(filtro)
+                        || cliente.getTelefones().contains(filtro) ||
+                        cliente.getPedidos().toLowerCase().contains(filtro);
+
             });
-         });
-
-
-
+        });
 
         Label placeholderFornec = new Label("Nenhum Fornecedor encontrado!");
         placeholderFornec.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
         tabelaFornec.setPlaceholder(placeholderFornec);
 
-        
         tabelaFornec.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         colFornec.setCellValueFactory(new PropertyValueFactory<>("empresa"));
         colTelefoneFornec.setCellValueFactory(new PropertyValueFactory<>("Telefone"));
         colCnpj.setCellValueFactory(new PropertyValueFactory<>("cnpj"));
-        
-      
-        
 
-        listaFornecedores = FXCollections.observableArrayList( 
-        new Fornecedor(1, "Cia Roupas", "11.111.222/0001-09", "(88) 88888-0000"),
-        new Fornecedor(2, "Roupas Cia", "22.333.444/0001-07", "(21) 22222-4444")
-        
-        );
+        Fornecedor f1 = new Fornecedor("Cia Roupas", "11.111.222/0001-09",
+                Arrays.asList(new Telefone(1, "(88) 88888-0000")));
+        Fornecedor f2 = new Fornecedor("Roupas Cia", "22.333.444/0001-07",
+                Arrays.asList(new Telefone(2, "(21) 22222-4444"), new Telefone(3, "(21) 99803-8215")));
+        Fornecedor f3 = new Fornecedor("Poco Roupas", "66.111.222/0001-09",
+                Arrays.asList(new Telefone(1, "(88) 80878-0000")));
+        Fornecedor f4 = new Fornecedor("Rio Cia", "22.003.444/0001-07",
+                Arrays.asList(new Telefone(2, "(21) 22222-8764"), new Telefone(3, "(21) 99803-8215")));
 
-        
-    
-    
+        ObservableList<FornecedorTelefoneDpo> listaFornecedor = FXCollections.observableArrayList();
 
-        listaFiltradaFornecedor = new FilteredList<>(listaFornecedores, p -> true);
+        for (Fornecedor f : Arrays.asList(f1, f2, f3, f4)) {
+            for (Telefone t : f.getTelefone()) {
+                listaFornecedor.add(new FornecedorTelefoneDpo(f.getEmpresa(), f.getCnpj(), t.getNumero()));
+            }
+        }
+
+        listaFiltradaFornecedor = new FilteredList<>(listaFornecedor, p -> true);
 
         tabelaFornec.setItems(listaFiltradaFornecedor);
-        
+
         txtFiltrarFornec.textProperty().addListener((obs, oldValue, newValue) -> {
             String filtro = newValue.toLowerCase();
             listaFiltradaFornecedor.setPredicate(fornecedor -> {
-             if(filtro == null || filtro.isEmpty()) {
-                return true;
-            }
+                if (filtro == null || filtro.isEmpty()) {
+                    return true;
+                }
 
-            
-            
-            return fornecedor.getEmpresa().toLowerCase().contains(filtro) ||             
-            fornecedor.getTelefone().toLowerCase().contains(filtro) ||
-            fornecedor.getCnpj().toLowerCase().contains(filtro);
-            
-            
+                return fornecedor.getEmpresa().toLowerCase().contains(filtro) ||
+                        fornecedor.getTelefone().toLowerCase().contains(filtro) ||
+                        fornecedor.getCnpj().toLowerCase().contains(filtro);
+
             });
         });
 
-
-    
         Label placeholderProduto = new Label("Nenhum Produto encontrado!");
         placeholderProduto.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
         tabelaProduto.setPlaceholder(placeholderProduto);
@@ -543,67 +589,52 @@ public class PesquisaController{
         colCodigoProduto.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         colEstoqueProduto.setCellValueFactory(new PropertyValueFactory<>("estoque"));
         colValorProduto.setCellValueFactory(new PropertyValueFactory<>("valorVenda"));
-        
-      
-        
 
-        listaProdutos = FXCollections.observableArrayList( 
-           new Produto(1,876577777L, "Vestido", 10, 123.9, 660.8, 10),
-            new Produto(2,8333564598L, "Calça Jeans", 6, 123.9, 760.8, 6),
-             new Produto(3,2457665598L, "Vestido Rusti", 4, 123.9, 160.8, 4)
-        
+        listaProdutos = FXCollections.observableArrayList(
+
+                new Produto("876577777", "Vestido", 10, 123.9, 660.8, 10),
+                new Produto("876577777", "Vestido", 10, 123.9, 660.8, 10),
+                new Produto("8333564598", "Calça Jeans", 6, 123.9, 760.8, 6),
+                new Produto("2457665598", "Vestido Rusti", 4, 123.9, 160.8, 4)
+
         );
-
-        
-    
-    
 
         listaFiltradaProduto = new FilteredList<>(listaProdutos, p -> true);
 
         tabelaProduto.setItems(listaFiltradaProduto);
-        
+
         txtFiltrarProduto.textProperty().addListener((obs, oldValue, newValue) -> {
             String filtro = newValue.toLowerCase();
             listaFiltradaProduto.setPredicate(produto -> {
-             if(filtro == null || filtro.isEmpty()) {
-                return true;
-            }
+                if (filtro == null || filtro.isEmpty()) {
+                    return true;
+                }
 
-            String codigoStr = String.valueOf(produto.getCodigo());
-            String estoqueStr = String.valueOf(produto.getEstoque());
-            String valorStr = String.valueOf(produto.getValorVenda());
-            
-            
-            return produto.getNome().toLowerCase().contains(filtro) ||             
-            codigoStr.toLowerCase().contains(filtro) ||
-            estoqueStr.toLowerCase().contains(filtro) ||
-            valorStr.toLowerCase().contains(filtro);
-            
-            
+                String codigoStr = String.valueOf(produto.getCodigo());
+                String estoqueStr = String.valueOf(produto.getEstoque());
+                String valorStr = String.valueOf(produto.getValorVenda());
+
+                return produto.getNome().toLowerCase().contains(filtro) ||
+                        codigoStr.toLowerCase().contains(filtro) ||
+                        estoqueStr.toLowerCase().contains(filtro) ||
+                        valorStr.toLowerCase().contains(filtro);
+
             });
         });
 
         tabelaProduto.setOnMouseClicked(e -> {
 
-            if (e.getClickCount() == 2){ 
-            Produto produtoSelecionado = tabelaProduto.getSelectionModel().getSelectedItem();
+            if (e.getClickCount() == 2) {
+                Produto produtoSelecionado = tabelaProduto.getSelectionModel().getSelectedItem();
 
                 if (produtoSelecionado != null) {
-                    System.out.println("Selecionado: Código " + produtoSelecionado.getId()+ " Produto: "+ produtoSelecionado.getNome());
+                    System.out.println("Selecionado: Código " + produtoSelecionado.getId() + " Produto: "
+                            + produtoSelecionado.getNome());
                 }
 
             }
         });
 
-    
     }
 
-    
 }
-
-    
-
-
-
-    
-

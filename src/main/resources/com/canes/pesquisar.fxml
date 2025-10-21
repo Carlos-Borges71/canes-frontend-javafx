@@ -89,18 +89,19 @@
                   <Font name="Verdana Bold" size="24.0" />
                </font>
             </Label>
-            <Pane fx:id="paneUser" layoutX="124.0" layoutY="300.0" prefHeight="367.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;">
+            <Pane fx:id="paneUser" layoutX="11.0" layoutY="300.0" prefHeight="367.0" prefWidth="1131.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;">
                <padding>
                   <Insets bottom="20.0" />
                </padding>
                <children>
-                  <TableView fx:id="tabelaUsuario" layoutX="16.0" layoutY="66.0" prefHeight="292.0" prefWidth="888.0">
+                  <TableView fx:id="tabelaUsuario" layoutX="16.0" layoutY="66.0" prefHeight="292.0" prefWidth="1104.0">
                     <columns>
-                      <TableColumn fx:id="colNome" prefWidth="249.60009765625" style="-fx-font-size: 16px" text="Nome" />
-                      <TableColumn fx:id="colSetor" prefWidth="199.20001220703125" style="-fx-font-size: 16px" text="Setor" />
-                        <TableColumn fx:id="colLogin" prefWidth="132.0" style="-fx-font-size: 16px" text="Login" />
-                        <TableColumn fx:id="colTelefone" prefWidth="191.199951171875" style="-fx-font-size: 16px" text="Telefone" />
-                        <TableColumn fx:id="colData" maxWidth="350.0" prefWidth="258.3997802734375" style="-fx-font-size: 16px" text="Data" />
+                      <TableColumn fx:id="colNome" prefWidth="175.19998931884766" style="-fx-font-size: 16px" text="Nome" />
+                      <TableColumn fx:id="colSetor" prefWidth="159.20004272460938" style="-fx-font-size: 16px" text="Setor" />
+                        <TableColumn fx:id="colLogin" prefWidth="168.0" style="-fx-font-size: 16px" text="Login" />
+                        <TableColumn fx:id="colTelefone" prefWidth="172.800048828125" style="-fx-font-size: 16px" text="Telefone" />
+                        <TableColumn fx:id="colEndereco" maxWidth="350.0" prefWidth="233.60003662109375" style="-fx-font-size: 16px" text="Endereço" />
+                        <TableColumn fx:id="colData" maxWidth="350.0" prefWidth="180.0" style="-fx-font-size: 16px" text="Data" />
                     </columns>
                   </TableView>
                   <TextField fx:id="txtFiltrar" layoutX="24.0" layoutY="14.0" prefHeight="37.0" prefWidth="323.0" promptText="Digite para filtrar" style="-fx-background-color: Transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;">
@@ -126,16 +127,18 @@
                   </ImageView>
                </children>
             </Pane>
-            <Pane fx:id="paneCliente" layoutX="124.0" layoutY="300.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="367.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
+            <Pane fx:id="paneCliente" layoutX="11.0" layoutY="300.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="367.0" prefWidth="1131.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
                <padding>
                   <Insets bottom="20.0" />
                </padding>
                <children>
-                  <TableView fx:id="tabelaCliente" layoutX="16.0" layoutY="66.0" prefHeight="292.0" prefWidth="888.0">
+                  <TableView fx:id="tabelaCliente" layoutX="17.0" layoutY="66.0" prefHeight="292.0" prefWidth="1104.0">
                      <columns>
-                        <TableColumn fx:id="colNomeCliente" prefWidth="300.00001525878906" style="-fx-font-size: 16px" text="Nome" />
-                        <TableColumn fx:id="colTelefoneCliente" prefWidth="208.80001831054688" style="-fx-font-size: 16px" text="Telefone" />
-                        <TableColumn fx:id="colDataCliente" prefWidth="167.99993896484375" style="-fx-font-size: 16px" text="Data" />
+                        <TableColumn fx:id="colNomeCliente" prefWidth="227.2000503540039" style="-fx-font-size: 16px" text="Nome" />
+                        <TableColumn fx:id="colTelefoneCliente" prefWidth="188.79998779296875" style="-fx-font-size: 16px" text="Telefone" />
+                        <TableColumn fx:id="colEnderecoCliente" prefWidth="277.60003662109375" style="-fx-font-size: 16px" text="Endereço" />
+                        <TableColumn fx:id="colPedidoCliente" prefWidth="234.39996337890625" style="-fx-font-size: 16px" text="Pedido" />
+                        <TableColumn fx:id="colDataCliente" prefWidth="169.60003662109375" style="-fx-font-size: 16px" text="Data" />
                      </columns>
                   </TableView>
                   <TextField fx:id="txtFiltrarCliente" layoutX="24.0" layoutY="14.0" prefHeight="37.0" prefWidth="323.0" promptText="Digite para filtrar" style="-fx-background-color: Transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;">

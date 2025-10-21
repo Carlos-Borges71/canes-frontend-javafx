@@ -3,7 +3,6 @@ package com.canes.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 public class StatusPagamentoController {
