@@ -58,6 +58,9 @@ public class PesquisaController {
     private TableColumn<UsuarioTelefoneDpo, String> colEndereco;
 
     @FXML
+    private TableColumn<UsuarioTelefoneDpo, String> colClienteUser;
+
+    @FXML
     private TableColumn<ClienteTelefoneDpo, String> colTelefoneCliente;
 
     @FXML
@@ -377,52 +380,66 @@ public class PesquisaController {
         colSetor.setCellValueFactory(new PropertyValueFactory<>("setor"));
         colLogin.setCellValueFactory(new PropertyValueFactory<>("login"));
         colTelefone.setCellValueFactory(new PropertyValueFactory<>("Telefone"));
-        colData.setCellValueFactory(cellData -> {
-            Instant data = cellData.getValue().getInstante();
-            String formatada = data == null ? "" : formatter.format(data);
-            return new SimpleStringProperty(formatada);
-        });
+        // colData.setCellValueFactory(cellData -> {
+        //     Instant data = cellData.getValue().getInstante();
+        //     String formatada = data == null ? "" : formatter.format(data);
+        //     return new SimpleStringProperty(formatada);
+        // });
         colEndereco.setCellValueFactory(new PropertyValueFactory<>("enderecos"));
+        colClienteUser.setCellValueFactory(new PropertyValueFactory<>("clientes"));
 
-        Usuario u1 = new Usuario(1, "Carlos Borges", "ADM", "Carlos", Instant.parse("2025-09-10T12:00:09Z"),
+        Usuario u1 = new Usuario(1, "Carlos Borges", "ADM", "Carlos", Instant.parse("2025-09-10T12:00:09Z"), "123",
                 Arrays.asList(new Telefone(1, "(99) 88888-0000")),
-                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")));
-        Usuario u2 = new Usuario(2, "Cintia Yellon", "ADMINISTRATIVO", "GRU", Instant.now(),
+                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")),
+                Arrays.asList(new Cliente("Sebastião Soares ", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
+        Usuario u2 = new Usuario(2, "Cintia Yellon", "ADMINISTRATIVO", "GRU", Instant.now(), "123",
                 Arrays.asList(new Telefone(1, "(99) 99988-0000"), new Telefone(2, "(21) 99888-8776")),
-                Arrays.asList(new Endereco("Rua Alan", "234", "Centro", "Rio", "RJ", "26.000-000")));
-        Usuario u3 = new Usuario(3, "Joâo Pedro", "ADM", "GRU", Instant.now(),
+                Arrays.asList(new Endereco("Rua Alan", "234", "Centro", "Rio", "RJ", "26.000-000")),
+                Arrays.asList(new Cliente("Antonio Pires ", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
+        Usuario u3 = new Usuario(3, "Joâo Pedro", "ADM", "GRU", Instant.now(), "123",
                 Arrays.asList(new Telefone(3, "(65)4343-4343")),
-                Arrays.asList(new Endereco("Rua Orca", "234", "Centro", "Rio de Janeiro", "RJ", "26.000-000")));
-        Usuario u4 = new Usuario(4, "Terla Gomes", "ADM", "GRU", Instant.now(),
+                Arrays.asList(new Endereco("Rua Orca", "234", "Centro", "Rio de Janeiro", "RJ", "26.000-000")),
+                Arrays.asList(new Cliente("Danilo Silva", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
+        Usuario u4 = new Usuario(4, "Terla Gomes", "ADM", "GRU", Instant.now(), "123",
                 Arrays.asList(new Telefone(1, "(99) 823888-0000")),
-                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")));
-        Usuario u5 = new Usuario(5, "Joana Black", "ADM", "GRU", Instant.now(),
+                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")),
+                Arrays.asList(new Cliente("Willian Lima", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
+        Usuario u5 = new Usuario(5, "Joana Black", "ADM", "GRU", Instant.now(), "123",
                 Arrays.asList(new Telefone(1, "(99) 88888-0000")),
-                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")));
-        Usuario u6 = new Usuario(6, "Flavio Blue", "ADM", "GRU", Instant.now(),
+                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")),
+                Arrays.asList(new Cliente("José Soares ", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
+        Usuario u6 = new Usuario(6, "Flavio Blue", "ADM", "GRU", Instant.now(), "123",
                 Arrays.asList(new Telefone(1, "(99) 877788-0000")),
-                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")));
-        Usuario u7 = new Usuario(7, "Yasmin Red", "ADM", "GRU", Instant.now(),
+                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")),
+                Arrays.asList(new Cliente("Cristian Morais", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
+        Usuario u7 = new Usuario(7, "Yasmin Red", "ADM", "GRU", Instant.now(), "123",
                 Arrays.asList(new Telefone(1, "(99) 88888-0000")),
-                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")));
-        Usuario u8 = new Usuario(8, "Washington Pink", "ADM", "GRU", Instant.now(),
+                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")),
+                Arrays.asList(new Cliente("Washington Torres Soares ", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
+        Usuario u8 = new Usuario(8, "Washington Pink", "ADM", "GRU", Instant.now(), "123",
                 Arrays.asList(new Telefone(1, "(99) 76588-0000")),
-                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")));
-        Usuario u9 = new Usuario(9, "Karla Khaki", "ADM", "GRU", Instant.now(),
+                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")),
+                Arrays.asList(new Cliente("Flavio Tulio", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
+        Usuario u9 = new Usuario(9, "Karla Khaki", "ADM", "GRU", Instant.now(), "123",
                 Arrays.asList(new Telefone(1, "(99) 09038-0000")),
-                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")));
+                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")),
+                Arrays.asList(new Cliente("Luis Carlos", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido())),new Cliente("Lucca ferraz Carlos", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
 
         ObservableList<UsuarioTelefoneDpo> listaUsuarios = FXCollections.observableArrayList();
 
         for (Usuario u : Arrays.asList(u1, u2, u3, u4, u5, u6, u7, u8, u9)) {
             for (Telefone t : u.getTelefone()) {
                 for (Endereco e : u.getEnderecos()) {
+                    for (Cliente c: u.getClientes()){ 
 
                     String enderecoCompleto = String.format("%s, %s - %s, %s/%s (%s)",
                             e.getLogradouro(), e.getNumero(), e.getBairro(), e.getCidade(), e.getEstado(), e.getCep());
 
-                    listaUsuarios.add(new UsuarioTelefoneDpo(u.getNome(), u.getLogin(), u.getSetor(), u.getInstante(),
-                            t.getNumero(), enderecoCompleto));
+                    String ClienteCompleto = String.format(" Cad -  %s ", c.getNome());        
+
+                    // listaUsuarios.add(new UsuarioTelefoneDpo(u.getNome(), u.getLogin(), u.getSetor(), u.getInstante(),u.getSenha(),
+                    //         t.getNumero(), enderecoCompleto, ClienteCompleto));
+                    // }
 
                 }
 
@@ -441,16 +458,17 @@ public class PesquisaController {
                     return true;
                 }
 
-                String dataString = usuario.getInstante() == null ? ""
-                        : formatter.format(usuario.getInstante()).toLowerCase();
+                // String dataString = usuario.getInstante() == null ? ""
+                //         : formatter.format(usuario.getInstante()).toLowerCase();
 
                 return usuario.getNome().toLowerCase().contains(filtro) ||
                         usuario.getSetor().toLowerCase().contains(filtro) ||
                         usuario.getLogin().toLowerCase().contains(filtro) ||
-                        usuario.getTelefone().toLowerCase().contains(filtro) ||
-                        dataString.contains(filtro) ||
-                        usuario.getTelefone().contains(filtro) ||
-                        usuario.getEnderecos().toLowerCase().contains(filtro);
+                        //usuario.getTelefone().toLowerCase().contains(filtro) ||
+                        //dataString.contains(filtro);
+                        //usuario.getTelefone().contains(filtro) ||
+                        //usuario.getEnderecos().toLowerCase().contains(filtro) ||
+                        //usuario.getClientes().toLowerCase().contains(filtro);
             });
         });
 

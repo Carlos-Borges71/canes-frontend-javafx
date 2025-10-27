@@ -9,6 +9,8 @@ public class ClienteTelefoneDpo {
     private Instant instante;
     private String enderecos;
     private String pedidos;
+    
+    
 
     public ClienteTelefoneDpo(String nome, Instant instante, String telefones, String enderecos, String pedidos) {
         this.nome = nome;
@@ -16,6 +18,7 @@ public class ClienteTelefoneDpo {
         this.instante = instante;
         this.enderecos = enderecos;
         this.pedidos = pedidos;
+        
     }
 
     public String getNome() {
@@ -37,5 +40,7 @@ public class ClienteTelefoneDpo {
     public String getPedidos() {
         return pedidos;
     }
+
+   
 
 }

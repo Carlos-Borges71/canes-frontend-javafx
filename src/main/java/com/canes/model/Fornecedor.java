@@ -4,30 +4,30 @@ import java.util.List;
 
 public class Fornecedor {
 
-
-    private Integer id;
+    private Long id;
     private String empresa;
-    private String cnpj;
+    private String cnpjCpf;
+
     private List<Telefone> telefones;
+    private Endereco endereco;
+    private NotaFiscal notasFiscais;
+    private List<Produto> produtos;
 
-    
-
-
-    public Fornecedor(){        
+    public Fornecedor() {
     }
 
-    public Fornecedor(String empresa, String cnpj, List<Telefone> telefones) {
-        
+    public Fornecedor(String empresa, String cnpjCpf) {
+
         this.empresa = empresa;
-        this.cnpj = cnpj;
-        this.telefones = telefones;
+        this.cnpjCpf = cnpjCpf;
+
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -39,20 +39,31 @@ public class Fornecedor {
         this.empresa = empresa;
     }
 
-    public String getCnpj() {
-        return cnpj;
+    public String getCnpjCpf() {
+        return cnpjCpf;
     }
 
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
+    public void setCnpjCpf(String cnpjCpf) {
+        this.cnpjCpf = cnpjCpf;
     }
-       
-     public List<Telefone> getTelefone() {
+
+   
+
+    public List<Telefone> getTelefones() {
         return telefones;
     }
 
-    
-    
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public NotaFiscal getNotasFiscais() {
+        return notasFiscais;
+    }
+
+    public List<Produto> getProdutos() {
+        return produtos;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -70,7 +81,5 @@ public class Fornecedor {
             return false;
         return true;
     }
-
-   
 
 }

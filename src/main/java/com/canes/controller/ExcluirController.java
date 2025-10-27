@@ -401,7 +401,7 @@ public class ExcluirController implements Initializable{
 
 
          try {
-            ScreenUtils.changeScreenMouse(event, "/com/canes/menu.fxml", "Menu", null);
+            ScreenUtils.changeScreenMouse(event, "/com/canes/view/menu.fxml", "Menu", null);
         } catch (Exception e) {
             e.printStackTrace();
         }

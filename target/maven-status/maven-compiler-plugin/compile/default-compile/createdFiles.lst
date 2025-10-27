@@ -1,0 +1,10 @@
+com\canes\model\dpo\UsuarioTelefoneDpo.class
+com\canes\controller\MenuController.class
+com\canes\model\Endereco.class
+module-info.class
+com\canes\services\UsuarioService.class
+com\canes\model\Telefone.class
+com\canes\controller\AtualizarController.class
+com\canes\model\Pedido.class
+com\canes\model\Produto.class
+com\canes\model\Cliente.class

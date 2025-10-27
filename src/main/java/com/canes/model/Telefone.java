@@ -1,44 +1,35 @@
 package com.canes.model;
 
-
-
-
 public class Telefone {
-    
 
-  
-    private Integer id;
+    private Long id;
     private String numero;
+    private Usuario operador;
 
-   
-
-    public Telefone(){        
+    public Telefone() {
     }
 
-    public Telefone( Integer id,String numero) {
-        
-        this.id = id;
+    public Telefone(String numero) {
+
         this.numero = numero;
-        
+
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    
     public String getNumero() {
         return numero;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
     
 
-    
-    
-   
-
-   
-   
-
-    
 }

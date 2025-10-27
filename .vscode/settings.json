@@ -1,4 +1,16 @@
 {
-    "java.debug.settings.onBuildFailureProceed": true,
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-24",
+            "path": "C:/JAVA/jdk-24.0.1"
+        }
+    ],
+    "java.configuration.defaultRuntime": "JavaSE-24",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.compilerArgs": ["--enable-preview"],
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "settingsSync.ignoredExtensions": [
+        
+    ],
+    "java.debug.settings.onBuildFailureProceed": true
 }

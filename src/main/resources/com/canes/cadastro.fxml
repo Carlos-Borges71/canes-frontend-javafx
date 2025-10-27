@@ -213,9 +213,9 @@
                   <ComboBox fx:id="txtSetor" layoutX="152.0" layoutY="107.0" prefWidth="132.0" promptText="Escolha a opção">
                      <items>
                         <FXCollections fx:factory="observableArrayList">
-                           <String fx:value="VENDAS" />
+                           <String fx:value="VENDA" />
                            <String fx:value="ADMINISTRATIVO" />
-                           <String fx:value="GERÊNCIA" />
+                           <String fx:value="GERENCIA" />
                         </FXCollections>
                      </items>
                   </ComboBox>

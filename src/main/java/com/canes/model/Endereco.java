@@ -1,42 +1,37 @@
 package com.canes.model;
 
-
-
-
 public class Endereco {
-  
 
-
-    private Integer id;
+    private Long id;
     private String logradouro;
     private String numero;
     private String bairro;
     private String cidade;
     private String estado;
     private String cep;
-    
-    
-    
+    private Long operador;
 
-    
+    public Endereco() {
+    }
 
-    public Endereco (String logradouro, String numero, String bairro, String cidade, String estado,
-            String cep) {
-        
+    public Endereco(String logradouro, String numero, String bairro, String cidade, String estado,
+            String cep, Long operador) {
+
         this.logradouro = logradouro;
         this.numero = numero;
         this.bairro = bairro;
         this.cidade = cidade;
         this.estado = estado;
         this.cep = cep;
-       
+        this.operador = operador;
+
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -88,7 +83,12 @@ public class Endereco {
         this.cep = cep;
     }
 
+    public Long getOperador() {
+        return operador;
+    }
 
-  
-    
+    public void setOperador(Long operador) {
+        this.operador = operador;
+    }
+
 }

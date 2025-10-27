@@ -1,36 +1,32 @@
 package com.canes.model;
 
-import java.time.Instant;
 import java.util.List;
 
 public class Cliente {
 
-    private Integer id;
+    private Long id;
     private String nome;
-    private Instant instante;
+    private String instante;
     private List<Telefone> telefones;
-    private List<Endereco> enderecos;
+    private Endereco endereco;
     private List<Pedido> pedidos;
+    private List<Usuario>usuarios;
 
     public Cliente() {
     }
 
-    public Cliente(String nome, Instant instante, List<Telefone> telefones, List<Endereco> enderecos,
-            List<Pedido> pedidos) {
+    public Cliente(String nome, String instante) {
 
         this.nome = nome;
         this.instante = instante;
-        this.telefones = telefones;
-        this.enderecos = enderecos;
-        this.pedidos = pedidos;
 
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -42,11 +38,11 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public Instant getInstante() {
+    public String getInstante() {
         return instante;
     }
 
-    public void setInstante(Instant instante) {
+    public void setInstante(String instante) {
         this.instante = instante;
     }
 
@@ -54,12 +50,17 @@ public class Cliente {
         return telefones;
     }
 
-    public List<Endereco> getEnderecos() {
-        return enderecos;
+    public Endereco getEndereco() {
+        return endereco;
     }
 
     public List<Pedido> getPedidos() {
         return pedidos;
     }
+
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+    
 
 }

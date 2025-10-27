@@ -1,8 +1,10 @@
 package com.canes.model;
 
+import java.util.List;
+
 public class Produto {
 
-    private Integer id;
+    private Long id;
     private String codigo;
     private String nome;
     private Integer estoque;
@@ -10,27 +12,29 @@ public class Produto {
     private Double valorVenda;
     private Integer quantcompra;
 
-    
-    public Produto(){
+    private Fornecedor fornecedor;
+    private List<Pedido> pedidos;
+
+    public Produto() {
     }
 
     public Produto(String codigo, String nome, Integer estoque, Double valorCompra,
             Double valorVenda, Integer quantcompra) {
-        
+
         this.codigo = codigo;
         this.nome = nome;
         this.estoque = estoque;
         this.valorCompra = valorCompra;
         this.valorVenda = valorVenda;
         this.quantcompra = quantcompra;
-        
+
     }
 
-      public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -81,7 +85,14 @@ public class Produto {
     public void setQuantcompra(Integer quantcompra) {
         this.quantcompra = quantcompra;
     }
-     
+
+    public Fornecedor getFornecedor() {
+        return fornecedor;
+    }
+
+    public List<Pedido> getPedidos() {
+        return pedidos;
+    }
 
     @Override
     public int hashCode() {

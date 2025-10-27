@@ -100,8 +100,9 @@
                       <TableColumn fx:id="colSetor" prefWidth="159.20004272460938" style="-fx-font-size: 16px" text="Setor" />
                         <TableColumn fx:id="colLogin" prefWidth="168.0" style="-fx-font-size: 16px" text="Login" />
                         <TableColumn fx:id="colTelefone" prefWidth="172.800048828125" style="-fx-font-size: 16px" text="Telefone" />
-                        <TableColumn fx:id="colEndereco" maxWidth="350.0" prefWidth="233.60003662109375" style="-fx-font-size: 16px" text="Endereço" />
-                        <TableColumn fx:id="colData" maxWidth="350.0" prefWidth="180.0" style="-fx-font-size: 16px" text="Data" />
+                        <TableColumn fx:id="colEndereco" maxWidth="350.0" prefWidth="172.800048828125" style="-fx-font-size: 16px" text="Endereço" />
+                        <TableColumn fx:id="colClienteUser" maxWidth="350.0" prefWidth="212.7999267578125" style="-fx-font-size: 16px" text="Cliente" />
+                        <TableColumn fx:id="colData" maxWidth="350.0" prefWidth="210.39996337890625" style="-fx-font-size: 16px" text="Data" />
                     </columns>
                   </TableView>
                   <TextField fx:id="txtFiltrar" layoutX="24.0" layoutY="14.0" prefHeight="37.0" prefWidth="323.0" promptText="Digite para filtrar" style="-fx-background-color: Transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;">

@@ -1,38 +1,42 @@
 package com.canes.model;
 
-import java.time.Instant;
-import java.util.List;
-
 public class Usuario {
 
     
-    private Integer id;
+    private Long id;
     private String nome;    
     private String login;
     private String setor;   
-    private Instant instante;
+    private String instante;
+    private String senha;
     
-    private List<Telefone> telefones;
-    private List<Endereco> enderecos;
-
+    // private List<Telefone> telefones;
+    private Endereco endereco;
+    // private List<Cliente> clientes;
    
 
     public Usuario(){        
     }
 
-    public Usuario( Integer id,String nome, String setor,  String login, Instant instante,  List<Telefone> telefones, List<Endereco> enderecos) {
+    public Usuario( String nome, String setor,  String login, String instante, String senha) {
         
         this.setor = setor;
         this.nome = nome;
         this.login = login;
         this.instante = instante;    
-        this.telefones = telefones;
-        this.enderecos = enderecos;
+        //this.telefones = telefones;
+        //this.endereco = endereco;
+        //this.clientes = clientes;
+        this.senha = senha;
         
     }
   
-
-    
+    public Long getId() {
+        return id;
+    }
+    public void setSetId(Long id) {
+        this.id = id;
+    }
 
     
     public String getSetor() {
@@ -59,29 +63,39 @@ public class Usuario {
         this.login = login;
     }
 
-    public Instant getInstante() {
+    public String getInstante() {
         return instante;
     }
 
-    public void setInstante(Instant instante) {
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public void setInstante(String instante) {
         this.instante = instante;
     }
 
     
     
-    public List<Telefone> getTelefone() {
-        return telefones;
-    }
+    // public List<Telefone> getTelefone() {
+    //     return telefones;
+    // }
 
-    public void setTelefone(List<Telefone> telefones) {
-        this.telefones = telefones;
-    }
+    // public void setTelefone(List<Telefone> telefones) {
+    //     this.telefones = telefones;
+    // }
 
-    public List<Endereco> getEnderecos() {
-        return enderecos;
+    public Endereco getEndereco() {
+        return endereco;
     }
      
-    
+    // public List<Cliente> getClientes(){
+    //     return clientes;
+    // }
     
  
     
