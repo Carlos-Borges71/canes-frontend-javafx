@@ -9,13 +9,14 @@ public class Endereco {
     private String cidade;
     private String estado;
     private String cep;
-    private Long operador;
+    private Usuario operador;
 
+    
     public Endereco() {
     }
 
     public Endereco(String logradouro, String numero, String bairro, String cidade, String estado,
-            String cep, Long operador) {
+            String cep) {
 
         this.logradouro = logradouro;
         this.numero = numero;
@@ -23,7 +24,7 @@ public class Endereco {
         this.cidade = cidade;
         this.estado = estado;
         this.cep = cep;
-        this.operador = operador;
+    
 
     }
 
@@ -83,11 +84,11 @@ public class Endereco {
         this.cep = cep;
     }
 
-    public Long getOperador() {
+    public Usuario getOperador() {
         return operador;
     }
 
-    public void setOperador(Long operador) {
+    public void setOperador(Usuario operador) {
         this.operador = operador;
     }
 

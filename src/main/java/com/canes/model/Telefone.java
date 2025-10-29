@@ -1,5 +1,8 @@
 package com.canes.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Telefone {
 
     private Long id;
@@ -29,6 +32,10 @@ public class Telefone {
 
     public void setNumero(String numero) {
         this.numero = numero;
+    }
+
+    public Usuario getOperador() {
+        return operador;
     }
     
 

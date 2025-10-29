@@ -13,23 +13,23 @@ public class UsuarioTelefoneDpo {
     private String instante;
     private String senha;
     
-    //private String telefones;
-    private Endereco endereco;
-   //private String clientes;
+    private String telefones;
+    private String endereco;
+   private String clientes;
    
 
     public UsuarioTelefoneDpo(){        
     }
 
-    public UsuarioTelefoneDpo( String nome, String setor,  String login, String instante, String senha, Endereco endereco) {
+    public UsuarioTelefoneDpo( String nome, String setor,  String login, String instante, String senha, String telefones, String endereco, String clientes) {
         
         this.setor = setor;
         this.nome = nome;
         this.login = login;
         this.instante = instante;    
-        //this.telefones = telefones;
+        this.telefones = telefones;
         this.endereco = endereco;
-        //this.clientes = clientes;
+        this.clientes = clientes;
         this.senha = senha;
         
     }
@@ -82,24 +82,24 @@ public class UsuarioTelefoneDpo {
 
     
     
-    // public String getTelefone() {
-    //     return telefones;
-    // }
+    public String getTelefone() {
+        return telefones;
+    }
 
-    // public void setTelefone(String telefones) {
-    //     this.telefones = telefones;
-    // }
+    public void setTelefone(String telefones) {
+        this.telefones = telefones;
+    }
 
-    public Endereco getEndereco() {
+    public String getEndereco() {
         return endereco;
     }
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
-
-    //  public String getClientes(){
-    //     return clientes;
+    // public void setEndereco(Endereco endereco) {
+    //     this.endereco = endereco;
     // }
+
+     public String getClientes(){
+        return clientes;
+    }
 
 }

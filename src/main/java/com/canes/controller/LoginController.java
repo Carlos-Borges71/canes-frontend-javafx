@@ -77,11 +77,12 @@ public class LoginController {
         
     
     // Exemplo: usuário autenticado com sucesso
+    Long id = 1L;
     String nome = "Carlos Borges";
     String login = txtUser.getText();
 
     // Salva na sessão
-    UserSession.getInstance().setUsuario(nome, login);
+    UserSession.getInstance().setUsuario(id,nome, login);
 
    
 

@@ -4,19 +4,21 @@ import java.text.NumberFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Fornecedor;
-import com.canes.model.Pedido;
 import com.canes.model.Produto;
 import com.canes.model.Telefone;
 import com.canes.model.Usuario;
 import com.canes.model.dpo.ClienteTelefoneDpo;
 import com.canes.model.dpo.FornecedorTelefoneDpo;
-import com.canes.model.dpo.UsuarioTelefoneDpo;
+import com.canes.services.EnderecoService;
+import com.canes.services.TelefoneService;
+import com.canes.services.UsuarioService;
 import com.canes.util.HouverEffectUtil;
 import com.canes.util.ScreenUtils;
 
@@ -38,27 +40,23 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 public class PesquisaController {
+    @FXML
+    private TableColumn<Usuario, String> colCodigo;
 
     @FXML
-    private TableColumn<UsuarioTelefoneDpo, String> colLogin;
+    private TableColumn<Usuario, String> colNome;
 
     @FXML
-    private TableColumn<UsuarioTelefoneDpo, String> colNome;
+    private TableColumn<Usuario, String> colData;
 
     @FXML
-    private TableColumn<UsuarioTelefoneDpo, String> colData;
+    private TableColumn<Usuario, String> colSetor;
 
     @FXML
-    private TableColumn<UsuarioTelefoneDpo, String> colSetor;
+    private TableColumn<Usuario, String> colTelefone;
 
     @FXML
-    private TableColumn<UsuarioTelefoneDpo, String> colTelefone;
-
-    @FXML
-    private TableColumn<UsuarioTelefoneDpo, String> colEndereco;
-
-    @FXML
-    private TableColumn<UsuarioTelefoneDpo, String> colClienteUser;
+    private TableColumn<Usuario, String> colEndereco;
 
     @FXML
     private TableColumn<ClienteTelefoneDpo, String> colTelefoneCliente;
@@ -97,7 +95,7 @@ public class PesquisaController {
     private TableColumn<Produto, Integer> colEstoqueProduto;
 
     @FXML
-    private TableView<UsuarioTelefoneDpo> tabelaUsuario;
+    private TableView<Usuario> tabelaUsuario;
 
     @FXML
     private TableView<ClienteTelefoneDpo> tabelaCliente;
@@ -117,7 +115,7 @@ public class PesquisaController {
     @FXML
     private TextField txtFiltrar;
 
-    private FilteredList<UsuarioTelefoneDpo> listaFiltrada;
+    private FilteredList<Usuario> listaFiltrada;
 
     private FilteredList<ClienteTelefoneDpo> listaFiltradaCliente;
 
@@ -376,101 +374,182 @@ public class PesquisaController {
 
         tabelaUsuario.setPlaceholder(placeholder);
 
+        colCodigo.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colSetor.setCellValueFactory(new PropertyValueFactory<>("setor"));
-        colLogin.setCellValueFactory(new PropertyValueFactory<>("login"));
-        colTelefone.setCellValueFactory(new PropertyValueFactory<>("Telefone"));
-        // colData.setCellValueFactory(cellData -> {
-        //     Instant data = cellData.getValue().getInstante();
-        //     String formatada = data == null ? "" : formatter.format(data);
-        //     return new SimpleStringProperty(formatada);
-        // });
-        colEndereco.setCellValueFactory(new PropertyValueFactory<>("enderecos"));
-        colClienteUser.setCellValueFactory(new PropertyValueFactory<>("clientes"));
+        colTelefone.setCellValueFactory(new PropertyValueFactory<>("telefones"));
+        colData.setCellValueFactory(new PropertyValueFactory<>("instante"));
+        colEndereco.setCellValueFactory(new PropertyValueFactory<>("endereco"));
 
-        Usuario u1 = new Usuario(1, "Carlos Borges", "ADM", "Carlos", Instant.parse("2025-09-10T12:00:09Z"), "123",
-                Arrays.asList(new Telefone(1, "(99) 88888-0000")),
-                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")),
-                Arrays.asList(new Cliente("Sebastião Soares ", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
-        Usuario u2 = new Usuario(2, "Cintia Yellon", "ADMINISTRATIVO", "GRU", Instant.now(), "123",
-                Arrays.asList(new Telefone(1, "(99) 99988-0000"), new Telefone(2, "(21) 99888-8776")),
-                Arrays.asList(new Endereco("Rua Alan", "234", "Centro", "Rio", "RJ", "26.000-000")),
-                Arrays.asList(new Cliente("Antonio Pires ", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
-        Usuario u3 = new Usuario(3, "Joâo Pedro", "ADM", "GRU", Instant.now(), "123",
-                Arrays.asList(new Telefone(3, "(65)4343-4343")),
-                Arrays.asList(new Endereco("Rua Orca", "234", "Centro", "Rio de Janeiro", "RJ", "26.000-000")),
-                Arrays.asList(new Cliente("Danilo Silva", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
-        Usuario u4 = new Usuario(4, "Terla Gomes", "ADM", "GRU", Instant.now(), "123",
-                Arrays.asList(new Telefone(1, "(99) 823888-0000")),
-                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")),
-                Arrays.asList(new Cliente("Willian Lima", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
-        Usuario u5 = new Usuario(5, "Joana Black", "ADM", "GRU", Instant.now(), "123",
-                Arrays.asList(new Telefone(1, "(99) 88888-0000")),
-                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")),
-                Arrays.asList(new Cliente("José Soares ", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
-        Usuario u6 = new Usuario(6, "Flavio Blue", "ADM", "GRU", Instant.now(), "123",
-                Arrays.asList(new Telefone(1, "(99) 877788-0000")),
-                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")),
-                Arrays.asList(new Cliente("Cristian Morais", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
-        Usuario u7 = new Usuario(7, "Yasmin Red", "ADM", "GRU", Instant.now(), "123",
-                Arrays.asList(new Telefone(1, "(99) 88888-0000")),
-                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")),
-                Arrays.asList(new Cliente("Washington Torres Soares ", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
-        Usuario u8 = new Usuario(8, "Washington Pink", "ADM", "GRU", Instant.now(), "123",
-                Arrays.asList(new Telefone(1, "(99) 76588-0000")),
-                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")),
-                Arrays.asList(new Cliente("Flavio Tulio", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
-        Usuario u9 = new Usuario(9, "Karla Khaki", "ADM", "GRU", Instant.now(), "123",
-                Arrays.asList(new Telefone(1, "(99) 09038-0000")),
-                Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ", "26.000-000")),
-                Arrays.asList(new Cliente("Luis Carlos", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido())),new Cliente("Lucca ferraz Carlos", Instant.now(), Arrays.asList(new Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
+        // Usuario u1 = new Usuario(1, "Carlos Borges", "ADM", "Carlos",
+        // Instant.parse("2025-09-10T12:00:09Z"), "123",
+        // Arrays.asList(new Telefone(1, "(99) 88888-0000")),
+        // Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ",
+        // "26.000-000")),
+        // Arrays.asList(new Cliente("Sebastião Soares ", Instant.now(),
+        // Arrays.asList(new Telefone()), Arrays.asList(new
+        // Endereco()),Arrays.asList(new Pedido()))));
+        // Usuario u2 = new Usuario(2, "Cintia Yellon", "ADMINISTRATIVO", "GRU",
+        // Instant.now(), "123",
+        // Arrays.asList(new Telefone(1, "(99) 99988-0000"), new Telefone(2, "(21)
+        // 99888-8776")),
+        // Arrays.asList(new Endereco("Rua Alan", "234", "Centro", "Rio", "RJ",
+        // "26.000-000")),
+        // Arrays.asList(new Cliente("Antonio Pires ", Instant.now(), Arrays.asList(new
+        // Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
+        // Usuario u3 = new Usuario(3, "Joâo Pedro", "ADM", "GRU", Instant.now(), "123",
+        // Arrays.asList(new Telefone(3, "(65)4343-4343")),
+        // Arrays.asList(new Endereco("Rua Orca", "234", "Centro", "Rio de Janeiro",
+        // "RJ", "26.000-000")),
+        // Arrays.asList(new Cliente("Danilo Silva", Instant.now(), Arrays.asList(new
+        // Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
+        // Usuario u4 = new Usuario(4, "Terla Gomes", "ADM", "GRU", Instant.now(),
+        // "123",
+        // Arrays.asList(new Telefone(1, "(99) 823888-0000")),
+        // Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ",
+        // "26.000-000")),
+        // Arrays.asList(new Cliente("Willian Lima", Instant.now(), Arrays.asList(new
+        // Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
+        // Usuario u5 = new Usuario(5, "Joana Black", "ADM", "GRU", Instant.now(),
+        // "123",
+        // Arrays.asList(new Telefone(1, "(99) 88888-0000")),
+        // Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ",
+        // "26.000-000")),
+        // Arrays.asList(new Cliente("José Soares ", Instant.now(), Arrays.asList(new
+        // Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
+        // Usuario u6 = new Usuario(6, "Flavio Blue", "ADM", "GRU", Instant.now(),
+        // "123",
+        // Arrays.asList(new Telefone(1, "(99) 877788-0000")),
+        // Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ",
+        // "26.000-000")),
+        // Arrays.asList(new Cliente("Cristian Morais", Instant.now(), Arrays.asList(new
+        // Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
+        // Usuario u7 = new Usuario(7, "Yasmin Red", "ADM", "GRU", Instant.now(), "123",
+        // Arrays.asList(new Telefone(1, "(99) 88888-0000")),
+        // Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ",
+        // "26.000-000")),
+        // Arrays.asList(new Cliente("Washington Torres Soares ", Instant.now(),
+        // Arrays.asList(new Telefone()), Arrays.asList(new
+        // Endereco()),Arrays.asList(new Pedido()))));
+        // Usuario u8 = new Usuario(8, "Washington Pink", "ADM", "GRU", Instant.now(),
+        // "123",
+        // Arrays.asList(new Telefone(1, "(99) 76588-0000")),
+        // Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ",
+        // "26.000-000")),
+        // Arrays.asList(new Cliente("Flavio Tulio", Instant.now(), Arrays.asList(new
+        // Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
+        // Usuario u9 = new Usuario(9, "Karla Khaki", "ADM", "GRU", Instant.now(),
+        // "123",
+        // Arrays.asList(new Telefone(1, "(99) 09038-0000")),
+        // Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ",
+        // "26.000-000")),
+        // Arrays.asList(new Cliente("Luis Carlos", Instant.now(), Arrays.asList(new
+        // Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido())),new
+        // Cliente("Lucca ferraz Carlos", Instant.now(), Arrays.asList(new Telefone()),
+        // Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
 
-        ObservableList<UsuarioTelefoneDpo> listaUsuarios = FXCollections.observableArrayList();
+        try {
+            UsuarioService usuarioService = new UsuarioService();
+            TelefoneService telefoneService = new TelefoneService();
+            EnderecoService enderecoService = new EnderecoService();
 
-        for (Usuario u : Arrays.asList(u1, u2, u3, u4, u5, u6, u7, u8, u9)) {
-            for (Telefone t : u.getTelefone()) {
-                for (Endereco e : u.getEnderecos()) {
-                    for (Cliente c: u.getClientes()){ 
+            List<Usuario> usuarios = usuarioService.buscarTodos();
+            List<Telefone> telefones = telefoneService.buscarTodos();
+            List<Endereco> end = enderecoService.buscarTodos();
 
-                    String enderecoCompleto = String.format("%s, %s - %s, %s/%s (%s)",
-                            e.getLogradouro(), e.getNumero(), e.getBairro(), e.getCidade(), e.getEstado(), e.getCep());
+            ObservableList<Usuario> listaUsuarios = FXCollections.observableArrayList();
 
-                    String ClienteCompleto = String.format(" Cad -  %s ", c.getNome());        
+            // evita NullPointer se alguma lista vier nula
+            List<Usuario> usuariosSeguros = usuarios != null ? usuarios : List.of();
+            List<Telefone> telefonesSeguros = telefones != null ? telefones : List.of();
+            List<Endereco> enderecosSeguros = end != null ? end : List.of();
 
-                    // listaUsuarios.add(new UsuarioTelefoneDpo(u.getNome(), u.getLogin(), u.getSetor(), u.getInstante(),u.getSenha(),
-                    //         t.getNumero(), enderecoCompleto, ClienteCompleto));
-                    // }
+            for (Usuario u : usuariosSeguros) {
 
+                Long userId = u != null ? u.getId() : null;
+
+                // Buscar todos os telefones do usuário
+                List<String> telefonesUsuario = telefonesSeguros.stream()
+                        .filter(t -> t != null && t.getOperador() != null && t.getOperador().getId().equals(userId))
+                        .map(Telefone::getNumero)
+                        .filter(Objects::nonNull)
+                        .toList();
+
+                // Montar string com todos os telefones
+                String numerosTelefone;
+                if (telefonesUsuario.isEmpty()) {
+                    numerosTelefone = "Usuário sem telefone";
+                } else {
+                    numerosTelefone = String.join(", ", telefonesUsuario);
                 }
+
+                // buscar endereço correspondente
+                Endereco ender = enderecosSeguros.stream()
+                        .filter(e -> e != null && e.getOperador() != null && e.getOperador().getId().equals(userId))
+                        .findFirst()
+                        .orElse(null);
+
+                String endereco = "";
+                if (ender != null) {
+                    String logradouro = ender.getLogradouro() != null ? ender.getLogradouro() : "";
+                    String numero = ender.getNumero() != null ? ender.getNumero() : "";
+                    String bairro = ender.getBairro() != null ? ender.getBairro() : "";
+                    String cidade = ender.getCidade() != null ? ender.getCidade() : "";
+                    String estado = ender.getEstado() != null ? ender.getEstado() : "";
+                    String cep = ender.getCep() != null ? ender.getCep() : "";
+
+                    endereco = String.format("%s, %s - %s, %s/%s (%s)",
+                            logradouro, numero, bairro, cidade, estado, cep);
+                } else {
+                    endereco = "Usuário sem endereço";
+                }
+
+                // proteger campos de Usuario também
+                Long codigo = u.getId();
+                String nome = u != null && u.getNome() != null ? u.getNome() : "";
+                String login = u != null && u.getLogin() != null ? u.getLogin() : "";
+                String setor = u != null && u.getSetor() != null ? u.getSetor() : "";
+                String instant = u != null && u.getInstante() != null ? u.getInstante() : null;
+                String inst = formatter.format(Instant.parse(instant));
+                listaUsuarios.add(new Usuario(
+                        codigo,
+                        nome,
+                        setor,
+                        login,
+                        inst,
+                        null,
+                        numerosTelefone,
+                        endereco
+
+                ));
+                System.out.println(u.getLogin() + u.getNome() + numerosTelefone + endereco + inst + codigo);
+                listaFiltrada = new FilteredList<>(listaUsuarios, p -> true);
+
+                tabelaUsuario.setItems(listaFiltrada);
+                txtFiltrar.textProperty().addListener((obs, oldValue, newValue) -> {
+                    String filtro = newValue.toLowerCase();
+                    listaFiltrada.setPredicate(usuario -> {
+                        if (filtro == null || filtro.isEmpty()) {
+                            return true;
+                        }
+
+                        return usuario.getNome().toLowerCase().contains(filtro) ||
+                                String.valueOf(usuario.getId()).contains(filtro) ||
+                                usuario.getSetor().toLowerCase().contains(filtro) ||
+                                usuario.getEndereco().toLowerCase().contains(filtro) ||
+                                usuario.getLogin().contains(filtro) ||
+                                usuario.getInstante().contains(filtro) ||
+                                usuario.getSetor().toLowerCase().contains(filtro) ||
+                                usuario.getTelefones().toLowerCase().contains(filtro);
+
+                    });
+                });
 
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        listaFiltrada = new FilteredList<>(listaUsuarios, p -> true);
-        tabelaUsuario.setItems(listaFiltrada);
-
-        tabelaUsuario.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        txtFiltrar.textProperty().addListener((obs, oldValue, newValue) -> {
-            String filtro = newValue.toLowerCase();
-            listaFiltrada.setPredicate(usuario -> {
-                if (filtro == null || filtro.isEmpty()) {
-                    return true;
-                }
-
-                // String dataString = usuario.getInstante() == null ? ""
-                //         : formatter.format(usuario.getInstante()).toLowerCase();
-
-                return usuario.getNome().toLowerCase().contains(filtro) ||
-                        usuario.getSetor().toLowerCase().contains(filtro) ||
-                        usuario.getLogin().toLowerCase().contains(filtro) ||
-                        //usuario.getTelefone().toLowerCase().contains(filtro) ||
-                        //dataString.contains(filtro);
-                        //usuario.getTelefone().contains(filtro) ||
-                        //usuario.getEnderecos().toLowerCase().contains(filtro) ||
-                        //usuario.getClientes().toLowerCase().contains(filtro);
-            });
-        });
 
         Label placeholderCliente = new Label("Nenhum Cliente encontrado!");
         placeholderCliente.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
@@ -493,165 +572,186 @@ public class PesquisaController {
 
         // colDataCliente.setCellValueFactory(new PropertyValueFactory<>("instante"));
 
-        Cliente c1 = new Cliente("Carlos borges", Instant.now(),
-                Arrays.asList(new Telefone(1, "(21) 98989-0000"), new Telefone(2, "(21) 98989-9999")),
-                Arrays.asList(new Endereco("Rua Abacaxi", "23234", "Centro", "Rio", "RJ", "26.000-000")),
-                Arrays.asList(new Pedido(1, "PAGO", 150.9, Instant.now(), Arrays.asList(new Produto()))));
-        Cliente c2 = new Cliente("Carlos ", Instant.now(),
-                Arrays.asList(new Telefone(3, "(21) 98359-0550"), new Telefone(4, "(21) 98989-9999")),
-                Arrays.asList(new Endereco("Rua Abc", "2w34", "Cuica", "São Paulo", "SP", "02.000-000")),
-                Arrays.asList(new Pedido(2, "CANCELADO", 150.9, Instant.now(), Arrays.asList(new Produto()))));
-        Cliente c3 = new Cliente(" borges", Instant.now(),
-                Arrays.asList(new Telefone(5, "(21) 98989-0000"), new Telefone(6, "(21) 98989-9999")),
-                Arrays.asList(new Endereco("Rua Abc", "2q34", "Centro", "Rio", "RJ", "26.000-000")), Arrays.asList(
-                        new Pedido(3, "AGARDANDO PAGAMENTO", 150.9, Instant.now(), Arrays.asList(new Produto()))));
+        // Cliente c1 = new Cliente("Carlos borges", Instant.now(),
+        // Arrays.asList(new Telefone(1, "(21) 98989-0000"), new Telefone(2, "(21)
+        // 98989-9999")),
+        // Arrays.asList(new Endereco("Rua Abacaxi", "23234", "Centro", "Rio", "RJ",
+        // "26.000-000")),
+        // Arrays.asList(new Pedido(1, "PAGO", 150.9, Instant.now(), Arrays.asList(new
+        // Produto()))));
+        // Cliente c2 = new Cliente("Carlos ", Instant.now(),
+        // Arrays.asList(new Telefone(3, "(21) 98359-0550"), new Telefone(4, "(21)
+        // 98989-9999")),
+        // Arrays.asList(new Endereco("Rua Abc", "2w34", "Cuica", "São Paulo", "SP",
+        // "02.000-000")),
+        // Arrays.asList(new Pedido(2, "CANCELADO", 150.9, Instant.now(),
+        // Arrays.asList(new Produto()))));
+        // Cliente c3 = new Cliente(" borges", Instant.now(),
+        // Arrays.asList(new Telefone(5, "(21) 98989-0000"), new Telefone(6, "(21)
+        // 98989-9999")),
+        // Arrays.asList(new Endereco("Rua Abc", "2q34", "Centro", "Rio", "RJ",
+        // "26.000-000")), Arrays.asList(
+        // new Pedido(3, "AGARDANDO PAGAMENTO", 150.9, Instant.now(), Arrays.asList(new
+        // Produto()))));
 
         ObservableList<ClienteTelefoneDpo> listaClientes = FXCollections.observableArrayList();
 
-        for (Cliente c : Arrays.asList(c1, c2, c3)) {
-            for (Telefone t : c.getTelefones()) {
-                for (Endereco e : c.getEnderecos()) {
-                    for (Pedido p : c.getPedidos()) {
-                        String enderecoCompleto = String.format("%s, %s - %s, %s/%s (%s)",
-                                e.getLogradouro(), e.getNumero(), e.getBairro(), e.getCidade(), e.getEstado(),
-                                e.getCep());
+        // for (Cliente c : Arrays.asList(c1, c2, c3)) {
+        // for (Telefone t : c.getTelefones()) {
+        // for (Endereco e : c.getEnderecos()) {
+        // for (Pedido p : c.getPedidos()) {
+        // String enderecoCompleto = String.format("%s, %s - %s, %s/%s (%s)",
+        // e.getLogradouro(), e.getNumero(), e.getBairro(), e.getCidade(),
+        // e.getEstado(),
+        // e.getCep());
 
-                        String pedidosCompleto = String.format("%s - (%s) -  %s", p.getId(), p.getStatus(),
-                                nf.format(p.getValor()));
+        // String pedidosCompleto = String.format("%s - (%s) - %s", p.getId(),
+        // p.getStatus(),
+        // nf.format(p.getValor()));
 
-                        listaClientes
-                                .add(new ClienteTelefoneDpo(c.getNome(), c.getInstante(), t.getNumero(),
-                                        enderecoCompleto, pedidosCompleto));
+        // listaClientes
+        // .add(new ClienteTelefoneDpo(c.getNome(), c.getInstante(), t.getNumero(),
+        // enderecoCompleto, pedidosCompleto));
 
-                    }
-                }
+        // // }
+        // // }
 
-            }
-        }
+        // // }
+        // }
 
-        listaFiltradaCliente = new FilteredList<>(listaClientes, p -> true);
+        // //listaFiltradaCliente = new FilteredList<>(listaClientes, p -> true);
 
-        tabelaCliente.setItems(listaFiltradaCliente);
+        // // tabelaCliente.setItems(listaFiltradaCliente);
 
-        txtFiltrarCliente.textProperty().addListener((obs, oldValue, newValue) -> {
-            String filtro = newValue.toLowerCase();
-            listaFiltradaCliente.setPredicate(cliente -> {
-                if (filtro == null || filtro.isEmpty()) {
-                    return true;
-                }
+        // // txtFiltrarCliente.textProperty().addListener((obs, oldValue, newValue) ->
+        // {
+        // // String filtro = newValue.toLowerCase();
+        // // listaFiltradaCliente.setPredicate(cliente -> {
+        // // if (filtro == null || filtro.isEmpty()) {
+        // // return true;
+        // // }
 
-                String dataString = cliente.getInstante() == null ? ""
-                        : formatter.format(cliente.getInstante()).toLowerCase();
+        // // String dataString = cliente.getInstante() == null ? ""
+        // // : formatter.format(cliente.getInstante()).toLowerCase();
 
-                return cliente.getNome().toLowerCase().contains(filtro) ||
+        // // return cliente.getNome().toLowerCase().contains(filtro) ||
 
-                        dataString.contains(filtro) || cliente.getEnderecos().toLowerCase().contains(filtro)
-                        || cliente.getTelefones().contains(filtro) ||
-                        cliente.getPedidos().toLowerCase().contains(filtro);
+        // // dataString.contains(filtro) ||
+        // cliente.getEnderecos().toLowerCase().contains(filtro)
+        // // || cliente.getTelefones().contains(filtro) ||
+        // // cliente.getPedidos().toLowerCase().contains(filtro);
 
-            });
-        });
+        // // });
+        // // });
 
-        Label placeholderFornec = new Label("Nenhum Fornecedor encontrado!");
-        placeholderFornec.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
-        tabelaFornec.setPlaceholder(placeholderFornec);
+        // Label placeholderFornec = new Label("Nenhum Fornecedor encontrado!");
+        // placeholderFornec.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
+        // tabelaFornec.setPlaceholder(placeholderFornec);
 
-        tabelaFornec.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        // tabelaFornec.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        colFornec.setCellValueFactory(new PropertyValueFactory<>("empresa"));
-        colTelefoneFornec.setCellValueFactory(new PropertyValueFactory<>("Telefone"));
-        colCnpj.setCellValueFactory(new PropertyValueFactory<>("cnpj"));
+        // colFornec.setCellValueFactory(new PropertyValueFactory<>("empresa"));
+        // colTelefoneFornec.setCellValueFactory(new
+        // PropertyValueFactory<>("Telefone"));
+        // colCnpj.setCellValueFactory(new PropertyValueFactory<>("cnpj"));
 
-        Fornecedor f1 = new Fornecedor("Cia Roupas", "11.111.222/0001-09",
-                Arrays.asList(new Telefone(1, "(88) 88888-0000")));
-        Fornecedor f2 = new Fornecedor("Roupas Cia", "22.333.444/0001-07",
-                Arrays.asList(new Telefone(2, "(21) 22222-4444"), new Telefone(3, "(21) 99803-8215")));
-        Fornecedor f3 = new Fornecedor("Poco Roupas", "66.111.222/0001-09",
-                Arrays.asList(new Telefone(1, "(88) 80878-0000")));
-        Fornecedor f4 = new Fornecedor("Rio Cia", "22.003.444/0001-07",
-                Arrays.asList(new Telefone(2, "(21) 22222-8764"), new Telefone(3, "(21) 99803-8215")));
+        // Fornecedor f1 = new Fornecedor("Cia Roupas", "11.111.222/0001-09",
+        // Arrays.asList(new Telefone(1, "(88) 88888-0000")));
+        // Fornecedor f2 = new Fornecedor("Roupas Cia", "22.333.444/0001-07",
+        // Arrays.asList(new Telefone(2, "(21) 22222-4444"), new Telefone(3, "(21)
+        // 99803-8215")));
+        // Fornecedor f3 = new Fornecedor("Poco Roupas", "66.111.222/0001-09",
+        // Arrays.asList(new Telefone(1, "(88) 80878-0000")));
+        // Fornecedor f4 = new Fornecedor("Rio Cia", "22.003.444/0001-07",
+        // Arrays.asList(new Telefone(2, "(21) 22222-8764"), new Telefone(3, "(21)
+        // 99803-8215")));
 
-        ObservableList<FornecedorTelefoneDpo> listaFornecedor = FXCollections.observableArrayList();
+        // ObservableList<FornecedorTelefoneDpo> listaFornecedor =
+        // FXCollections.observableArrayList();
 
-        for (Fornecedor f : Arrays.asList(f1, f2, f3, f4)) {
-            for (Telefone t : f.getTelefone()) {
-                listaFornecedor.add(new FornecedorTelefoneDpo(f.getEmpresa(), f.getCnpj(), t.getNumero()));
-            }
-        }
+        // for (Fornecedor f : Arrays.asList(f1, f2, f3, f4)) {
+        // for (Telefone t : f.getTelefone()) {
+        // listaFornecedor.add(new FornecedorTelefoneDpo(f.getEmpresa(), f.getCnpj(),
+        // t.getNumero()));
+        // }
+        // }
 
-        listaFiltradaFornecedor = new FilteredList<>(listaFornecedor, p -> true);
+        // listaFiltradaFornecedor = new FilteredList<>(listaFornecedor, p -> true);
 
-        tabelaFornec.setItems(listaFiltradaFornecedor);
+        // tabelaFornec.setItems(listaFiltradaFornecedor);
 
-        txtFiltrarFornec.textProperty().addListener((obs, oldValue, newValue) -> {
-            String filtro = newValue.toLowerCase();
-            listaFiltradaFornecedor.setPredicate(fornecedor -> {
-                if (filtro == null || filtro.isEmpty()) {
-                    return true;
-                }
+        // txtFiltrarFornec.textProperty().addListener((obs, oldValue, newValue) -> {
+        // String filtro = newValue.toLowerCase();
+        // listaFiltradaFornecedor.setPredicate(fornecedor -> {
+        // if (filtro == null || filtro.isEmpty()) {
+        // return true;
+        // }
 
-                return fornecedor.getEmpresa().toLowerCase().contains(filtro) ||
-                        fornecedor.getTelefone().toLowerCase().contains(filtro) ||
-                        fornecedor.getCnpj().toLowerCase().contains(filtro);
+        // return fornecedor.getEmpresa().toLowerCase().contains(filtro) ||
+        // fornecedor.getTelefone().toLowerCase().contains(filtro) ||
+        // fornecedor.getCnpj().toLowerCase().contains(filtro);
 
-            });
-        });
+        // });
+        // });
 
-        Label placeholderProduto = new Label("Nenhum Produto encontrado!");
-        placeholderProduto.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
-        tabelaProduto.setPlaceholder(placeholderProduto);
+        // Label placeholderProduto = new Label("Nenhum Produto encontrado!");
+        // placeholderProduto.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
+        // tabelaProduto.setPlaceholder(placeholderProduto);
 
-        tabelaProduto.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        // tabelaProduto.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        colNomeProduto.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        colCodigoProduto.setCellValueFactory(new PropertyValueFactory<>("codigo"));
-        colEstoqueProduto.setCellValueFactory(new PropertyValueFactory<>("estoque"));
-        colValorProduto.setCellValueFactory(new PropertyValueFactory<>("valorVenda"));
+        // colNomeProduto.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        // colCodigoProduto.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        // colEstoqueProduto.setCellValueFactory(new PropertyValueFactory<>("estoque"));
+        // colValorProduto.setCellValueFactory(new
+        // PropertyValueFactory<>("valorVenda"));
 
-        listaProdutos = FXCollections.observableArrayList(
+        // listaProdutos = FXCollections.observableArrayList(
 
-                new Produto("876577777", "Vestido", 10, 123.9, 660.8, 10),
-                new Produto("876577777", "Vestido", 10, 123.9, 660.8, 10),
-                new Produto("8333564598", "Calça Jeans", 6, 123.9, 760.8, 6),
-                new Produto("2457665598", "Vestido Rusti", 4, 123.9, 160.8, 4)
+        // new Produto("876577777", "Vestido", 10, 123.9, 660.8, 10),
+        // new Produto("876577777", "Vestido", 10, 123.9, 660.8, 10),
+        // new Produto("8333564598", "Calça Jeans", 6, 123.9, 760.8, 6),
+        // new Produto("2457665598", "Vestido Rusti", 4, 123.9, 160.8, 4)
 
-        );
+        // );
 
-        listaFiltradaProduto = new FilteredList<>(listaProdutos, p -> true);
+        // listaFiltradaProduto = new FilteredList<>(listaProdutos, p -> true);
 
-        tabelaProduto.setItems(listaFiltradaProduto);
+        // tabelaProduto.setItems(listaFiltradaProduto);
 
-        txtFiltrarProduto.textProperty().addListener((obs, oldValue, newValue) -> {
-            String filtro = newValue.toLowerCase();
-            listaFiltradaProduto.setPredicate(produto -> {
-                if (filtro == null || filtro.isEmpty()) {
-                    return true;
-                }
+        // txtFiltrarProduto.textProperty().addListener((obs, oldValue, newValue) -> {
+        // String filtro = newValue.toLowerCase();
+        // listaFiltradaProduto.setPredicate(produto -> {
+        // if (filtro == null || filtro.isEmpty()) {
+        // return true;
+        // }
 
-                String codigoStr = String.valueOf(produto.getCodigo());
-                String estoqueStr = String.valueOf(produto.getEstoque());
-                String valorStr = String.valueOf(produto.getValorVenda());
+        // String codigoStr = String.valueOf(produto.getCodigo());
+        // String estoqueStr = String.valueOf(produto.getEstoque());
+        // String valorStr = String.valueOf(produto.getValorVenda());
 
-                return produto.getNome().toLowerCase().contains(filtro) ||
-                        codigoStr.toLowerCase().contains(filtro) ||
-                        estoqueStr.toLowerCase().contains(filtro) ||
-                        valorStr.toLowerCase().contains(filtro);
+        // return produto.getNome().toLowerCase().contains(filtro) ||
+        // codigoStr.toLowerCase().contains(filtro) ||
+        // estoqueStr.toLowerCase().contains(filtro) ||
+        // valorStr.toLowerCase().contains(filtro);
 
-            });
-        });
+        // });
+        // });
 
-        tabelaProduto.setOnMouseClicked(e -> {
+        // tabelaProduto.setOnMouseClicked(e -> {
 
-            if (e.getClickCount() == 2) {
-                Produto produtoSelecionado = tabelaProduto.getSelectionModel().getSelectedItem();
+        // if (e.getClickCount() == 2) {
+        // Produto produtoSelecionado =
+        // tabelaProduto.getSelectionModel().getSelectedItem();
 
-                if (produtoSelecionado != null) {
-                    System.out.println("Selecionado: Código " + produtoSelecionado.getId() + " Produto: "
-                            + produtoSelecionado.getNome());
-                }
+        // if (produtoSelecionado != null) {
+        // System.out.println("Selecionado: Código " + produtoSelecionado.getId() + "
+        // Produto: "
+        // + produtoSelecionado.getNome());
+        // }
 
-            }
-        });
+        // }
+        // });
 
     }
 

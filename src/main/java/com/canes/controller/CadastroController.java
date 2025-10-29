@@ -267,6 +267,8 @@ public class CadastroController implements Initializable {
         paneFornec.setVisible(true);
         lblFornec.setTextFill(Color.RED);
 
+        txtNomeFornec.requestFocus();;
+
     }
 
     @FXML
@@ -282,7 +284,7 @@ public class CadastroController implements Initializable {
         lblClient.setTextFill(Color.WHITE);
         paneFornec.setVisible(false);
         lblFornec.setTextFill(Color.WHITE);
-
+        txtNome.requestFocus();
     }
 
     @FXML
@@ -325,7 +327,7 @@ public class CadastroController implements Initializable {
     @FXML
     void onClickCadastrarFornec(ActionEvent event) {
 
-        txtNomeFornec.requestFocus();
+        
 
         if (txtNomeFornec.getText().trim().isEmpty()) {
             AlertUtil.mostrarErro("O campo nome não pode ficar vazio!.");

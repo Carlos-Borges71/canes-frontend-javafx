@@ -5,22 +5,32 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 
 import com.canes.model.Usuario;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class UsuarioService {
 
-    private static final String API_URL = "http://localhost:8080/usuarios";
+    private final HttpClient httpClient;
+    private final ObjectMapper objectMapper;
+
+    private static final String BASE_URL = "http://localhost:8080/usuarios";
+    HttpClient client = HttpClient.newHttpClient();
+    ObjectMapper mapper = new ObjectMapper();
+
+    public UsuarioService() {
+        this.httpClient = HttpClient.newHttpClient();
+        this.objectMapper = new ObjectMapper();
+    }
 
     public Long salvarUsuario(Usuario usuario) throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
-        ObjectMapper mapper = new ObjectMapper();
 
         String json = mapper.writeValueAsString(usuario);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL))
+                .uri(URI.create(BASE_URL))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
@@ -33,6 +43,23 @@ public class UsuarioService {
             return usuarioSalvo.getId();
         } else {
             throw new RuntimeException("Erro ao salvar usuario: " + response.body());
+            
+        }
+    }
+
+    public List<Usuario> buscarTodos() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            return objectMapper.readValue(response.body(), new TypeReference<List<Usuario>>() {
+            });
+        } else {
+            throw new RuntimeException("Erro ao buscar usuários: " + response.statusCode());
         }
     }
 

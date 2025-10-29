@@ -5,6 +5,8 @@ module com.canes {
     requires javafx.graphics;
     requires com.fasterxml.jackson.databind;
     requires java.net.http;
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.annotation;
 
     opens com.canes.controller to javafx.fxml;
     exports com.canes;

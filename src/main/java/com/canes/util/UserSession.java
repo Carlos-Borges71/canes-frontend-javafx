@@ -3,6 +3,7 @@ package com.canes.util;
 public class UserSession {
 
     private static UserSession instance;
+    private Long id;
     private String nomeUsuario;
     private String login;
 
@@ -17,9 +18,13 @@ public class UserSession {
         return instance;
     }
 
-    public void setUsuario(String nome, String login) {
+    public void setUsuario(Long id, String nome, String login) {
+        this.id =id;
         this.nomeUsuario = nome;
         this.login = login;
+    }
+    public Long getLogin(){
+        return id;
     }
 
     public String getNomeUsuario() {

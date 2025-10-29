@@ -7,18 +7,19 @@ public class Cliente {
     private Long id;
     private String nome;
     private String instante;
-    private List<Telefone> telefones;
-    private Endereco endereco;
-    private List<Pedido> pedidos;
-    private List<Usuario>usuarios;
+    private String telefones;
+    private String endereco;
+    private String pedidos;
+    private String operador;
 
     public Cliente() {
     }
 
-    public Cliente(String nome, String instante) {
+    public Cliente(String nome, String instante, String operador) {
 
         this.nome = nome;
         this.instante = instante;
+        this.operador = operador;
 
     }
 
@@ -46,20 +47,20 @@ public class Cliente {
         this.instante = instante;
     }
 
-    public List<Telefone> getTelefones() {
+    public String getTelefones() {
         return telefones;
     }
 
-    public Endereco getEndereco() {
+    public String getEndereco() {
         return endereco;
     }
 
-    public List<Pedido> getPedidos() {
+    public String getPedidos() {
         return pedidos;
     }
 
-    public List<Usuario> getUsuarios() {
-        return usuarios;
+    public String getOperador() {
+        return operador;
     }
     
 

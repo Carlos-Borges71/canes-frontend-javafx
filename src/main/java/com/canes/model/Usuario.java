@@ -1,5 +1,7 @@
 package com.canes.model;
 
+import java.util.List;
+
 public class Usuario {
 
     
@@ -10,22 +12,23 @@ public class Usuario {
     private String instante;
     private String senha;
     
-    // private List<Telefone> telefones;
-    private Endereco endereco;
-    // private List<Cliente> clientes;
+    private String telefones;
+    private String endereco;
+ private String clientes;
+ 
    
 
     public Usuario(){        
     }
 
-    public Usuario( String nome, String setor,  String login, String instante, String senha) {
-        
+    public Usuario( Long id, String nome, String setor,  String login, String instante, String senha, String telefones, String endereco) {
+        this.id = id;
         this.setor = setor;
         this.nome = nome;
         this.login = login;
         this.instante = instante;    
-        //this.telefones = telefones;
-        //this.endereco = endereco;
+        this.telefones = telefones;
+        this.endereco = endereco;
         //this.clientes = clientes;
         this.senha = senha;
         
@@ -81,21 +84,21 @@ public class Usuario {
 
     
     
-    // public List<Telefone> getTelefone() {
-    //     return telefones;
-    // }
+    public String getTelefones() {
+        return telefones;
+    }
 
     // public void setTelefone(List<Telefone> telefones) {
     //     this.telefones = telefones;
     // }
 
-    public Endereco getEndereco() {
+    public String getEndereco() {
         return endereco;
     }
      
-    // public List<Cliente> getClientes(){
-    //     return clientes;
-    // }
+    public String getClientes(){
+        return clientes;
+    }
     
  
     
