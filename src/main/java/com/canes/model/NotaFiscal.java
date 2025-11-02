@@ -7,9 +7,14 @@ public class NotaFiscal {
 
     private Fornecedor fornecedor;
 
-    public NotaFiscal(Integer notaFiscal, String data) {
+    public NotaFiscal() {
+        
+    }
+
+    public NotaFiscal(Integer notaFiscal, String data, Fornecedor fornecedor) {
         this.notaFiscal = notaFiscal;
         this.data = data;
+        this.fornecedor = fornecedor;
     }
 
     public long getId() {

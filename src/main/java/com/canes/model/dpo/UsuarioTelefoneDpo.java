@@ -1,9 +1,5 @@
 package com.canes.model.dpo;
 
-import java.time.Instant;
-
-import com.canes.model.Endereco;
-
 public class UsuarioTelefoneDpo {
 
     private int id;

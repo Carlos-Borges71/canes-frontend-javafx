@@ -1,5 +1,6 @@
 package com.canes.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -14,12 +15,9 @@ import com.canes.util.ScreenUtils;
 import com.canes.util.TextFieldUtil;
 import com.canes.util.UserSession;
 import com.canes.model.Cliente;
-import com.canes.model.Endereco;
 import com.canes.model.Fornecedor;
 import com.canes.model.Produto;
-import com.canes.model.Telefone;
 import com.canes.model.Usuario;
-import com.canes.model.dpo.UsuarioTelefoneDpo;
 import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
 import com.canes.services.FornecedorService;
@@ -29,13 +27,14 @@ import com.canes.services.TelefoneService;
 import com.canes.services.UsuarioService;
 import com.canes.util.AlertUtil;
 import com.canes.util.ValidadorSenha;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -48,6 +47,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 public class CadastroController implements Initializable {
 
@@ -172,8 +172,8 @@ public class CadastroController implements Initializable {
     @FXML
     private TextField txtCnpjFornec;
 
-    @FXML
-    private TextField txtCodigoFornec;
+    // @FXML
+    // private TextField txtCodigoFornec;
 
     @FXML
     private TextField txtEstadoFornec;
@@ -190,20 +190,20 @@ public class CadastroController implements Initializable {
     @FXML
     private TextField txtNumeroFornec;
 
-    @FXML
-    private TextField txtProdutoFornec;
+    // @FXML
+    // private TextField txtProdutoFornec;
 
-    @FXML
-    private TextField txtQuantFornec;
+    // @FXML
+    // private TextField txtQuantFornec;
 
-    @FXML
-    private TextField txtTamanhoFornec;
+    // @FXML
+    // private TextField txtTamanhoFornec;
 
-    @FXML
-    private TextField txtValorCompraFornec;
+    // @FXML
+    // private TextField txtValorCompraFornec;
 
-    @FXML
-    private TextField txtValorVendaFornec;
+    // @FXML
+    // private TextField txtValorVendaFornec;
 
     @FXML
     private ImageView btnVoltar;
@@ -255,6 +255,9 @@ public class CadastroController implements Initializable {
 
     @FXML
     private VBox vBoxTelFornec;
+    
+
+    
 
     TextField newText = new TextField();
 
@@ -267,7 +270,8 @@ public class CadastroController implements Initializable {
         paneFornec.setVisible(true);
         lblFornec.setTextFill(Color.RED);
 
-        txtNomeFornec.requestFocus();;
+        txtNomeFornec.requestFocus();
+        ;
 
     }
 
@@ -322,12 +326,11 @@ public class CadastroController implements Initializable {
         txtCepFornec.clear();
 
     }
+
     Integer estoque = null;
 
     @FXML
     void onClickCadastrarFornec(ActionEvent event) {
-
-        
 
         if (txtNomeFornec.getText().trim().isEmpty()) {
             AlertUtil.mostrarErro("O campo nome não pode ficar vazio!.");
@@ -361,8 +364,7 @@ public class CadastroController implements Initializable {
         else if (txtCelFornec.getText().trim().isEmpty()) {
             AlertUtil.mostrarErro("O campo Celular não \npode ficar vazio!.");
             return;
-       
-            
+
         }
 
         try {
@@ -377,29 +379,30 @@ public class CadastroController implements Initializable {
 
             Long fornecedorId = fornecedorService.salvarFornecedor(fornecedor);
 
-           
+            // Produto produto = new Produto();
 
-            Produto produto = new Produto();
-        
-            
-            String codigo = txtCodigoFornec.getText();
-            String nome = txtProdutoFornec.getText();            
-            Double valorCompra = Double.parseDouble(txtValorCompraFornec.getText().replaceAll("[^\\d,\\.]", "").replace( ",","."));
-            Double valorVenda = Double.parseDouble(txtValorVendaFornec.getText().replaceAll("[^\\d,\\.]", "").replace( ",","."));
-            Integer quantCompra = Integer.parseInt(txtQuantFornec.getText());
-            estoque = 5;
- 
-             ProdutoService produtoService = new ProdutoService();
-            
-             produtoService.salvarProduto(codigo,nome, estoque, valorCompra, valorVenda, quantCompra, fornecedorId);
+            // String codigo = txtCodigoFornec.getText();
+            // String nome = txtProdutoFornec.getText();
+            // Double valorCompra =
+            // Double.parseDouble(txtValorCompraFornec.getText().replaceAll("[^\\d,\\.]",
+            // "").replace( ",","."));
+            // Double valorVenda =
+            // Double.parseDouble(txtValorVendaFornec.getText().replaceAll("[^\\d,\\.]",
+            // "").replace( ",","."));
+            // Integer quantCompra = Integer.parseInt(txtQuantFornec.getText());
+            // estoque = 5;
 
-             Integer notaFisccal = Integer.parseInt(txtNotaFiscalFornec.getText());
-             String data = instanteFormatado;
-            
+            // ProdutoService produtoService = new ProdutoService();
+
+            // produtoService.salvarProduto(codigo,nome, estoque, valorCompra, valorVenda,
+            // quantCompra, fornecedorId);
+
+            Integer notaFisccal = Integer.parseInt(txtNotaFiscalFornec.getText());
+            String data = instanteFormatado;
+
             NotaFiscalService ntFiscal = new NotaFiscalService();
 
             ntFiscal.salvarNotaFiscal(notaFisccal, data, fornecedorId);
-
 
             String numeroTel = txtCelFornec.getText();
             TelefoneService telefoneService = new TelefoneService();
@@ -425,17 +428,63 @@ public class CadastroController implements Initializable {
             EnderecoService enderecoService = new EnderecoService();
             enderecoService.salvarEndereco(logradouro, numero, bairro, cidade, estado, cep, null, null, fornecedorId);
 
+            txtNomeFornec.clear();
+            txtCelFornec.clear();
+            txtLogradouroFornec.clear();
+            txtNumeroFornec.clear();
+            txtBairroFornec.clear();
+            txtCidadeFornec.clear();
+            txtEstadoFornec.clear();
+            txtCepFornec.clear();
+            txtCnpjFornec.clear();
+            // txtProdutoFornec.clear();
+            // txtValorCompraFornec.clear();
+            // txtValorVendaFornec.clear();
+            // txtTamanhoFornec.clear();
+            // txtCodigoFornec.clear();
+            txtNotaFiscalFornec.clear();
+        
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/canes/cadastroProduto.fxml"));
+            Parent root = loader.load(); // precisa carregar antes!
+
+            // Agora pega o controller
+            CadastroProdutoController produtoController = loader.getController();
+
+            // E passa o ID
+
+            produtoController.setFornecedor(fornecedorId);
+
+            // Mostra a tela (pode ser nova janela ou mesma)
+            Stage stage = new Stage();
+            stage.setTitle("Tela de Produto");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // ScreenUtils.openNewWindow("/com/canes/cadastroProduto.fxml",
+            // "Cadastro de Produto", controller -> {
+            // if (controller instanceof CadastroProdutoController) {
+
+            // CadastroProdutoController cadastroProdutoController =
+            // (CadastroProdutoController) controller;
+
+            // cadastroProdutoController.setFornecedor(fornecedorId);
+
+            // }
+
+            // });
+
         } catch (Exception e) {
             AlertUtil.mostrarErro("Erro ao tentar salvar no banco\n" + e.getMessage());
-
+            System.out.println(e.getMessage());
         }
 
-        try {
-            ScreenUtils.changeScreen(event, "/com/canes/view/menu.fxml", "Menu", null);
-        } catch (Exception e) {
+        // try {
+        // ScreenUtils.changeScreen(event, "/com/canes/view/menu.fxml", "Menu", null);
+        // } catch (Exception e) {
 
-            e.printStackTrace();
-        }
+        // e.printStackTrace();
+        // }
 
     }
 
@@ -452,18 +501,19 @@ public class CadastroController implements Initializable {
         txtEstadoFornec.clear();
         txtCepFornec.clear();
         txtCnpjFornec.clear();
-        txtProdutoFornec.clear();
-        txtValorCompraFornec.clear();
-        txtValorVendaFornec.clear();
-        txtTamanhoFornec.clear();
-        txtCodigoFornec.clear();
+        // txtProdutoFornec.clear();
+        // txtValorCompraFornec.clear();
+        // txtValorVendaFornec.clear();
+        // txtTamanhoFornec.clear();
+        // txtCodigoFornec.clear();
         txtNotaFiscalFornec.clear();
+        
 
     }
 
     @FXML
     void onclickLimparClient(ActionEvent event) {
-
+        HBox linha = new HBox();
         txtNomeClient.clear();
         txtcelClient.clear();
         txtLogradouroClient.clear();
@@ -472,6 +522,8 @@ public class CadastroController implements Initializable {
         txtCidadeClient.clear();
         txtEstadoClient.clear();
         txtCepClient.clear();
+        
+       
 
     }
 
@@ -566,6 +618,7 @@ public class CadastroController implements Initializable {
     @FXML
     void onClickTelClient(MouseEvent event) {
 
+        TextField newText = new TextField();
         newText.setMaxWidth(133);
         newText.setStyle("-fx-background-color: transparent;" + "-fx-border-color: fff;" +
                 "-fx-border-radius: 7;" + "-fx-text-fill: fff;");
@@ -607,6 +660,7 @@ public class CadastroController implements Initializable {
     @FXML
     void onClickTelFornec(MouseEvent event) {
 
+        TextField newText = new TextField();
         newText.setMaxWidth(133);
         newText.setStyle("-fx-background-color: transparent;" + "-fx-border-color: fff;" +
                 "-fx-border-radius: 7;" + "-fx-text-fill: fff;");
@@ -1063,13 +1117,13 @@ public class CadastroController implements Initializable {
         TextFieldUtil.aplicarCapitalizacao(txtLogradouroFornec);
         TextFieldUtil.aplicarCapitalizacao(txtBairroFornec);
         TextFieldUtil.aplicarCapitalizacao(txtCidadeFornec);
-        TextFieldUtil.aplicarCapitalizacao(txtProdutoFornec);
+        // TextFieldUtil.aplicarCapitalizacao(txtProdutoFornec);
         MaskTextField.applyCnpjMask(txtCnpjFornec);
-        MaskTextField.quantNumbery(txtCodigoFornec, 13);
-        MaskTextField.quantNumbery(txtQuantFornec, 2);
-        MaskTextField.valor(txtValorCompraFornec);
-        MaskTextField.valor(txtValorVendaFornec);
-        MaskTextField.limitarCaracteresFixos(txtTamanhoFornec, 2);
+        // MaskTextField.quantNumbery(txtCodigoFornec, 13);
+        // MaskTextField.quantNumbery(txtQuantFornec, 2);
+        // MaskTextField.valor(txtValorCompraFornec);
+        // MaskTextField.valor(txtValorVendaFornec);
+        // MaskTextField.limitarCaracteresFixos(txtTamanhoFornec, 2);
         MaskTextField.quantNumbery(txtNotaFiscalFornec, 10);
 
         String nome = UserSession.getInstance().getNomeUsuario();

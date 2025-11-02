@@ -13,5 +13,6 @@ module com.canes {
     exports com.canes.model;
     exports com.canes.model.dpo;
     opens com.canes.model to com.fasterxml.jackson.databind;
+    
 
 }

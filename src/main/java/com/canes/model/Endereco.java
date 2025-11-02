@@ -1,5 +1,6 @@
 package com.canes.model;
 
+
 public class Endereco {
 
     private Long id;
@@ -10,6 +11,7 @@ public class Endereco {
     private String estado;
     private String cep;
     private Usuario operador;
+    private Fornecedor fornecedor;
 
     
     public Endereco() {
@@ -88,8 +90,22 @@ public class Endereco {
         return operador;
     }
 
+    public Fornecedor getFornecedor() {
+        return fornecedor;
+    }
+    
+
     public void setOperador(Usuario operador) {
         this.operador = operador;
+    }
+
+    public void setFornecedor(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
+    }
+
+    @Override
+    public String toString() {
+        return "Fornecedor{id=" + id + ", empresa='" + fornecedor +  "}";
     }
 
 }

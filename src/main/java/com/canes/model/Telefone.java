@@ -8,6 +8,7 @@ public class Telefone {
     private Long id;
     private String numero;
     private Usuario operador;
+    private Fornecedor fornecedor;
 
     public Telefone() {
     }
@@ -38,5 +39,8 @@ public class Telefone {
         return operador;
     }
     
+    public Fornecedor getFornecedor(){
+        return fornecedor;
+    }
 
 }

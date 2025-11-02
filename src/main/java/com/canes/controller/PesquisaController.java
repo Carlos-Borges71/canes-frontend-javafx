@@ -11,12 +11,15 @@ import java.util.Objects;
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Fornecedor;
+import com.canes.model.FornecedorDTO;
 import com.canes.model.Produto;
 import com.canes.model.Telefone;
 import com.canes.model.Usuario;
 import com.canes.model.dpo.ClienteTelefoneDpo;
 import com.canes.model.dpo.FornecedorTelefoneDpo;
 import com.canes.services.EnderecoService;
+import com.canes.services.FornecedorService;
+import com.canes.services.ProdutoService;
 import com.canes.services.TelefoneService;
 import com.canes.services.UsuarioService;
 import com.canes.util.HouverEffectUtil;
@@ -74,13 +77,22 @@ public class PesquisaController {
     private TableColumn<ClienteTelefoneDpo, String> colPedidoCliente;
 
     @FXML
-    private TableColumn<FornecedorTelefoneDpo, String> colFornec;
+    private TableColumn<FornecedorDTO, String> colFornec;
 
     @FXML
-    private TableColumn<FornecedorTelefoneDpo, String> colTelefoneFornec;
+    private TableColumn<FornecedorDTO, String> colTelefoneFornec;
 
     @FXML
-    private TableColumn<FornecedorTelefoneDpo, String> colCnpj;
+    private TableColumn<FornecedorDTO, String> colCnpj;
+
+     @FXML
+    private TableColumn<FornecedorDTO, String> colCodigoFornec;
+
+     @FXML
+    private TableColumn<FornecedorDTO, String>colProdutoFornec;
+
+     @FXML
+    private TableColumn<FornecedorDTO, String>colEnderecoFornec;
 
     @FXML
     private TableColumn<Produto, String> colNomeProduto;
@@ -101,7 +113,7 @@ public class PesquisaController {
     private TableView<ClienteTelefoneDpo> tabelaCliente;
 
     @FXML
-    private TableView<FornecedorTelefoneDpo> tabelaFornec;
+    private TableView<FornecedorDTO> tabelaFornec;
 
     @FXML
     private TableView<Produto> tabelaProduto;
@@ -119,7 +131,7 @@ public class PesquisaController {
 
     private FilteredList<ClienteTelefoneDpo> listaFiltradaCliente;
 
-    private FilteredList<FornecedorTelefoneDpo> listaFiltradaFornecedor;
+    private FilteredList<FornecedorDTO> listaFiltradaFornecedor;
 
     private FilteredList<Produto> listaFiltradaProduto;
 
@@ -191,7 +203,7 @@ public class PesquisaController {
 
     private ObservableList<Cliente> listaClientes;
 
-    private ObservableList<Fornecedor> listaFornecedores;
+    private ObservableList<FornecedorDTO> listaFornecedores;
 
     private ObservableList<Produto> listaProdutos;
 
@@ -296,6 +308,7 @@ public class PesquisaController {
 
     @FXML
     public void initialize() {
+        txtFiltrar.requestFocus();
 
         formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").withZone(ZoneId.systemDefault());
 
@@ -547,8 +560,9 @@ public class PesquisaController {
 
             }
 
-        } catch (Exception e) {
+        } catch (Exception e ) {
             e.printStackTrace();
+
         }
 
         Label placeholderCliente = new Label("Nenhum Cliente encontrado!");
@@ -644,16 +658,19 @@ public class PesquisaController {
         // // });
         // // });
 
-        // Label placeholderFornec = new Label("Nenhum Fornecedor encontrado!");
-        // placeholderFornec.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
-        // tabelaFornec.setPlaceholder(placeholderFornec);
+        Label placeholderFornec = new Label("Nenhum Fornecedor encontrado!");
+        placeholderFornec.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
+        tabelaFornec.setPlaceholder(placeholderFornec);
 
-        // tabelaFornec.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tabelaFornec.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        // colFornec.setCellValueFactory(new PropertyValueFactory<>("empresa"));
-        // colTelefoneFornec.setCellValueFactory(new
-        // PropertyValueFactory<>("Telefone"));
-        // colCnpj.setCellValueFactory(new PropertyValueFactory<>("cnpj"));
+        colFornec.setCellValueFactory(new PropertyValueFactory<>("empresa"));
+        colTelefoneFornec.setCellValueFactory(new
+        PropertyValueFactory<>("Telefones"));
+        colCnpj.setCellValueFactory(new PropertyValueFactory<>("cnpjCpf"));
+        colEnderecoFornec.setCellValueFactory(new PropertyValueFactory<>("endereco"));
+        colCodigoFornec.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colProdutoFornec.setCellValueFactory(new PropertyValueFactory<>("produtos"));
 
         // Fornecedor f1 = new Fornecedor("Cia Roupas", "11.111.222/0001-09",
         // Arrays.asList(new Telefone(1, "(88) 88888-0000")));
@@ -666,8 +683,7 @@ public class PesquisaController {
         // Arrays.asList(new Telefone(2, "(21) 22222-8764"), new Telefone(3, "(21)
         // 99803-8215")));
 
-        // ObservableList<FornecedorTelefoneDpo> listaFornecedor =
-        // FXCollections.observableArrayList();
+        
 
         // for (Fornecedor f : Arrays.asList(f1, f2, f3, f4)) {
         // for (Telefone t : f.getTelefone()) {
@@ -676,9 +692,133 @@ public class PesquisaController {
         // }
         // }
 
-        // listaFiltradaFornecedor = new FilteredList<>(listaFornecedor, p -> true);
 
-        // tabelaFornec.setItems(listaFiltradaFornecedor);
+
+        try {
+            FornecedorService fornecedorService = new FornecedorService();
+            TelefoneService telefoneService = new TelefoneService();
+            EnderecoService enderecoService = new EnderecoService();
+            ProdutoService produtoService = new ProdutoService();
+
+            List<Fornecedor> fornecedores = fornecedorService.buscarTodos();
+            List<Telefone> telefones = telefoneService.buscarTodos();
+            List<Endereco> end = enderecoService.buscarTodos();
+            List<Produto> prod = produtoService.buscarTodos();
+
+            ObservableList<FornecedorDTO> listaFornecedores = FXCollections.observableArrayList();
+
+            // evita NullPointer se alguma lista vier nula
+            List<Fornecedor> fornecedoresSeguros = fornecedores != null ? fornecedores : List.of();
+            List<Telefone> telefonesSeguros = telefones != null ? telefones : List.of();
+            List<Endereco> enderecosSeguros = end != null ? end : List.of();
+            List<Produto> produtosSeguros = prod != null ? prod : List.of();
+            
+            
+            for (Fornecedor f : fornecedoresSeguros) {
+
+                Long userId = f != null ? f.getId() : null;
+
+                // Buscar todos os telefones do usuário
+                List<String> telefonesUsuario = telefonesSeguros.stream()
+                        .filter(t -> t != null && t.getFornecedor() != null && t.getFornecedor().getId().equals(userId))
+                        .map(Telefone::getNumero)
+                        .filter(Objects::nonNull)
+                        .toList();
+
+                // Montar string com todos os telefones
+                String numerosTelefone;
+                if (telefonesUsuario.isEmpty()) {
+                    numerosTelefone = "Usuário sem telefone";
+                
+                } else {
+                    numerosTelefone = String.join(", ", telefonesUsuario);
+                }
+
+//                 System.out.println("Fornecedor ID: " + f.getId());
+// enderecosSeguros.forEach(e -> System.out.println("Produto: " + e.getId() + " | FornecedorID: " + e.getFornecedor().getId()));
+
+                // Buscar todos os produtos do fornecedor
+                List<String> produtoFornecedor = produtosSeguros.stream()
+                        .filter(p -> p != null && p.getFornecedor() != null && p.getFornecedor().getId().equals(userId))
+                        .map(Produto::getNome)
+                        .filter(Objects::nonNull)
+                        .toList();
+                    
+                // Montar string com todos os produtos
+                String produtoF;
+                if (produtoFornecedor.isEmpty()) {
+                    produtoF = "fornecedor sem proditos";
+                    
+                } else {
+                    produtoF = String.join(", ", produtoFornecedor);
+                }
+
+                // buscar endereço correspondente
+                Endereco ender = enderecosSeguros.stream()
+                        .filter(e -> e != null && e.getFornecedor() != null && e.getFornecedor().getId().equals(userId))
+                        .findFirst()
+                        .orElse(null);
+
+                String endereco = "";
+                if (ender != null) {
+                    String logradouro = ender.getLogradouro() != null ? ender.getLogradouro() : "";
+                    String numero = ender.getNumero() != null ? ender.getNumero() : "";
+                    String bairro = ender.getBairro() != null ? ender.getBairro() : "";
+                    String cidade = ender.getCidade() != null ? ender.getCidade() : "";
+                    String estado = ender.getEstado() != null ? ender.getEstado() : "";
+                    String cep = ender.getCep() != null ? ender.getCep() : "";
+
+                    endereco = String.format("%s, %s - %s, %s/%s (%s)",
+                            logradouro, numero, bairro, cidade, estado, cep);
+                } else {
+                    endereco = "Usuário sem endereço";
+                }
+                
+
+                // proteger campos de Fornecedor também
+                Long codigo = f.getId();
+                String nome = f != null && f.getEmpresa() != null ? f.getEmpresa() : "";
+                String cnpj = f != null && f.getCnpjCpf() != null ? f.getCnpjCpf() : "";
+                
+                System.out.println();
+                listaFornecedores.add(new FornecedorDTO(
+                        codigo,
+                        nome,
+                        cnpj,
+                        numerosTelefone,
+                        endereco,
+                        produtoF
+
+                ));
+               listaFiltradaFornecedor = new FilteredList<>(listaFornecedores, p -> true);
+
+                tabelaFornec.setItems(listaFiltradaFornecedor);
+                
+               
+                
+                txtFiltrar.textProperty().addListener((obs, oldValue, newValue) -> {
+                    String filtro = newValue.toLowerCase();
+                    listaFiltradaFornecedor.setPredicate(fornecedor -> {
+                        if (filtro == null || filtro.isEmpty()) {
+                            return true;
+                        }
+
+                        return fornecedor.getEmpresa().toLowerCase().contains(filtro) ||
+                                String.valueOf(fornecedor.getId()).contains(filtro) ||
+                                fornecedor.getCnpjCpf().toLowerCase().contains(filtro) ||
+                                fornecedor.getEndereco().toLowerCase().contains(filtro) ||                               
+                                fornecedor.getProdutos().toLowerCase().contains(filtro) ||
+                                fornecedor.getTelefones().toLowerCase().contains(filtro);
+
+                    });
+                });
+
+            }
+
+        } catch (Exception e ) {
+            e.printStackTrace();
+
+        }
 
         // txtFiltrarFornec.textProperty().addListener((obs, oldValue, newValue) -> {
         // String filtro = newValue.toLowerCase();

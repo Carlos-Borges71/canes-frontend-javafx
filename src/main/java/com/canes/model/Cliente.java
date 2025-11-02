@@ -1,7 +1,5 @@
 package com.canes.model;
 
-import java.util.List;
-
 public class Cliente {
 
     private Long id;

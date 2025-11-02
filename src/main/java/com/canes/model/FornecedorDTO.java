@@ -2,26 +2,25 @@ package com.canes.model;
 
 import java.util.Set;
 
-
-public class Fornecedor {
+public class FornecedorDTO {
 
     private Long id;
     private String empresa;
     private String cnpjCpf;
 
-    private Telefone telefones;
-    private Endereco endereco;
+    private String telefones;
+    private String endereco;
 
     
-    private Set<Produto> produtos;
+    private String produtos;
 
     
     private Set<NotaFiscal> notasFiscais;
 
-    public Fornecedor() {
+    public FornecedorDTO() {
     }
 
-    public Fornecedor(Long id,String empresa, String cnpjCpf, Telefone telefones, Endereco endereco, Set<Produto> produtos ) {
+    public FornecedorDTO(Long id,String empresa, String cnpjCpf, String telefones, String endereco, String produtos ) {
         this.id =  id;
         this.empresa = empresa;
         this.cnpjCpf = cnpjCpf;
@@ -39,28 +38,6 @@ public class Fornecedor {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setTelefones(Telefone telefones) {
-        this.telefones = telefones;
-    }
-
-    @Override
-    public String toString() {
-        return "Fornecedor [empresa=" + empresa + ", cnpjCpf=" + cnpjCpf + ", endereco=" + endereco + ", produtos="
-                + produtos + ", notasFiscais=" + notasFiscais + "]";
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
-
-    public void setProdutos(Set<Produto> produtos) {
-        this.produtos = produtos;
-    }
-
-    public void setNotasFiscais(Set<NotaFiscal> notasFiscais) {
-        this.notasFiscais = notasFiscais;
     }
 
     public String getEmpresa() {
@@ -81,11 +58,11 @@ public class Fornecedor {
 
    
 
-    public Telefone getTelefones() {
+    public String getTelefones() {
         return telefones;
     }
 
-    public Endereco getEndereco() {
+    public String getEndereco() {
         return endereco;
     }
 
@@ -93,8 +70,24 @@ public class Fornecedor {
         return notasFiscais;
     }
 
-    public Set<Produto> getProdutos() {
+    public String getProdutos() {
         return produtos;
+    }
+
+    public void setTelefones(String telefones) {
+        this.telefones = telefones;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    public void setProdutos(String produtos) {
+        this.produtos = produtos;
+    }
+
+    public void setNotasFiscais(Set<NotaFiscal> notasFiscais) {
+        this.notasFiscais = notasFiscais;
     }
 
     
