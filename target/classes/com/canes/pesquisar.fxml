@@ -172,11 +172,12 @@
                   <TableView fx:id="tabelaFornec" layoutX="16.0" layoutY="66.0" prefHeight="292.0" prefWidth="1104.0">
                      <columns>
                         <TableColumn fx:id="colCodigoFornec" prefWidth="81.60000610351562" style="-fx-font-size: 16px" text="Código" />
-                        <TableColumn fx:id="colFornec" prefWidth="221.59999084472656" style="-fx-font-size: 16px" text="Empresa" />
-                        <TableColumn fx:id="colCnpj" prefWidth="179.20001220703125" style="-fx-font-size: 16px" text="Cnpj" />
-                        <TableColumn fx:id="colProdutoFornec" prefWidth="213.60003662109375" style="-fx-font-size: 16px" text="Produtos" />
-                        <TableColumn fx:id="colTelefoneFornec" prefWidth="207.20001220703125" style="-fx-font-size: 16px" text="Telefone" />
-                        <TableColumn fx:id="colEnderecoFornec" prefWidth="192.79998779296875" style="-fx-font-size: 16px" text="Endereço" />
+                        <TableColumn fx:id="colFornec" prefWidth="188.00003051757812" style="-fx-font-size: 16px" text="Empresa" />
+                        <TableColumn fx:id="colCnpj" prefWidth="172.0" style="-fx-font-size: 16px" text="Cnpj" />
+                        <TableColumn fx:id="colNotaFiscalFornec" prefWidth="120.79998779296875" style="-fx-font-size: 16px" text="Nota fiscal" />
+                        <TableColumn fx:id="colProdutoFornec" prefWidth="198.4000244140625" style="-fx-font-size: 16px" text="Produtos" />
+                        <TableColumn fx:id="colTelefoneFornec" prefWidth="175.199951171875" style="-fx-font-size: 16px" text="Telefone" />
+                        <TableColumn fx:id="colEnderecoFornec" prefWidth="357.5999755859375" style="-fx-font-size: 16px" text="Endereço" />
                      </columns>
                   </TableView>
                   <TextField fx:id="txtFiltrarFornec" layoutX="24.0" layoutY="14.0" prefHeight="37.0" prefWidth="323.0" promptText="Digite para filtrar" style="-fx-background-color: Transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;">

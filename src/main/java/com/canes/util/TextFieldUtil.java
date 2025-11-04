@@ -64,4 +64,50 @@ public class TextFieldUtil {
         }
         return sb.toString();
     }
+
+
+
+    /**
+     * Converte um texto de valor monetário em um double.
+     * 
+     * Exemplo:
+     *   "R$ 1.234,56" -> 1234.56
+     *   "12,50" -> 12.50
+     *   "1000" -> 1000.0
+     *
+     * @param textoValor o valor digitado no campo (pode conter R$, pontos ou vírgulas)
+     * @return o valor numérico em double, ou 0.0 se for inválido ou vazio
+     */
+    public static double converterParaDouble(String textoValor) {
+        if (textoValor == null || textoValor.isEmpty()) {
+            return 0.0;
+        }
+
+        // Remove tudo que não for número, ponto ou vírgula
+        String limpo = textoValor.replaceAll("[^\\d,\\.]", "");
+
+        // Remove separador de milhar e troca vírgula por ponto
+        limpo = limpo.replace(".", "").replace(",", ".");
+
+        try {
+            return Double.parseDouble(limpo);
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
+    }
+
+    /**
+     * Faz a limpeza do texto, mas sem converter (mantém formato para exibir).
+     * 
+     * Exemplo:
+     *   "R$ 1.234,56" -> "1234.56"
+     */
+    public static String limparTextoValor(String textoValor) {
+        if (textoValor == null || textoValor.isEmpty()) {
+            return "";
+        }
+        return textoValor.replaceAll("[^\\d,\\.]", "")
+                         .replace(".", "")
+                         .replace(",", ".");
+    }
 }

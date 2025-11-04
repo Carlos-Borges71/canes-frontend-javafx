@@ -84,7 +84,7 @@ public class EnderecoService {
         int status = response.statusCode();
         if (status == 200 || status == 201) {
 
-            AlertUtil.mostrarSucesso("Dados inserido com sucesso!");
+            //AlertUtil.mostrarSucesso("Dados inserido com sucesso!");
 
         } else {
             System.out.println(response.body());

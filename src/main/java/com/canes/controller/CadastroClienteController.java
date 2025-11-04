@@ -111,9 +111,9 @@ public class CadastroClienteController implements Initializable{
     @FXML
     void onClickcadastrarClient(ActionEvent event) {
         
-        //clienteSalvo = new Cliente(txtNomeClient.getText(),Instant.now(), Arrays.asList(new Telefone(1,txtcelClient.getText())), Arrays.asList(new Endereco(txtLogradouroClient.getText(), txtNumeroClient.getText(), txtBairroClient.getText(), txtCidadeClient.getText(), txtEstadoClient.getText(), txtCepClient.getText())));
-        //telefoneSalvo = new Telefone(1,txtcelClient.getText());
-        //enderecoSalvo = new Endereco(txtLogradouroClient.getText(), txtNumeroClient.getText(), txtBairroClient.getText(), txtCidadeClient.getText(), txtEstadoClient.getText(), txtCepClient.getText());
+        clienteSalvo = new Cliente(txtNomeClient.getText(),null, null);
+        telefoneSalvo = new Telefone(txtcelClient.getText());
+        enderecoSalvo = new Endereco(txtLogradouroClient.getText(), txtNumeroClient.getText(), txtBairroClient.getText(), txtCidadeClient.getText(), txtEstadoClient.getText(), txtCepClient.getText());
 
 
         if(txtNomeClient.getText().isEmpty()) {

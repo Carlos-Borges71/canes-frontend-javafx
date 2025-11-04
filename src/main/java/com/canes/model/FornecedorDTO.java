@@ -1,7 +1,5 @@
 package com.canes.model;
 
-import java.util.Set;
-
 public class FornecedorDTO {
 
     private Long id;
@@ -15,19 +13,19 @@ public class FornecedorDTO {
     private String produtos;
 
     
-    private Set<NotaFiscal> notasFiscais;
+    private Integer notasFiscais;
 
     public FornecedorDTO() {
     }
 
-    public FornecedorDTO(Long id,String empresa, String cnpjCpf, String telefones, String endereco, String produtos ) {
+    public FornecedorDTO(Long id,String empresa, String cnpjCpf, String telefones, String endereco, String produtos, Integer notasFiscais ) {
         this.id =  id;
         this.empresa = empresa;
         this.cnpjCpf = cnpjCpf;
         this.telefones = telefones;
         this.endereco = endereco;
         this.produtos = produtos;
-        //this.notasFiscais = notasFiscais;
+        this.notasFiscais = notasFiscais;
         
 
     }
@@ -66,7 +64,7 @@ public class FornecedorDTO {
         return endereco;
     }
 
-    public Set<NotaFiscal> getNotasFiscais() {
+    public Integer getNotasFiscais() {
         return notasFiscais;
     }
 
@@ -86,7 +84,7 @@ public class FornecedorDTO {
         this.produtos = produtos;
     }
 
-    public void setNotasFiscais(Set<NotaFiscal> notasFiscais) {
+    public void setNotasFiscais(Integer notasFiscais) {
         this.notasFiscais = notasFiscais;
     }
 

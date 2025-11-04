@@ -27,7 +27,23 @@
                         <Insets left="8.0" />
                      </padding>
                   </TextField>
+                  <TextField fx:id="txtCodigo" layoutX="441.0" layoutY="90.0" prefHeight="25.0" prefWidth="199.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent; -fx-text-fill: fff;">
+                     <font>
+                        <Font name="Verdana" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="8.0" />
+                     </padding>
+                  </TextField>
                   <TextField fx:id="txtTamanho" layoutX="127.0" layoutY="136.0" prefHeight="25.0" prefWidth="92.0" style="-fx-background-color: transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets left="8.0" />
+                     </padding>
+                  </TextField>
+                  <TextField fx:id="txtValorCompra" layoutX="340.0" layoutY="137.0" prefHeight="25.0" prefWidth="92.0" style="-fx-background-color: transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -48,8 +64,7 @@
                         <Insets />
                      </opaqueInsets>
                   </TextField>
-                  <VBox fx:id="vBoxTelClient" layoutX="129.0" layoutY="148.0" />
-                  <Button fx:id="btnLimpar" layoutX="414.0" layoutY="208.0" mnemonicParsing="false" onAction="#onclickLimpar" onMouseEntered="#onMouseEnteredLimpar" onMouseExited="#onMouseExitedLimpar" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Limpar" textFill="WHITE">
+                  <Button fx:id="btnCadastrar" layoutX="538.0" layoutY="208.0" mnemonicParsing="false" onAction="#onClickcadastrar" onMouseEntered="#onMouseEnteredCadastro" onMouseExited="#onMouseExitedCadastro" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Cadastrar" textFill="WHITE">
                      <font>
                         <Font name="Verdana Bold" size="14.0" />
                      </font>
@@ -57,7 +72,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="btnCadastrar" layoutX="538.0" layoutY="208.0" mnemonicParsing="false" onAction="#onClickcadastrar" onMouseEntered="#onMouseEnteredCadastro" onMouseExited="#onMouseExitedCadastro" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Cadastrar" textFill="WHITE">
+                  <Button fx:id="btnLimpar" layoutX="414.0" layoutY="208.0" mnemonicParsing="false" onAction="#onclickLimpar" onMouseEntered="#onMouseEnteredLimpar" onMouseExited="#onMouseExitedLimpar" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Limpar" textFill="WHITE">
                      <font>
                         <Font name="Verdana Bold" size="14.0" />
                      </font>
@@ -86,23 +101,7 @@
                         <Font name="Verdana Bold" size="36.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtCodigo" layoutX="441.0" layoutY="90.0" prefHeight="25.0" prefWidth="199.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent; -fx-text-fill: fff;">
-                     <font>
-                        <Font name="Verdana" size="12.0" />
-                     </font>
-                     <padding>
-                        <Insets left="8.0" />
-                     </padding>
-                  </TextField>
                   <Label layoutX="389.0" layoutY="93.0" text="Código:" textFill="WHITE" />
-                  <TextField fx:id="txtValorCompra" layoutX="340.0" layoutY="137.0" prefHeight="25.0" prefWidth="92.0" style="-fx-background-color: transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <padding>
-                        <Insets left="8.0" />
-                     </padding>
-                  </TextField>
                   <Label layoutX="242.0" layoutY="140.0" text="Valor Compra:" textFill="WHITE">
                      <font>
                         <Font name="Verdana" size="12.0" />

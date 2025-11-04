@@ -44,12 +44,12 @@
                         <Insets left="8.0" />
                      </padding>
                   </TextField>
-                  <TextField fx:id="txtCidadeClient" layoutX="377.0" layoutY="150.0" prefWidth="152.0" style="-fx-border-radius: 7; -fx-background-color: transparent; -fx-border-color: fff; -fx-text-fill: fff;">
+                  <TextField fx:id="txtCidadeClient" layoutX="590.0" layoutY="151.0" prefWidth="152.0" style="-fx-border-radius: 7; -fx-background-color: transparent; -fx-border-color: fff; -fx-text-fill: fff;">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                   </TextField>
-                  <TextField fx:id="txtBairroClient" layoutX="594.0" layoutY="150.0" prefWidth="152.0" style="-fx-border-radius: 7; -fx-background-color: transparent; -fx-border-color: fff; -fx-text-fill: fff;">
+                  <TextField fx:id="txtBairroClient" layoutX="374.0" layoutY="150.0" prefWidth="152.0" style="-fx-border-radius: 7; -fx-background-color: transparent; -fx-border-color: fff; -fx-text-fill: fff;">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -128,12 +128,12 @@
                         <Font name="Verdana" size="12.0" />
                      </font>
                   </Label>
-                  <Label layoutX="546.0" layoutY="156.0" text="Bairro:" textFill="WHITE">
+                  <Label layoutX="326.0" layoutY="156.0" text="Bairro:" textFill="WHITE">
                      <font>
                         <Font name="Verdana" size="12.0" />
                      </font>
                   </Label>
-                  <Label layoutX="324.0" layoutY="154.0" text="Cidade:" textFill="WHITE">
+                  <Label layoutX="537.0" layoutY="155.0" text="Cidade:" textFill="WHITE">
                      <font>
                         <Font name="Verdana" size="12.0" />
                      </font>

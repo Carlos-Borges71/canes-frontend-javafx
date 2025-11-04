@@ -2,9 +2,11 @@ package com.canes.controller;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.List;
 import java.util.Locale;
 
 import com.canes.model.Produto;
+import com.canes.services.ProdutoService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -80,16 +82,55 @@ public class ProdutoController {
         realColuna(colValorProduto);
         
       
-        
+        try{ 
+            ProdutoService produtoService = new ProdutoService();
 
-        listaProdutos = FXCollections.observableArrayList( 
+           
+            List<Produto> produt = produtoService.buscarTodos();
+
+            ObservableList<Produto> listaProdutos = FXCollections.observableArrayList();
+
+            // evita NullPointer se alguma lista vier nula
+            
+            List<Produto> produtosSeguros = produt != null ? produt : List.of();
+
+            for (Produto p : produtosSeguros) {
+
+            
+
+
+                // proteger campos de Fornecedor também
+                Long id = p.getId();
+                String codigo = p != null && p.getCodigo() != null ? p.getCodigo() : "";
+                String nome = p != null && p.getNome() != null ? p.getNome() : "";
+                Integer estoque = p != null && p.getEstoque() != null ? p.getEstoque() : null;
+                Double valorCompra = p != null && p.getValorCompra() != null ? p.getValorCompra() : null;
+                Double valorVenda = p != null && p.getValorVenda() != null ? p.getValorVenda() : null;
+                Integer quant = p != null && p.getQuantcompra() != null ? p.getQuantcompra() : null;
+
+                System.out.println();
+                listaProdutos.add(new Produto(
+                        codigo,
+                        nome,
+                        estoque,
+                        valorCompra,
+                        valorVenda,
+                        quant
+
+                ));
+
+
+            }
+
+
+        // listaProdutos = FXCollections.observableArrayList( 
         
-            new Produto("876577777", "Vestido", 10, 123.9, 660.8, 10),
-           new Produto("876577777", "Vestido", 10, 123.9, 660.8, 10),
-            new Produto("8333564598", "Calça Jeans", 6, 123.9, 760.8, 6),
-             new Produto("2457665598", "Vestido Rusti", 4, 123.9, 160.8, 4)
+        //     new Produto("876577777", "Vestido", 10, 123.9, 660.8, 10),
+        //    new Produto("876577777", "Vestido", 10, 123.9, 660.8, 10),
+        //     new Produto("8333564598", "Calça Jeans", 6, 123.9, 760.8, 6),
+        //      new Produto("2457665598", "Vestido Rusti", 4, 123.9, 160.8, 4)
         
-        );
+        // );
 
         
     
@@ -120,7 +161,10 @@ public class ProdutoController {
             });
         });
 
+        } catch (Exception e) {
+            e.printStackTrace();
 
+        }
 
         //  // Zebrando a tabela
         // tabelaProduto.setRowFactory(tv -> new TableRow<>() {

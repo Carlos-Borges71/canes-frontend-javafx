@@ -361,6 +361,7 @@ public class PedidoController {
                                         Cliente cliente = ((CadastroClienteController) controller).getClienteSalvo();
                                         Telefone telefone = ((CadastroClienteController) controller).getTelefoneSalvo();
                                         Endereco enderco = ((CadastroClienteController) controller).getEnderecoSalvo();
+                                        System.out.println(cliente.getNome());
 
                                         if (cliente != null) {
                                             txtCliente.setText(cliente.getNome());
@@ -397,6 +398,7 @@ public class PedidoController {
             controller.setPedidoController(this);
             Stage stage = new Stage();
             stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Produto");
             stage.show();
 
@@ -532,7 +534,6 @@ public class PedidoController {
             System.out.println(txtUnitario);
             txtValorUnitario.setText(nf.format(unitario));
             double total = quant * unitario;
-            
 
             tblExibirPedido p = new tblExibirPedido(item, codigo, produt, quant, unitario, total);
             tabelaPedido.getItems().add(p);

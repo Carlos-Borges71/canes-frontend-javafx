@@ -7,7 +7,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
-import com.canes.model.Fornecedor;
 import com.canes.model.Produto;
 import com.canes.util.AlertUtil;
 import com.fasterxml.jackson.core.type.TypeReference;

@@ -23,7 +23,7 @@ public class UserSession {
         this.nomeUsuario = nome;
         this.login = login;
     }
-    public Long getLogin(){
+    public Long getId(){
         return id;
     }
 
@@ -39,3 +39,4 @@ public class UserSession {
         instance = null;
     }
 }
+

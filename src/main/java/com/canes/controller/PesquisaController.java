@@ -12,19 +12,21 @@ import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Fornecedor;
 import com.canes.model.FornecedorDTO;
+import com.canes.model.NotaFiscal;
 import com.canes.model.Produto;
 import com.canes.model.Telefone;
 import com.canes.model.Usuario;
 import com.canes.model.dpo.ClienteTelefoneDpo;
-import com.canes.model.dpo.FornecedorTelefoneDpo;
 import com.canes.services.EnderecoService;
 import com.canes.services.FornecedorService;
+import com.canes.services.NotaFiscalService;
 import com.canes.services.ProdutoService;
 import com.canes.services.TelefoneService;
 import com.canes.services.UsuarioService;
 import com.canes.util.HouverEffectUtil;
 import com.canes.util.ScreenUtils;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -85,14 +87,17 @@ public class PesquisaController {
     @FXML
     private TableColumn<FornecedorDTO, String> colCnpj;
 
-     @FXML
+    @FXML
     private TableColumn<FornecedorDTO, String> colCodigoFornec;
 
-     @FXML
-    private TableColumn<FornecedorDTO, String>colProdutoFornec;
+    @FXML
+    private TableColumn<FornecedorDTO, String> colProdutoFornec;
 
-     @FXML
-    private TableColumn<FornecedorDTO, String>colEnderecoFornec;
+    @FXML
+    private TableColumn<FornecedorDTO, String> colNotaFiscalFornec;
+
+    @FXML
+    private TableColumn<FornecedorDTO, String> colEnderecoFornec;
 
     @FXML
     private TableColumn<Produto, String> colNomeProduto;
@@ -212,6 +217,11 @@ public class PesquisaController {
     @FXML
     void onactionClient(ActionEvent event) {
 
+        Platform.runLater(() -> {
+            txtFiltrarCliente.requestFocus();
+            // txtNomeProduto.selectAll(); // opcional: seleciona todo o texto
+        });
+
         paneUser.setVisible(false);
         paneCliente.setVisible(true);
         lbluser.setTextFill(Color.WHITE);
@@ -225,6 +235,11 @@ public class PesquisaController {
     @FXML
     void onActionUser(ActionEvent event) {
 
+         Platform.runLater(() -> {
+            txtFiltrar.requestFocus();
+            //txtNomeProduto.selectAll(); // opcional: seleciona todo o texto
+        });
+
         paneUser.setVisible(true);
         paneCliente.setVisible(false);
         lbluser.setTextFill(Color.RED);
@@ -237,6 +252,11 @@ public class PesquisaController {
 
     @FXML
     void onActionFornec(ActionEvent event) {
+
+        Platform.runLater(() -> {
+            txtFiltrarFornec.requestFocus();
+            // txtNomeProduto.selectAll(); // opcional: seleciona todo o texto
+        });
 
         paneUser.setVisible(false);
         paneCliente.setVisible(false);
@@ -308,7 +328,10 @@ public class PesquisaController {
 
     @FXML
     public void initialize() {
-        txtFiltrar.requestFocus();
+        Platform.runLater(() -> {
+            txtFiltrar.requestFocus();
+            // txtNomeProduto.selectAll(); // opcional: seleciona todo o texto
+        });
 
         formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").withZone(ZoneId.systemDefault());
 
@@ -560,7 +583,7 @@ public class PesquisaController {
 
             }
 
-        } catch (Exception e ) {
+        } catch (Exception e) {
             e.printStackTrace();
 
         }
@@ -665,12 +688,12 @@ public class PesquisaController {
         tabelaFornec.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         colFornec.setCellValueFactory(new PropertyValueFactory<>("empresa"));
-        colTelefoneFornec.setCellValueFactory(new
-        PropertyValueFactory<>("Telefones"));
+        colTelefoneFornec.setCellValueFactory(new PropertyValueFactory<>("Telefones"));
         colCnpj.setCellValueFactory(new PropertyValueFactory<>("cnpjCpf"));
         colEnderecoFornec.setCellValueFactory(new PropertyValueFactory<>("endereco"));
         colCodigoFornec.setCellValueFactory(new PropertyValueFactory<>("id"));
         colProdutoFornec.setCellValueFactory(new PropertyValueFactory<>("produtos"));
+        colNotaFiscalFornec.setCellValueFactory(new PropertyValueFactory<>("notasFiscais"));
 
         // Fornecedor f1 = new Fornecedor("Cia Roupas", "11.111.222/0001-09",
         // Arrays.asList(new Telefone(1, "(88) 88888-0000")));
@@ -683,8 +706,6 @@ public class PesquisaController {
         // Arrays.asList(new Telefone(2, "(21) 22222-8764"), new Telefone(3, "(21)
         // 99803-8215")));
 
-        
-
         // for (Fornecedor f : Arrays.asList(f1, f2, f3, f4)) {
         // for (Telefone t : f.getTelefone()) {
         // listaFornecedor.add(new FornecedorTelefoneDpo(f.getEmpresa(), f.getCnpj(),
@@ -692,18 +713,18 @@ public class PesquisaController {
         // }
         // }
 
-
-
         try {
             FornecedorService fornecedorService = new FornecedorService();
             TelefoneService telefoneService = new TelefoneService();
             EnderecoService enderecoService = new EnderecoService();
             ProdutoService produtoService = new ProdutoService();
+            NotaFiscalService notaFiscalService = new NotaFiscalService();
 
             List<Fornecedor> fornecedores = fornecedorService.buscarTodos();
             List<Telefone> telefones = telefoneService.buscarTodos();
             List<Endereco> end = enderecoService.buscarTodos();
             List<Produto> prod = produtoService.buscarTodos();
+            List<NotaFiscal> nota = notaFiscalService.buscarTodos();
 
             ObservableList<FornecedorDTO> listaFornecedores = FXCollections.observableArrayList();
 
@@ -712,8 +733,8 @@ public class PesquisaController {
             List<Telefone> telefonesSeguros = telefones != null ? telefones : List.of();
             List<Endereco> enderecosSeguros = end != null ? end : List.of();
             List<Produto> produtosSeguros = prod != null ? prod : List.of();
-            
-            
+            List<NotaFiscal> notasFiscaisSeguros = nota != null ? nota : List.of();
+
             for (Fornecedor f : fornecedoresSeguros) {
 
                 Long userId = f != null ? f.getId() : null;
@@ -729,13 +750,14 @@ public class PesquisaController {
                 String numerosTelefone;
                 if (telefonesUsuario.isEmpty()) {
                     numerosTelefone = "Usuário sem telefone";
-                
+
                 } else {
                     numerosTelefone = String.join(", ", telefonesUsuario);
                 }
 
-//                 System.out.println("Fornecedor ID: " + f.getId());
-// enderecosSeguros.forEach(e -> System.out.println("Produto: " + e.getId() + " | FornecedorID: " + e.getFornecedor().getId()));
+                // System.out.println("Fornecedor ID: " + f.getId());
+                // enderecosSeguros.forEach(e -> System.out.println("Produto: " + e.getId() + "
+                // | FornecedorID: " + e.getFornecedor().getId()));
 
                 // Buscar todos os produtos do fornecedor
                 List<String> produtoFornecedor = produtosSeguros.stream()
@@ -743,12 +765,12 @@ public class PesquisaController {
                         .map(Produto::getNome)
                         .filter(Objects::nonNull)
                         .toList();
-                    
+
                 // Montar string com todos os produtos
                 String produtoF;
                 if (produtoFornecedor.isEmpty()) {
                     produtoF = "fornecedor sem proditos";
-                    
+
                 } else {
                     produtoF = String.join(", ", produtoFornecedor);
                 }
@@ -773,13 +795,23 @@ public class PesquisaController {
                 } else {
                     endereco = "Usuário sem endereço";
                 }
-                
+
+                NotaFiscal notas = notasFiscaisSeguros.stream()
+                        .filter(n -> n != null && n.getFornecedor() != null && n.getFornecedor().getId().equals(userId))
+                        .findFirst()
+                        .orElse(null);
+
+                Integer notaFiscal = null;
+                if (notas != null) {
+
+                    notaFiscal = notas.getNotaFiscal();
+                }
 
                 // proteger campos de Fornecedor também
                 Long codigo = f.getId();
                 String nome = f != null && f.getEmpresa() != null ? f.getEmpresa() : "";
                 String cnpj = f != null && f.getCnpjCpf() != null ? f.getCnpjCpf() : "";
-                
+
                 System.out.println();
                 listaFornecedores.add(new FornecedorDTO(
                         codigo,
@@ -787,16 +819,15 @@ public class PesquisaController {
                         cnpj,
                         numerosTelefone,
                         endereco,
-                        produtoF
+                        produtoF,
+                        notaFiscal
 
                 ));
-               listaFiltradaFornecedor = new FilteredList<>(listaFornecedores, p -> true);
+                listaFiltradaFornecedor = new FilteredList<>(listaFornecedores, p -> true);
 
                 tabelaFornec.setItems(listaFiltradaFornecedor);
-                
-               
-                
-                txtFiltrar.textProperty().addListener((obs, oldValue, newValue) -> {
+
+                txtFiltrarFornec.textProperty().addListener((obs, oldValue, newValue) -> {
                     String filtro = newValue.toLowerCase();
                     listaFiltradaFornecedor.setPredicate(fornecedor -> {
                         if (filtro == null || filtro.isEmpty()) {
@@ -806,16 +837,18 @@ public class PesquisaController {
                         return fornecedor.getEmpresa().toLowerCase().contains(filtro) ||
                                 String.valueOf(fornecedor.getId()).contains(filtro) ||
                                 fornecedor.getCnpjCpf().toLowerCase().contains(filtro) ||
-                                fornecedor.getEndereco().toLowerCase().contains(filtro) ||                               
+                                fornecedor.getEndereco().toLowerCase().contains(filtro) ||
                                 fornecedor.getProdutos().toLowerCase().contains(filtro) ||
-                                fornecedor.getTelefones().toLowerCase().contains(filtro);
+                                fornecedor.getTelefones().toLowerCase().contains(filtro) ||
+                                fornecedor.getEndereco().toLowerCase().contains(filtro) ||
+                                String.valueOf(fornecedor.getNotasFiscais()).contains(filtro);
 
                     });
                 });
 
             }
 
-        } catch (Exception e ) {
+        } catch (Exception e) {
             e.printStackTrace();
 
         }

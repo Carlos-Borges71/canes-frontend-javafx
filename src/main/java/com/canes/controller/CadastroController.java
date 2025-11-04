@@ -1,14 +1,10 @@
 package com.canes.controller;
 
-import java.io.IOException;
-import java.net.URL;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
-
 import com.canes.util.HouverEffectUtil;
 import com.canes.util.MaskTextField;
 import com.canes.util.ScreenUtils;
@@ -16,21 +12,20 @@ import com.canes.util.TextFieldUtil;
 import com.canes.util.UserSession;
 import com.canes.model.Cliente;
 import com.canes.model.Fornecedor;
-import com.canes.model.Produto;
 import com.canes.model.Usuario;
 import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
 import com.canes.services.FornecedorService;
 import com.canes.services.NotaFiscalService;
-import com.canes.services.ProdutoService;
 import com.canes.services.TelefoneService;
 import com.canes.services.UsuarioService;
 import com.canes.util.AlertUtil;
 import com.canes.util.ValidadorSenha;
+
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -47,9 +42,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class CadastroController implements Initializable {
+public class CadastroController {
 
     @FXML
     private Button btnCadastrar;
@@ -255,9 +251,6 @@ public class CadastroController implements Initializable {
 
     @FXML
     private VBox vBoxTelFornec;
-    
-
-    
 
     TextField newText = new TextField();
 
@@ -443,7 +436,6 @@ public class CadastroController implements Initializable {
             // txtTamanhoFornec.clear();
             // txtCodigoFornec.clear();
             txtNotaFiscalFornec.clear();
-        
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/canes/cadastroProduto.fxml"));
             Parent root = loader.load(); // precisa carregar antes!
@@ -457,6 +449,7 @@ public class CadastroController implements Initializable {
 
             // Mostra a tela (pode ser nova janela ou mesma)
             Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Tela de Produto");
             stage.setScene(new Scene(root));
             stage.show();
@@ -507,7 +500,6 @@ public class CadastroController implements Initializable {
         // txtTamanhoFornec.clear();
         // txtCodigoFornec.clear();
         txtNotaFiscalFornec.clear();
-        
 
     }
 
@@ -522,8 +514,6 @@ public class CadastroController implements Initializable {
         txtCidadeClient.clear();
         txtEstadoClient.clear();
         txtCepClient.clear();
-        
-       
 
     }
 
@@ -989,10 +979,12 @@ public class CadastroController implements Initializable {
 
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resources) {
+    public void initialize() {
 
-        txtNome.requestFocus();
+        Platform.runLater(() -> {
+            txtNome.requestFocus();
+            // txtNomeProduto.selectAll(); // opcional: seleciona todo o texto
+        });
 
         // MaskTextField.validarNaoVazio(txtNome, btnCadastrar);
         // MaskTextField.validarNaoVazio(txtLogradouro, btnCadastrar);
@@ -1128,6 +1120,7 @@ public class CadastroController implements Initializable {
 
         String nome = UserSession.getInstance().getNomeUsuario();
         String login = UserSession.getInstance().getlogin();
+        Long id = UserSession.getInstance().getId();
 
         txtOperador.setText("Operador: " + nome);
 
