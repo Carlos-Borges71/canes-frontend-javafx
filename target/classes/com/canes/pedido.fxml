@@ -69,7 +69,7 @@
                   <Font name="Verdana Bold" size="30.0" />
                </font>
             </TextField>
-            <TextField fx:id="txtTelefone" alignment="BOTTOM_CENTER" layoutX="232.0" layoutY="548.0" prefHeight="78.0" prefWidth="203.0" style="-fx-background-radius: 20;" text="(21) 99999-5555">
+            <TextField fx:id="txtTelefone" alignment="BOTTOM_CENTER" layoutX="232.0" layoutY="548.0" onAction="#pressedEnter" prefHeight="78.0" prefWidth="203.0" style="-fx-background-radius: 20;" text="(21) 99999-5555">
                <font>
                   <Font name="Verdana Bold" size="18.0" />
                </font>

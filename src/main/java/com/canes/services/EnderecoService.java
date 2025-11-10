@@ -1,6 +1,7 @@
 package com.canes.services;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -25,12 +26,11 @@ public class EnderecoService {
     public EnderecoService() {
         this.httpClient = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper();
-    
 
     }
 
     public static void salvarEndereco(String logradouro, String numero, String bairro, String cidade, String estado,
-            String cep, Long operadorId, Long clienteId, Long fornecedorId) throws Exception {
+            String cep, Long operadorId, Long clienteId, Long fornecedorId) throws Exception, ConnectException {
 
         StringBuilder jsonBuilder = new StringBuilder();
         jsonBuilder.append("{\n")
@@ -84,7 +84,7 @@ public class EnderecoService {
         int status = response.statusCode();
         if (status == 200 || status == 201) {
 
-            //AlertUtil.mostrarSucesso("Dados inserido com sucesso!");
+            // AlertUtil.mostrarSucesso("Dados inserido com sucesso!");
 
         } else {
             System.out.println(response.body());
@@ -94,7 +94,7 @@ public class EnderecoService {
         }
     }
 
-    public List<Endereco> buscarTodos() throws IOException, InterruptedException {
+    public List<Endereco> buscarTodos() throws IOException, InterruptedException, ConnectException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
                 .GET()
@@ -110,11 +110,11 @@ public class EnderecoService {
         }
     }
 
+    public Endereco buscarEnderecoPorId(Long id) {
+        if (id == null)
+            return null;
 
-     public Endereco buscarEnderecoPorId(Long id) {
-        if (id == null) return null;
-
-        String url = BASE_URL +"/" + id;
+        String url = BASE_URL + "/" + id;
 
         try {
             HttpRequest req = HttpRequest.newBuilder()

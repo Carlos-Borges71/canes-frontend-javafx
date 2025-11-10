@@ -13,6 +13,7 @@ import com.canes.util.UserSession;
 import com.canes.model.Cliente;
 import com.canes.model.Fornecedor;
 import com.canes.model.Usuario;
+import com.canes.model.dpo.ClienteDPO;
 import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
 import com.canes.services.FornecedorService;
@@ -557,7 +558,7 @@ public class CadastroController {
 
             try {
 
-                Cliente cliente = new Cliente();
+                ClienteDPO cliente = new ClienteDPO();
 
                 cliente.setNome(txtNomeClient.getText());
 

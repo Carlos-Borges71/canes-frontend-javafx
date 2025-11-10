@@ -1,6 +1,7 @@
 package com.canes.services;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -25,7 +26,7 @@ public class UsuarioService {
         this.objectMapper = new ObjectMapper();
     }
 
-    public Long salvarUsuario(Usuario usuario) throws IOException, InterruptedException {
+    public Long salvarUsuario(Usuario usuario) throws IOException, InterruptedException, ConnectException {
 
         String json = mapper.writeValueAsString(usuario);
 
@@ -43,11 +44,11 @@ public class UsuarioService {
             return usuarioSalvo.getId();
         } else {
             throw new RuntimeException("Erro ao salvar usuario: " + response.body());
-            
+
         }
     }
 
-    public List<Usuario> buscarTodos() throws IOException, InterruptedException {
+    public List<Usuario> buscarTodos() throws IOException, InterruptedException, ConnectException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
                 .GET()

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Locale;
 
 import com.canes.model.Cliente;
@@ -12,8 +13,11 @@ import com.canes.model.Endereco;
 import com.canes.model.Produto;
 import com.canes.model.Telefone;
 import com.canes.model.tblExibirPedido;
+import com.canes.services.ClienteService;
+import com.canes.services.TelefoneService;
 import com.canes.util.MaskTextField;
 import com.canes.util.ScreenUtils;
+import com.canes.util.TextFieldUtil;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -117,6 +121,75 @@ public class PedidoController {
     NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
     DecimalFormatSymbols simbols = new DecimalFormatSymbols(new Locale("pt", "BR"));
+
+    @FXML
+    void pressedEnter(ActionEvent event) {
+        try {
+            TelefoneService telefones = new TelefoneService();
+
+            List<Telefone> listaTelefones = telefones.buscarTodos();
+
+            boolean encontrado = false;
+
+            for (Telefone t : listaTelefones) {
+                if (txtTelefone.getText().equals(t.getNumero()) && t.getCliente() != null) {
+                    txtCliente.setText(t.getCliente().getNome());
+                    encontrado = true;
+                    break;
+
+                }
+            }
+
+            if (!encontrado) {
+
+                cadastro();
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    private void cadastro() {
+        try {
+            // Carrega o FXML normalmente
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/canes/cadastroCliente.fxml"));
+            Parent root = loader.load();
+
+            // Pega o controller criado pelo FXMLLoader
+            CadastroClienteController cadastroClienteController = loader.getController();
+
+            // 👉 Envia o valor do TextField atual
+            cadastroClienteController.setTelefoneInicial(txtTelefone.getText());
+
+            // Exibe a tela
+            Stage stage = new Stage();
+            stage.setTitle("Cadastro Cliente");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // ✅ Se quiser capturar os valores depois que fechar a tela:
+            stage.setOnHidden(event -> {
+                Cliente cliente = cadastroClienteController.getClienteSalvo();
+                Telefone telefone = cadastroClienteController.getTelefoneSalvo();
+                Endereco endereco = cadastroClienteController.getEnderecoSalvo();
+
+                if (cliente != null) {
+                    txtCliente.setText(cliente.getNome());
+                }
+                if (telefone != null) {
+                    txtTelefone.setText(telefone.getNumero());
+                }
+                if (endereco != null) {
+                    // ...
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void initialize() {
 
@@ -400,8 +473,8 @@ public class PedidoController {
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Produto");
-            stage.show();
-
+            // Mostra e espera fechar
+            stage.showAndWait();
         } catch (IOException e) {
 
             e.printStackTrace();
@@ -487,8 +560,7 @@ public class PedidoController {
             String codigo = txtCodigo.getText();
             String produt = "Calça";
             int quant = Integer.parseInt(txtQuant.getText());
-            double unitario = Double.parseDouble(
-                    txtValorUnitario.getText().replace(",", ".").replace("R$", "").replaceAll("[^0-9.,-]", ""));
+            double unitario = TextFieldUtil.converterParaDouble(txtValorUnitario.getText());
             double total = quant * unitario;
             tblExibirPedido p = new tblExibirPedido(item, codigo, produt, quant, unitario, total);
 

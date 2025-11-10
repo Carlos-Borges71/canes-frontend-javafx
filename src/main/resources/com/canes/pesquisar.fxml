@@ -134,11 +134,12 @@
                <children>
                   <TableView fx:id="tabelaCliente" layoutX="17.0" layoutY="66.0" prefHeight="292.0" prefWidth="1104.0">
                      <columns>
-                        <TableColumn fx:id="colNomeCliente" prefWidth="227.2000503540039" style="-fx-font-size: 16px" text="Nome" />
-                        <TableColumn fx:id="colTelefoneCliente" prefWidth="188.79998779296875" style="-fx-font-size: 16px" text="Telefone" />
-                        <TableColumn fx:id="colEnderecoCliente" prefWidth="277.60003662109375" style="-fx-font-size: 16px" text="Endereço" />
-                        <TableColumn fx:id="colPedidoCliente" prefWidth="234.39996337890625" style="-fx-font-size: 16px" text="Pedido" />
-                        <TableColumn fx:id="colDataCliente" prefWidth="169.60003662109375" style="-fx-font-size: 16px" text="Data" />
+                        <TableColumn fx:id="colCodigoCliente" prefWidth="86.39998626708984" style="-fx-font-size: 16px" text="Código" />
+                        <TableColumn fx:id="colNomeCliente" prefWidth="228.00003051757812" style="-fx-font-size: 16px" text="Nome" />
+                        <TableColumn fx:id="colTelefoneCliente" prefWidth="197.60003662109375" style="-fx-font-size: 16px" text="Telefone" />
+                        <TableColumn fx:id="colEnderecoCliente" prefWidth="220.0" style="-fx-font-size: 16px" text="Endereço" />
+                        <TableColumn fx:id="colPedidoCliente" prefWidth="199.99993896484375" style="-fx-font-size: 16px" text="Pedido" />
+                        <TableColumn fx:id="colDataCliente" prefWidth="167.1998291015625" style="-fx-font-size: 16px" text="Data" />
                      </columns>
                   </TableView>
                   <TextField fx:id="txtFiltrarCliente" layoutX="24.0" layoutY="14.0" prefHeight="37.0" prefWidth="323.0" promptText="Digite para filtrar" style="-fx-background-color: Transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;">
@@ -176,8 +177,8 @@
                         <TableColumn fx:id="colCnpj" prefWidth="172.0" style="-fx-font-size: 16px" text="Cnpj" />
                         <TableColumn fx:id="colNotaFiscalFornec" prefWidth="120.79998779296875" style="-fx-font-size: 16px" text="Nota fiscal" />
                         <TableColumn fx:id="colProdutoFornec" prefWidth="198.4000244140625" style="-fx-font-size: 16px" text="Produtos" />
-                        <TableColumn fx:id="colTelefoneFornec" prefWidth="175.199951171875" style="-fx-font-size: 16px" text="Telefone" />
-                        <TableColumn fx:id="colEnderecoFornec" prefWidth="357.5999755859375" style="-fx-font-size: 16px" text="Endereço" />
+                        <TableColumn fx:id="colTelefoneFornec" prefWidth="146.4000244140625" style="-fx-font-size: 16px" text="Telefone" />
+                        <TableColumn fx:id="colEnderecoFornec" prefWidth="183.9998779296875" style="-fx-font-size: 16px" text="Endereço" />
                      </columns>
                   </TableView>
                   <TextField fx:id="txtFiltrarFornec" layoutX="24.0" layoutY="14.0" prefHeight="37.0" prefWidth="323.0" promptText="Digite para filtrar" style="-fx-background-color: Transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;">

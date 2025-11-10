@@ -1,25 +1,31 @@
 package com.canes.model.dpo;
 
-import java.time.Instant;
+public class ClienteTabelaDPO {
 
-public class ClienteTelefoneDpo {
-
+    private Long id;
     private String nome;
     private String telefones;
-    private Instant instante;
-    private String enderecos;
+    private String instante;
+    private String endereco;
     private String pedidos;
     
     
 
-    public ClienteTelefoneDpo(String nome, Instant instante, String telefones, String enderecos, String pedidos) {
+    public ClienteTabelaDPO(Long id,String nome, String instante, String telefones, String endereco) {
+        this.id = id;
         this.nome = nome;
         this.telefones = telefones;
         this.instante = instante;
-        this.enderecos = enderecos;
-        this.pedidos = pedidos;
+        this.endereco = endereco;
+        //this.pedidos = pedidos;
         
     }
+    
+
+    public Long getId() {
+        return id;
+    }
+
 
     public String getNome() {
         return nome;
@@ -29,12 +35,12 @@ public class ClienteTelefoneDpo {
         return telefones;
     }
 
-    public Instant getInstante() {
+    public String getInstante() {
         return instante;
     }
 
-    public String getEnderecos() {
-        return enderecos;
+    public String getEndereco() {
+        return endereco;
     }
 
     public String getPedidos() {

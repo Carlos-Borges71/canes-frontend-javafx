@@ -1,23 +1,29 @@
 package com.canes.model;
 
+import java.util.List;
+
+
 public class Cliente {
 
     private Long id;
     private String nome;
     private String instante;
     private String telefones;
-    private String endereco;
-    private String pedidos;
-    private String operador;
+    private Endereco endereco;
+    private List<Pedido> pedidos;
+    private List<Usuario> usuarios;
 
     public Cliente() {
     }
 
-    public Cliente(String nome, String instante, String operador) {
+    public Cliente(Long id, String nome, String instante, Endereco endereco, String telefones) {
 
+        this.id = id;
         this.nome = nome;
         this.instante = instante;
-        this.operador = operador;
+        //this.operador = operador;
+        this.endereco = endereco;
+        this.telefones =telefones;
 
     }
 
@@ -49,17 +55,34 @@ public class Cliente {
         return telefones;
     }
 
-    public String getEndereco() {
+    public Endereco getEndereco() {
         return endereco;
     }
 
-    public String getPedidos() {
+    public List<Pedido> getPedidos() {
         return pedidos;
     }
 
-    public String getOperador() {
-        return operador;
+    public List<Usuario> getUsuarios() {
+        return usuarios;
     }
+
+    public void setTelefones(String telefones) {
+        this.telefones = telefones;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
+    
     
 
 }

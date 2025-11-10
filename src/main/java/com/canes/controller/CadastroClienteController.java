@@ -1,6 +1,9 @@
 package com.canes.controller;
 
 import java.net.URL;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -11,7 +14,15 @@ import com.canes.util.TextFieldUtil;
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Telefone;
+import com.canes.model.Usuario;
+import com.canes.model.dpo.ClienteDPO;
+import com.canes.services.ClienteService;
+import com.canes.services.EnderecoService;
+import com.canes.services.TelefoneService;
+import com.canes.services.UsuarioService;
 import com.canes.util.AlertUtil;
+
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,10 +39,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class CadastroClienteController implements Initializable{
+public class CadastroClienteController {
 
-    
-   
     @FXML
     private Button btnCadastrarClient;
 
@@ -76,13 +85,13 @@ public class CadastroClienteController implements Initializable{
     private Cliente clienteSalvo;
     private Telefone telefoneSalvo;
     private Endereco enderecoSalvo;
-  
+
+    private String telefoneInicial;
 
     @FXML
     void onclickLimparClient(ActionEvent event) {
 
-        
-        txtNomeClient.clear();        
+        txtNomeClient.clear();
         txtcelClient.clear();
         txtLogradouroClient.clear();
         txtNumeroClient.clear();
@@ -90,90 +99,136 @@ public class CadastroClienteController implements Initializable{
         txtCidadeClient.clear();
         txtEstadoClient.clear();
         txtCepClient.clear();
-        
 
     }
-   
-    public Cliente getClienteSalvo(){
+
+    public Cliente getClienteSalvo() {
         return clienteSalvo;
     }
 
-    public Endereco getEnderecoSalvo(){
+    public Endereco getEnderecoSalvo() {
         return enderecoSalvo;
     }
 
-    public Telefone getTelefoneSalvo(){
+    public Telefone getTelefoneSalvo() {
         return telefoneSalvo;
     }
 
-    private 
-    
+    Instant instante = Instant.now();
+
+    DateTimeFormatter formatter = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+            .withZone(ZoneOffset.UTC);
+
+    String instanteFormatado = formatter.format(instante);
+
     @FXML
     void onClickcadastrarClient(ActionEvent event) {
-        
-        clienteSalvo = new Cliente(txtNomeClient.getText(),null, null);
+
+        clienteSalvo = new Cliente(null, txtNomeClient.getText(), null, null, null);
         telefoneSalvo = new Telefone(txtcelClient.getText());
-        enderecoSalvo = new Endereco(txtLogradouroClient.getText(), txtNumeroClient.getText(), txtBairroClient.getText(), txtCidadeClient.getText(), txtEstadoClient.getText(), txtCepClient.getText());
+        enderecoSalvo = new Endereco(txtLogradouroClient.getText(), txtNumeroClient.getText(),
+                txtBairroClient.getText(), txtCidadeClient.getText(), txtEstadoClient.getText(),
+                txtCepClient.getText());
 
+        if (txtNomeClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo nome não pode ficar vazio!.");
+            return;
+        } else if (txtLogradouroClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Logradouro não \npode ficar vazio!.");
+            return;
+        } else if (txtNumeroClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo número não \npode ficar vazio!.");
+            return;
+        } else if (txtBairroClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Bairro não \npode ficar vazio!.");
+            return;
+        }
 
-        if(txtNomeClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro( "O campo nome não pode ficar vazio!." );
+        else if (txtCidadeClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Cidade não \npode ficar vazio!.");
             return;
         }
-        else if(txtLogradouroClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro( "O campo Logradouro não \npode ficar vazio!." );
-            return;
-        }
-        else if(txtNumeroClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro( "O campo número não \npode ficar vazio!." );
-            return;
-        }
-        else if(txtBairroClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Bairro não \npode ficar vazio!." );
-            return;
-        }
-        
-        else if(txtCidadeClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Cidade não \npode ficar vazio!." );
-            return;
-        }
-        
-        else if(txtEstadoClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Estado não \npode ficar vazio!." );
-            return;
-        }
-        
-        else if(txtCepClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo CEP não \npode ficar vazio!." );
-            return;
-        }
-        
-        else if(txtcelClient.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Celular não \npode ficar vazio!." );
-            return;
-        }
-        else {
-            AlertUtil.mostrarSucesso("Cadastro do Cliente " + txtNomeClient.getText() + "\nSalvo com sucesso");
 
-           Stage stage = (Stage)((javafx.scene.Node)event.getSource()).getScene().getWindow();
-           stage.close();
+        else if (txtEstadoClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Estado não \npode ficar vazio!.");
+            return;
+        }
+
+        else if (txtCepClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo CEP não \npode ficar vazio!.");
+            return;
+        }
+
+        else if (txtcelClient.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Celular não \npode ficar vazio!.");
+            return;
+        } else {
+
+            try {
+
+                String nome = txtNomeClient.getText();
+                String data = instanteFormatado;
+
+                ClienteDPO clientes = new ClienteDPO(
+                        nome,
+                        data
+
+                );
+
+                ClienteService clienteService = new ClienteService();
+                Long clienteId = clienteService.salvarCliente(clientes);
+
+                String numeroTel = txtcelClient.getText();
+                TelefoneService telefoneService = new TelefoneService();
+
+                telefoneService.salvarTelefone(numeroTel, null, clienteId, null);
+
+                if (campos != null) {
+                    for (TextField campo : campos) {
+
+                        String numeroTelSeg = campo.getText();
+                        telefoneService.salvarTelefone(numeroTelSeg, null, clienteId, null);
+                    }
+
+                }
+
+                String logradouro = txtLogradouroClient.getText();
+                String numero = txtNumeroClient.getText();
+                String bairro = txtBairroClient.getText();
+                String cidade = txtCidadeClient.getText();
+                String estado = txtEstadoClient.getText();
+                String cep = txtCepClient.getText();
+
+                EnderecoService enderecoService = new EnderecoService();
+                enderecoService.salvarEndereco(logradouro, numero, bairro, cidade, estado, cep, null, clienteId, null);
+
+                AlertUtil.mostrarSucesso("Cadastro do Cliente " + txtNomeClient.getText() + "\nSalvo com sucesso");
+
+                Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+                stage.close();
+
+            } catch (Exception e) {
+                AlertUtil.mostrarErro("Erro ao tentar salvar no banco\n" + e.getMessage());
+
+                System.out.println(e.getMessage());
+            }
+
         }
 
     }
-   
+
     @FXML
     void onClickTelClient(MouseEvent event) {
-         
+
         TextField newText = new TextField();
         newText.setMaxWidth(133);
         newText.setStyle("-fx-background-color: transparent;" + "-fx-border-color: fff;" +
-        "-fx-border-radius: 7;" + "-fx-text-fill: fff;" );
+                "-fx-border-radius: 7;" + "-fx-text-fill: fff;");
 
         campos.add(newText);
 
         MaskTextField.applyPhoneMask(newText);
-        
-  
 
         Image imgExcluir = new Image(getClass().getResourceAsStream("/com/canes/img/excluir.png"));
 
@@ -184,53 +239,45 @@ public class CadastroClienteController implements Initializable{
         img.setFitWidth(19);
         img.setPickOnBounds(true);
 
-        //Label labelRemover = new Label("Remover");
-        //labelRemover.setStyle("-fx-text-fill: red;" +
-        //    "-fx-font-size: 14;" +
-            //"-fx-font-weight: bold ;" +
-            //"-fx-alignment: center;" +
-        //    "-fx-padding: 4 0 0 0;" +
-        //    "-fx-cursor: hand; ");
+        // Label labelRemover = new Label("Remover");
+        // labelRemover.setStyle("-fx-text-fill: red;" +
+        // "-fx-font-size: 14;" +
+        // "-fx-font-weight: bold ;" +
+        // "-fx-alignment: center;" +
+        // "-fx-padding: 4 0 0 0;" +
+        // "-fx-cursor: hand; ");
 
-
-         HBox linha = new HBox(10, newText,img);
-         linha.setAlignment(Pos.CENTER);
+        HBox linha = new HBox(10, newText, img);
+        linha.setAlignment(Pos.CENTER);
 
         vBoxTelClient.setMargin(linha, new Insets(0, 0, 10, -10));
 
-         
-
-         img.setOnMouseClicked(e -> {
-            vBoxTelClient.getChildren().remove(linha);     
+        img.setOnMouseClicked(e -> {
+            vBoxTelClient.getChildren().remove(linha);
             campos.remove(newText);
         });
 
-         vBoxTelClient.getChildren().add(linha);
+        vBoxTelClient.getChildren().add(linha);
     }
-
 
     @FXML
     void onClickEnviar(MouseEvent event) {
 
     }
 
- 
-
     @FXML
     void onclickLimparExited(MouseEvent event) {
 
-        //HouverEffectUtil.apllyHouverSair(btnLimpar);
+        // HouverEffectUtil.apllyHouverSair(btnLimpar);
 
     }
 
     @FXML
     void onclickLimparEntered(ActionEvent event) {
 
-        //HouverEffectUtil.apllyHouverSobre(btnLimpar);
+        // HouverEffectUtil.apllyHouverSobre(btnLimpar);
 
     }
-
-   
 
     @FXML
     void onMouseEntered(MouseEvent event) {
@@ -242,21 +289,21 @@ public class CadastroClienteController implements Initializable{
 
     }
 
-   
+    public void setTelefoneInicial(String telefone) {
 
+        this.telefoneInicial = telefone;
 
+        Platform.runLater(() -> {
+            if (txtcelClient != null) {
+                
+            }
+        });
 
+    }
 
+    public void initialize() {
 
-    @Override
-    public void initialize(URL url, ResourceBundle resources) {
-
-
-        
-       
-       
-
-         btnCadastrarClient.setOnMouseEntered(e -> {
+        btnCadastrarClient.setOnMouseEntered(e -> {
             HouverEffectUtil.apllyHouverSobre(btnCadastrarClient);
         });
 
@@ -264,7 +311,7 @@ public class CadastroClienteController implements Initializable{
             HouverEffectUtil.apllyHouverSair(btnCadastrarClient);
         });
 
-         btnLimparClient.setOnMouseEntered(e -> {
+        btnLimparClient.setOnMouseEntered(e -> {
             HouverEffectUtil.apllyHouverSobre(btnLimparClient);
         });
 
@@ -272,26 +319,17 @@ public class CadastroClienteController implements Initializable{
             HouverEffectUtil.apllyHouverSair(btnLimparClient);
         });
 
-       
+        MaskTextField.applyPhoneMask(txtcelClient);
 
-        
+        MaskTextField.applyCepMask(txtCepClient);
 
-          MaskTextField.applyPhoneMask(txtcelClient);
+        MaskTextField.applyStateMask(txtEstadoClient);
 
-         MaskTextField.applyCepMask(txtCepClient);  
+        TextFieldUtil.aplicarCapitalizacao(txtNomeClient);
+        TextFieldUtil.aplicarCapitalizacao(txtLogradouroClient);
+        TextFieldUtil.aplicarCapitalizacao(txtBairroClient);
+        TextFieldUtil.aplicarCapitalizacao(txtCidadeClient);
 
-         MaskTextField.applyStateMask(txtEstadoClient);
-
-         TextFieldUtil.aplicarCapitalizacao(txtNomeClient);
-         TextFieldUtil.aplicarCapitalizacao(txtLogradouroClient);
-         TextFieldUtil.aplicarCapitalizacao(txtBairroClient);
-         TextFieldUtil.aplicarCapitalizacao(txtCidadeClient);
-
-      
- 
-        
     }
-
-   
 
 }

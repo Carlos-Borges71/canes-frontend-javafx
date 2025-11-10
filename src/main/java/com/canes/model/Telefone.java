@@ -9,6 +9,7 @@ public class Telefone {
     private String numero;
     private Usuario operador;
     private Fornecedor fornecedor;
+    private Cliente cliente;
 
     public Telefone() {
     }
@@ -41,6 +42,9 @@ public class Telefone {
     
     public Fornecedor getFornecedor(){
         return fornecedor;
+    }
+    public Cliente getCliente(){
+        return cliente;
     }
 
 }

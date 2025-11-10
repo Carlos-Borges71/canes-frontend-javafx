@@ -1,6 +1,7 @@
 package com.canes.services;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -8,6 +9,7 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 import com.canes.model.Cliente;
+import com.canes.model.dpo.ClienteDPO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -26,7 +28,7 @@ public class ClienteService {
         this.objectMapper = new ObjectMapper();
     }
 
-    public Long salvarCliente(Cliente cliente) throws IOException, InterruptedException {
+    public Long salvarCliente(ClienteDPO cliente) throws IOException, InterruptedException, ConnectException {
 
         String json = mapper.writeValueAsString(cliente);
 
@@ -48,7 +50,7 @@ public class ClienteService {
         }
     }
 
-    public List<Cliente> buscarTodos() throws IOException, InterruptedException {
+    public List<Cliente> buscarTodos() throws IOException, InterruptedException ,ConnectException{
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
                 .GET()

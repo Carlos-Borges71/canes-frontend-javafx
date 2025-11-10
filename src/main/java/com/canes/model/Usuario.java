@@ -1,5 +1,8 @@
 package com.canes.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Usuario {
 
     
@@ -12,7 +15,7 @@ public class Usuario {
     
     private String telefones;
     private String endereco;
- private String clientes;
+ private Cliente clientes;
  
    
 
@@ -94,7 +97,7 @@ public class Usuario {
         return endereco;
     }
      
-    public String getClientes(){
+    public Cliente getClientes(){
         return clientes;
     }
     
