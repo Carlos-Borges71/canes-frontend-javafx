@@ -1,6 +1,6 @@
-package com.canes.model;
+package com.canes.model.dpo;
 
-public class tblExibirPedido {
+public class PedidoDPO {
 
     private Integer item;
     private String codigo;
@@ -10,7 +10,7 @@ public class tblExibirPedido {
     private Double total;
 
 
-    public tblExibirPedido(Integer item, String codigo,  String produto, Integer quant, Double valorUnitario, Double total) {
+    public PedidoDPO(Integer item, String codigo,  String produto, Integer quant, Double valorUnitario, Double total) {
         this.item = item;
         this.codigo = codigo;
         this.produto = produto;

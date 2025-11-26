@@ -12,8 +12,7 @@ import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Produto;
 import com.canes.model.Telefone;
-import com.canes.model.tblExibirPedido;
-import com.canes.services.ClienteService;
+import com.canes.model.dpo.PedidoDPO;
 import com.canes.services.TelefoneService;
 import com.canes.util.MaskTextField;
 import com.canes.util.ScreenUtils;
@@ -48,21 +47,21 @@ public class PedidoController {
     private Produto produto;
 
     @FXML
-    private TableColumn<tblExibirPedido, Integer> colItem;
+    private TableColumn<PedidoDPO, Integer> colItem;
     @FXML
-    private TableColumn<tblExibirPedido, Integer> colCodigo;
+    private TableColumn<PedidoDPO, Integer> colCodigo;
 
     @FXML
-    private TableColumn<tblExibirPedido, String> colProduto;
+    private TableColumn<PedidoDPO, String> colProduto;
 
     @FXML
-    private TableColumn<tblExibirPedido, Integer> colQuant;
+    private TableColumn<PedidoDPO, Integer> colQuant;
 
     @FXML
-    private TableColumn<tblExibirPedido, Double> colTotal;
+    private TableColumn<PedidoDPO, Double> colTotal;
 
     @FXML
-    private TableColumn<tblExibirPedido, Double> colValorUnitario;
+    private TableColumn<PedidoDPO, Double> colValorUnitario;
 
     @FXML
     private Label lblDesconto;
@@ -74,7 +73,7 @@ public class PedidoController {
     private Label lblTotal;
 
     @FXML
-    private TableView<tblExibirPedido> tabelaPedido;
+    private TableView<PedidoDPO> tabelaPedido;
 
     @FXML
     private TextField txtCliente;
@@ -112,7 +111,7 @@ public class PedidoController {
     @FXML
     private AnchorPane root;
 
-    private ObservableList<tblExibirPedido> listaPedidos;
+    private ObservableList<PedidoDPO> listaPedidos;
 
     private DecimalFormat df;
 
@@ -212,7 +211,7 @@ public class PedidoController {
         // Zebrando a tabela
         tabelaPedido.setRowFactory(tv -> new TableRow<>() {
             @Override
-            protected void updateItem(tblExibirPedido item, boolean empty) {
+            protected void updateItem(PedidoDPO item, boolean empty) {
                 super.updateItem(item, empty);
                 if (item == null || empty) {
                     setStyle("");
@@ -278,7 +277,7 @@ public class PedidoController {
                 newScene.addEventFilter(KeyEvent.KEY_PRESSED, evet -> {
                     if (evet.getCode() == KeyCode.DELETE) {
 
-                        tblExibirPedido selecionado = tabelaPedido.getSelectionModel().getSelectedItem();
+                        PedidoDPO selecionado = tabelaPedido.getSelectionModel().getSelectedItem();
 
                         if (selecionado != null) {
                             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -562,7 +561,7 @@ public class PedidoController {
             int quant = Integer.parseInt(txtQuant.getText());
             double unitario = TextFieldUtil.converterParaDouble(txtValorUnitario.getText());
             double total = quant * unitario;
-            tblExibirPedido p = new tblExibirPedido(item, codigo, produt, quant, unitario, total);
+            PedidoDPO p = new PedidoDPO(item, codigo, produt, quant, unitario, total);
 
             tabelaPedido.getItems().add(p);
 
@@ -607,7 +606,7 @@ public class PedidoController {
             txtValorUnitario.setText(nf.format(unitario));
             double total = quant * unitario;
 
-            tblExibirPedido p = new tblExibirPedido(item, codigo, produt, quant, unitario, total);
+            PedidoDPO p = new PedidoDPO(item, codigo, produt, quant, unitario, total);
             tabelaPedido.getItems().add(p);
 
             tabelaPedido.scrollTo(p);
@@ -636,20 +635,20 @@ public class PedidoController {
     }
 
     private void totalQuant() {
-        int total = tabelaPedido.getItems().stream().mapToInt(tblExibirPedido::getQuant).sum();
+        int total = tabelaPedido.getItems().stream().mapToInt(PedidoDPO::getQuant).sum();
         String totalString = String.valueOf(total);
         lblQuant.setText(totalString);
     }
 
     private void totalValor() {
-        double total = tabelaPedido.getItems().stream().mapToDouble(tblExibirPedido::getTotal).sum();
+        double total = tabelaPedido.getItems().stream().mapToDouble(PedidoDPO::getTotal).sum();
         String totalString = String.valueOf(nf.format(total));
         lblTotal.setText(totalString.replace("R$", ""));
 
     }
 
     private void desconto() {
-        double total = tabelaPedido.getItems().stream().mapToDouble(tblExibirPedido::getTotal).sum();
+        double total = tabelaPedido.getItems().stream().mapToDouble(PedidoDPO::getTotal).sum();
         BigDecimal totalBig = BigDecimal.valueOf(total);
         BigDecimal desc = new BigDecimal(
                 lblDesconto.getText().replace("R$ ", "").replaceAll("[^\\d,\\.]", "").replace(",", ".").trim());
@@ -660,9 +659,9 @@ public class PedidoController {
 
     }
 
-    public void realColuna(TableColumn<tblExibirPedido, Double> coluna) {
+    public void realColuna(TableColumn<PedidoDPO, Double> coluna) {
 
-        coluna.setCellFactory(col -> new TableCell<tblExibirPedido, Double>() {
+        coluna.setCellFactory(col -> new TableCell<PedidoDPO, Double>() {
             @Override
             protected void updateItem(Double valor, boolean empty) {
                 super.updateItem(valor, empty);

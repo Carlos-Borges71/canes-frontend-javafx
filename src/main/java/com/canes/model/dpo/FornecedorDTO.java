@@ -1,4 +1,4 @@
-package com.canes.model;
+package com.canes.model.dpo;
 
 public class FornecedorDTO {
 

@@ -1,31 +1,25 @@
 package com.canes.controller;
 
-import java.net.URL;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
-
 import com.canes.util.HouverEffectUtil;
 import com.canes.util.MaskTextField;
 import com.canes.util.TextFieldUtil;
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Telefone;
-import com.canes.model.Usuario;
 import com.canes.model.dpo.ClienteDPO;
 import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
 import com.canes.services.TelefoneService;
-import com.canes.services.UsuarioService;
 import com.canes.util.AlertUtil;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -294,9 +288,10 @@ public class CadastroClienteController {
         this.telefoneInicial = telefone;
 
         Platform.runLater(() -> {
-            if (txtcelClient != null) {
-                
-            }
+            txtcelClient.setText(telefone);
+            // if (txtcelClient != null) {
+            //     txtcelClient.setText(telefone);
+            // }
         });
 
     }

@@ -10,7 +10,6 @@ import com.canes.util.MaskTextField;
 import com.canes.util.ScreenUtils;
 import com.canes.util.TextFieldUtil;
 import com.canes.util.UserSession;
-import com.canes.model.Cliente;
 import com.canes.model.Fornecedor;
 import com.canes.model.Usuario;
 import com.canes.model.dpo.ClienteDPO;

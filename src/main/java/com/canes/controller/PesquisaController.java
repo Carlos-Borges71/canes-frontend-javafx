@@ -11,13 +11,12 @@ import java.util.Objects;
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Fornecedor;
-import com.canes.model.FornecedorDTO;
 import com.canes.model.NotaFiscal;
 import com.canes.model.Produto;
 import com.canes.model.Telefone;
 import com.canes.model.Usuario;
-import com.canes.model.dpo.ClienteDPO;
 import com.canes.model.dpo.ClienteTabelaDPO;
+import com.canes.model.dpo.FornecedorDTO;
 import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
 import com.canes.services.FornecedorService;
@@ -29,7 +28,6 @@ import com.canes.util.HouverEffectUtil;
 import com.canes.util.ScreenUtils;
 
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -711,7 +709,7 @@ public class PesquisaController {
             }
 
         } catch (Exception e) {
-            // TODO: handle exception
+            
         }
 
         Label placeholderFornec = new Label("Nenhum Fornecedor encontrado!");
