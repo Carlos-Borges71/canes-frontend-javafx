@@ -192,8 +192,6 @@ public class PedidoController {
 
     public void initialize() {
 
-        System.out.println("Root:" + root);
-
         MaskTextField.valor(txtDesconto);
         MaskTextField.valor(txtSubTotal);
         MaskTextField.valor(txtTotalRecebido);
@@ -602,7 +600,7 @@ public class PedidoController {
             int quant = Integer.parseInt(txtQuant.getText());
             double unitario = produto.getValorVenda();
             String txtUnitario = String.valueOf(unitario);
-            System.out.println(txtUnitario);
+
             txtValorUnitario.setText(nf.format(unitario));
             double total = quant * unitario;
 
