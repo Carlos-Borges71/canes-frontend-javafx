@@ -26,6 +26,11 @@
                         <Font name="Verdana Bold" size="36.0" />
                      </font>
                   </Label>
+                  <Label fx:id="txtRelogio" layoutX="871.0" layoutY="19.0" prefHeight="26.0" prefWidth="123.0" text="Relogio" textFill="#123c6b">
+                     <font>
+                        <Font name="Verdana Bold" size="18.0" />
+                     </font>
+                  </Label>
                </children>
             </Pane>
             <Pane layoutX="15.0" layoutY="86.0" prefHeight="452.0" prefWidth="304.0" style="-fx-border-radius: 0; -fx-border-color: fff;">

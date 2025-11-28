@@ -15,6 +15,7 @@ import com.canes.model.Telefone;
 import com.canes.model.dpo.PedidoDPO;
 import com.canes.services.TelefoneService;
 import com.canes.util.MaskTextField;
+import com.canes.util.RelogioUtil;
 import com.canes.util.ScreenUtils;
 import com.canes.util.TextFieldUtil;
 
@@ -106,6 +107,9 @@ public class PedidoController {
     private TextField txtTroco;
 
     @FXML
+    private Label txtRelogio;
+
+    @FXML
     private TextField txtValorUnitario;
 
     @FXML
@@ -191,6 +195,8 @@ public class PedidoController {
     }
 
     public void initialize() {
+
+        RelogioUtil.iniciarRelogio(txtRelogio);
 
         MaskTextField.valor(txtDesconto);
         MaskTextField.valor(txtSubTotal);
@@ -640,8 +646,8 @@ public class PedidoController {
 
     private void totalValor() {
         double total = tabelaPedido.getItems().stream().mapToDouble(PedidoDPO::getTotal).sum();
-        String totalString = String.valueOf(nf.format(total));
-        lblTotal.setText(totalString.replace("R$", ""));
+        String totalString = String.valueOf(total);
+        lblTotal.setText(totalString);
 
     }
 
@@ -653,7 +659,7 @@ public class PedidoController {
 
         BigDecimal resultado = totalBig.subtract(desc);
 
-        lblTotal.setText(nf.format(resultado));
+        lblTotal.setText(nf.format(resultado).replace("R$",""));
 
     }
 

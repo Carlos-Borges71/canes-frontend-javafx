@@ -191,25 +191,21 @@ public class ProdutoController {
         // }
         // });
 
-        tabelaProduto.sceneProperty().addListener((obs, oldScene, newScene) -> {
+        tabelaProduto.addEventFilter(MouseEvent.MOUSE_CLICKED, evet -> {
+            if (evet.getClickCount() == 2) {
 
-            if (newScene != null) {
-                newScene.addEventFilter(MouseEvent.MOUSE_CLICKED, evet -> {
-                    if (evet.getClickCount() == 2) {
+                Produto selecionado = tabelaProduto.getSelectionModel().getSelectedItem();
 
-                        Produto selecionado = tabelaProduto.getSelectionModel().getSelectedItem();
+                if (selecionado != null && pedidoController != null) {
+                    pedidoController.receberProduto(selecionado);
 
-                        if (selecionado != null && pedidoController != null) {
-                            pedidoController.receberProduto(selecionado);
+                    Stage stage = (Stage) tabelaProduto.getScene().getWindow();
+                    stage.close();
 
-                            Stage stage = (Stage) tabelaProduto.getScene().getWindow();
-                            stage.close();
-
-                        }
-                    }
-                });
+                }
             }
         });
+
     }
 
     public void setPedidoController(PedidoController pedidoController) {
