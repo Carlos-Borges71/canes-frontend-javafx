@@ -25,6 +25,7 @@ import com.canes.services.ProdutoService;
 import com.canes.services.TelefoneService;
 import com.canes.services.UsuarioService;
 import com.canes.util.HouverEffectUtil;
+import com.canes.util.MoedaCorrenteCellFactory;
 import com.canes.util.ScreenUtils;
 
 import javafx.application.Platform;
@@ -898,17 +899,74 @@ public class PesquisaController {
         // });
         // });
 
-        // Label placeholderProduto = new Label("Nenhum Produto encontrado!");
-        // placeholderProduto.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
-        // tabelaProduto.setPlaceholder(placeholderProduto);
+        Label placeholderProduto = new Label("Nenhum Produto encontrado!");
+        placeholderProduto.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
+        tabelaProduto.setPlaceholder(placeholderProduto);
 
-        // tabelaProduto.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tabelaProduto.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        // colNomeProduto.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        // colCodigoProduto.setCellValueFactory(new PropertyValueFactory<>("codigo"));
-        // colEstoqueProduto.setCellValueFactory(new PropertyValueFactory<>("estoque"));
-        // colValorProduto.setCellValueFactory(new
-        // PropertyValueFactory<>("valorVenda"));
+        colNomeProduto.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        colCodigoProduto.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        colEstoqueProduto.setCellValueFactory(new PropertyValueFactory<>("estoque"));
+        colValorProduto.setCellValueFactory(new PropertyValueFactory<>("valorVenda"));
+        colValorProduto.setCellFactory(MoedaCorrenteCellFactory.forTableColumn());
+
+        try{
+            ProdutoService produtoService = new ProdutoService();
+            List<Produto> prod = produtoService.buscarTodos();
+
+            ObservableList<Produto> listaProdutos = FXCollections.observableArrayList();
+
+            List<Produto> produtosSeguros = prod != null ? prod : List.of();
+            
+           
+            
+
+            for(Produto p : produtosSeguros){ 
+
+                String codigo = p.getCodigo();
+                String nome = p != null && p.getNome() != null ? p.getNome() : "";
+                Integer estoque = p != null && p.getEstoque() != null ? p.getEstoque() : null;
+                Double valorCompra = p != null && p.getValorCompra() != null ? p.getValorCompra() : null;
+                Double valorVenda = p != null && p.getValorVenda() != null ? p.getValorVenda() : null;
+                Integer quantcompra = p != null && p.getQuantcompra() != null ? p.getQuantcompra() : null;
+
+             listaProdutos.add(new Produto(
+                        codigo,
+                        nome,
+                       estoque,
+                       valorCompra,
+                       valorVenda,
+                       quantcompra               
+
+
+                ));
+                listaFiltradaProduto = new FilteredList<>(listaProdutos, pr -> true);
+
+                tabelaProduto.setItems(listaFiltradaProduto);
+
+                txtFiltrarProduto.textProperty().addListener((obs, oldValue, newValue) -> {
+                    String filtro = newValue.toLowerCase();
+                    listaFiltradaProduto.setPredicate(produto -> {
+                        if (filtro == null || filtro.isEmpty()) {
+                            return true;
+                        }
+                        
+                        return produto.getNome().toLowerCase().contains(filtro) ||
+                                String.valueOf(produto.getId()).contains(filtro) ||
+                                String.valueOf(produto.getEstoque()).contains(filtro) ||
+                                String.valueOf(produto.getValorCompra()).contains(filtro) ||
+                                String.valueOf(produto.getValorVenda()).contains(filtro) ||
+                                String.valueOf(produto.getQuantcompra()).contains(filtro);
+
+                    });
+                });
+
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
         // listaProdutos = FXCollections.observableArrayList(
 

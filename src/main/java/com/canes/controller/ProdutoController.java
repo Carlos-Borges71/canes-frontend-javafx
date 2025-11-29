@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import com.canes.model.Produto;
 import com.canes.services.ProdutoService;
+import com.canes.util.MoedaCorrenteCellFactory;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -100,7 +101,8 @@ public class ProdutoController {
         colCodigoProduto.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         colEstoqueProduto.setCellValueFactory(new PropertyValueFactory<>("estoque"));
         colValorProduto.setCellValueFactory(new PropertyValueFactory<>("valorVenda"));
-        realColuna(colValorProduto);
+        colValorProduto.setCellFactory(MoedaCorrenteCellFactory.forTableColumn());
+        //realColuna(colValorProduto);
 
         try {
             ProdutoService produtoService = new ProdutoService();
