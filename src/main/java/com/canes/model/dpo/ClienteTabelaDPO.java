@@ -11,13 +11,13 @@ public class ClienteTabelaDPO {
     
     
 
-    public ClienteTabelaDPO(Long id,String nome, String instante, String telefones, String endereco) {
+    public ClienteTabelaDPO(Long id,String nome, String instante, String telefones, String endereco, String pedidos) {
         this.id = id;
         this.nome = nome;
         this.telefones = telefones;
         this.instante = instante;
         this.endereco = endereco;
-        //this.pedidos = pedidos;
+        this.pedidos = pedidos;
         
     }
     

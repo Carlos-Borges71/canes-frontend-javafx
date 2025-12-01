@@ -32,6 +32,7 @@ public class ProdutoController {
 
     @FXML
     private Button btnLimparProduto;
+    
 
     @FXML
     private TableColumn<Produto, String> colCodigoProduto;
@@ -118,7 +119,7 @@ public class ProdutoController {
             for (Produto p : produtosSeguros) {
 
                 // proteger campos de Fornecedor também
-                Long id = p.getId();
+                Integer id = p.getId();
                 String codigo = p != null && p.getCodigo() != null ? p.getCodigo() : "";
                 String nome = p != null && p.getNome() != null ? p.getNome() : "";
                 Integer estoque = p != null && p.getEstoque() != null ? p.getEstoque() : null;
@@ -127,12 +128,14 @@ public class ProdutoController {
                 Integer quant = p != null && p.getQuantcompra() != null ? p.getQuantcompra() : null;
 
                 listaProdutos.add(new Produto(
+                        id,
                         codigo,
                         nome,
                         estoque,
                         valorCompra,
                         valorVenda,
-                        quant
+                        quant,
+                        null
 
                 ));
 

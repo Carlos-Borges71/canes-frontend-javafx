@@ -12,6 +12,7 @@ import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Fornecedor;
 import com.canes.model.NotaFiscal;
+import com.canes.model.Pedido;
 import com.canes.model.Produto;
 import com.canes.model.Telefone;
 import com.canes.model.Usuario;
@@ -21,6 +22,7 @@ import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
 import com.canes.services.FornecedorService;
 import com.canes.services.NotaFiscalService;
+import com.canes.services.PedidoService;
 import com.canes.services.ProdutoService;
 import com.canes.services.TelefoneService;
 import com.canes.services.UsuarioService;
@@ -29,6 +31,7 @@ import com.canes.util.MoedaCorrenteCellFactory;
 import com.canes.util.ScreenUtils;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -110,10 +113,16 @@ public class PesquisaController {
     private TableColumn<Produto, String> colCodigoProduto;
 
     @FXML
+    private TableColumn<Produto, String> colFornecedorProduto;
+
+    @FXML
     private TableColumn<Produto, Double> colValorProduto;
 
     @FXML
     private TableColumn<Produto, Integer> colEstoqueProduto;
+
+    @FXML
+    private TableColumn<Produto, Integer> colIdProduto;
 
     @FXML
     private TableView<Usuario> tabelaUsuario;
@@ -203,7 +212,7 @@ public class PesquisaController {
 
     private DateTimeFormatter formatter;
 
-    private Fornecedor fornecedor;
+    private String fornecedor;
 
     private Cliente cliente;
     private Telefone telefone;
@@ -294,6 +303,7 @@ public class PesquisaController {
         lblFornec.setTextFill(Color.WHITE);
         paneProduto.setVisible(true);
         lblProduto.setTextFill(Color.RED);
+        txtFiltrarProduto.requestFocus();
     }
 
     @FXML
@@ -562,7 +572,7 @@ public class PesquisaController {
                         endereco
 
                 ));
-                System.out.println(u.getLogin() + u.getNome() + numerosTelefone + endereco + inst + codigo);
+                
                 listaFiltrada = new FilteredList<>(listaUsuarios, p -> true);
 
                 tabelaUsuario.setItems(listaFiltrada);
@@ -617,10 +627,12 @@ public class PesquisaController {
             ClienteService clienteService = new ClienteService();
             TelefoneService telefoneService = new TelefoneService();
             EnderecoService enderecoService = new EnderecoService();
+            PedidoService pedidoService = new PedidoService();
 
             List<Cliente> clientes = clienteService.buscarTodos();
             List<Telefone> telefones = telefoneService.buscarTodos();
             List<Endereco> end = enderecoService.buscarTodos();
+            List<Pedido> pedidos = pedidoService.buscarTodos();
 
             ObservableList<ClienteTabelaDPO> listaClientes = FXCollections.observableArrayList();
 
@@ -628,6 +640,7 @@ public class PesquisaController {
             List<Cliente> clientesSeguros = clientes != null ? clientes : List.of();
             List<Telefone> telefonesSeguros = telefones != null ? telefones : List.of();
             List<Endereco> enderecosSeguros = end != null ? end : List.of();
+            List<Pedido> pedidosSeguros = pedidos != null ? pedidos : List.of();
 
             for (Cliente c : clientesSeguros) {
 
@@ -667,7 +680,7 @@ public class PesquisaController {
 
                     endereco = String.format("%s, %s - %s, %s/%s (%s)",
                             logradouro, numero, bairro, cidade, estado, cep);
-                    System.out.println(ender.getCliente().getId());
+                   
                 } else {
                     endereco = "Cliente sem endereço";
 
@@ -680,12 +693,28 @@ public class PesquisaController {
                 Long codigo = c.getId();
                 String nome = c != null && c.getNome() != null ? c.getNome() : "";
 
+                Pedido ordes = pedidosSeguros.stream()
+                        .filter(o -> o != null && o.getCliente() != null && o.getCliente().getId().equals(clientId))
+                        .findFirst()
+                        .orElse(null);
+
+                String numeroPedido = "";
+                if (ordes != null) {
+                    Long id = ordes.getId() != null ? ordes.getId() : null;
+                    String status = ordes.getStatus() != null ? ordes.getStatus() : "";
+                    numeroPedido = String.format("%s, (%s)",
+                            id, status);
+                } else {
+                    numeroPedido = "Cliente sem pedido!";
+                }
+
                 listaClientes.add(new ClienteTabelaDPO(
                         codigo,
                         nome,
                         inst,
                         numerosTelefone,
-                        endereco));
+                        endereco,
+                        numeroPedido));
 
                 listaFiltradaCliente = new FilteredList<>(listaClientes, p -> true);
 
@@ -701,16 +730,17 @@ public class PesquisaController {
                         return cliente.getNome().toLowerCase().contains(filtro) ||
                                 cliente.getEndereco().toLowerCase().contains(filtro) ||
                                 cliente.getTelefones().contains(filtro) ||
+                                cliente.getPedidos().contains(filtro) ||
                                 String.valueOf(cliente.getId()).contains(filtro) ||
-                                cliente.getInstante().contains(filtro);
-                        // cliente.getPedidos().toLowerCase().contains(filtro);
+                                cliente.getInstante().contains(filtro) ||
+                                cliente.getPedidos().toLowerCase().contains(filtro);
 
                     });
                 });
             }
 
         } catch (Exception e) {
-            
+            System.out.println(e.getMessage());
         }
 
         Label placeholderFornec = new Label("Nenhum Fornecedor encontrado!");
@@ -726,24 +756,7 @@ public class PesquisaController {
         colCodigoFornec.setCellValueFactory(new PropertyValueFactory<>("id"));
         colProdutoFornec.setCellValueFactory(new PropertyValueFactory<>("produtos"));
         colNotaFiscalFornec.setCellValueFactory(new PropertyValueFactory<>("notasFiscais"));
-
-        // Fornecedor f1 = new Fornecedor("Cia Roupas", "11.111.222/0001-09",
-        // Arrays.asList(new Telefone(1, "(88) 88888-0000")));
-        // Fornecedor f2 = new Fornecedor("Roupas Cia", "22.333.444/0001-07",
-        // Arrays.asList(new Telefone(2, "(21) 22222-4444"), new Telefone(3, "(21)
-        // 99803-8215")));
-        // Fornecedor f3 = new Fornecedor("Poco Roupas", "66.111.222/0001-09",
-        // Arrays.asList(new Telefone(1, "(88) 80878-0000")));
-        // Fornecedor f4 = new Fornecedor("Rio Cia", "22.003.444/0001-07",
-        // Arrays.asList(new Telefone(2, "(21) 22222-8764"), new Telefone(3, "(21)
-        // 99803-8215")));
-
-        // for (Fornecedor f : Arrays.asList(f1, f2, f3, f4)) {
-        // for (Telefone t : f.getTelefone()) {
-        // listaFornecedor.add(new FornecedorTelefoneDpo(f.getEmpresa(), f.getCnpj(),
-        // t.getNumero()));
-        // }
-        // }
+       
 
         try {
             FornecedorService fornecedorService = new FornecedorService();
@@ -787,9 +800,7 @@ public class PesquisaController {
                     numerosTelefone = String.join(", ", telefonesUsuario);
                 }
 
-                // System.out.println("Fornecedor ID: " + f.getId());
-                // enderecosSeguros.forEach(e -> System.out.println("Produto: " + e.getId() + "
-                // | FornecedorID: " + e.getFornecedor().getId()));
+                
 
                 // Buscar todos os produtos do fornecedor
                 List<String> produtoFornecedor = produtosSeguros.stream()
@@ -844,7 +855,7 @@ public class PesquisaController {
                 String nome = f != null && f.getEmpresa() != null ? f.getEmpresa() : "";
                 String cnpj = f != null && f.getCnpjCpf() != null ? f.getCnpjCpf() : "";
 
-                System.out.println();
+               
                 listaFornecedores.add(new FornecedorDTO(
                         codigo,
                         nome,
@@ -885,19 +896,7 @@ public class PesquisaController {
 
         }
 
-        // txtFiltrarFornec.textProperty().addListener((obs, oldValue, newValue) -> {
-        // String filtro = newValue.toLowerCase();
-        // listaFiltradaFornecedor.setPredicate(fornecedor -> {
-        // if (filtro == null || filtro.isEmpty()) {
-        // return true;
-        // }
-
-        // return fornecedor.getEmpresa().toLowerCase().contains(filtro) ||
-        // fornecedor.getTelefone().toLowerCase().contains(filtro) ||
-        // fornecedor.getCnpj().toLowerCase().contains(filtro);
-
-        // });
-        // });
+       
 
         Label placeholderProduto = new Label("Nenhum Produto encontrado!");
         placeholderProduto.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
@@ -905,25 +904,25 @@ public class PesquisaController {
 
         tabelaProduto.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
+        colIdProduto.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNomeProduto.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colCodigoProduto.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         colEstoqueProduto.setCellValueFactory(new PropertyValueFactory<>("estoque"));
         colValorProduto.setCellValueFactory(new PropertyValueFactory<>("valorVenda"));
+        colFornecedorProduto.setCellValueFactory(new PropertyValueFactory<>("fornec"));
         colValorProduto.setCellFactory(MoedaCorrenteCellFactory.forTableColumn());
 
-        try{
+        try {
+
             ProdutoService produtoService = new ProdutoService();
             List<Produto> prod = produtoService.buscarTodos();
 
             ObservableList<Produto> listaProdutos = FXCollections.observableArrayList();
 
             List<Produto> produtosSeguros = prod != null ? prod : List.of();
-            
-           
-            
 
-            for(Produto p : produtosSeguros){ 
-
+            for (Produto p : produtosSeguros) {
+                Integer id = p.getId();
                 String codigo = p.getCodigo();
                 String nome = p != null && p.getNome() != null ? p.getNome() : "";
                 Integer estoque = p != null && p.getEstoque() != null ? p.getEstoque() : null;
@@ -931,14 +930,18 @@ public class PesquisaController {
                 Double valorVenda = p != null && p.getValorVenda() != null ? p.getValorVenda() : null;
                 Integer quantcompra = p != null && p.getQuantcompra() != null ? p.getQuantcompra() : null;
 
-             listaProdutos.add(new Produto(
+                String fornec = p != null && p.getFornecedor().getEmpresa() != null ? p.getFornecedor().getEmpresa()
+                        : "Sem fornecedor";
+
+                listaProdutos.add(new Produto(
+                        id,
                         codigo,
                         nome,
-                       estoque,
-                       valorCompra,
-                       valorVenda,
-                       quantcompra               
-
+                        estoque,
+                        valorCompra,
+                        valorVenda,
+                        quantcompra,
+                        fornec
 
                 ));
                 listaFiltradaProduto = new FilteredList<>(listaProdutos, pr -> true);
@@ -951,12 +954,13 @@ public class PesquisaController {
                         if (filtro == null || filtro.isEmpty()) {
                             return true;
                         }
-                        
+
                         return produto.getNome().toLowerCase().contains(filtro) ||
+                                produto.getFornec().toLowerCase().contains(filtro) ||
                                 String.valueOf(produto.getId()).contains(filtro) ||
                                 String.valueOf(produto.getEstoque()).contains(filtro) ||
-                                String.valueOf(produto.getValorCompra()).contains(filtro) ||
                                 String.valueOf(produto.getValorVenda()).contains(filtro) ||
+                                String.valueOf(produto.getCodigo()).contains(filtro) ||
                                 String.valueOf(produto.getQuantcompra()).contains(filtro);
 
                     });
@@ -964,56 +968,11 @@ public class PesquisaController {
 
             }
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // listaProdutos = FXCollections.observableArrayList(
-
-        // new Produto("876577777", "Vestido", 10, 123.9, 660.8, 10),
-        // new Produto("876577777", "Vestido", 10, 123.9, 660.8, 10),
-        // new Produto("8333564598", "Calça Jeans", 6, 123.9, 760.8, 6),
-        // new Produto("2457665598", "Vestido Rusti", 4, 123.9, 160.8, 4)
-
-        // );
-
-        // listaFiltradaProduto = new FilteredList<>(listaProdutos, p -> true);
-
-        // tabelaProduto.setItems(listaFiltradaProduto);
-
-        // txtFiltrarProduto.textProperty().addListener((obs, oldValue, newValue) -> {
-        // String filtro = newValue.toLowerCase();
-        // listaFiltradaProduto.setPredicate(produto -> {
-        // if (filtro == null || filtro.isEmpty()) {
-        // return true;
-        // }
-
-        // String codigoStr = String.valueOf(produto.getCodigo());
-        // String estoqueStr = String.valueOf(produto.getEstoque());
-        // String valorStr = String.valueOf(produto.getValorVenda());
-
-        // return produto.getNome().toLowerCase().contains(filtro) ||
-        // codigoStr.toLowerCase().contains(filtro) ||
-        // estoqueStr.toLowerCase().contains(filtro) ||
-        // valorStr.toLowerCase().contains(filtro);
-
-        // });
-        // });
-
-        // tabelaProduto.setOnMouseClicked(e -> {
-
-        // if (e.getClickCount() == 2) {
-        // Produto produtoSelecionado =
-        // tabelaProduto.getSelectionModel().getSelectedItem();
-
-        // if (produtoSelecionado != null) {
-        // System.out.println("Selecionado: Código " + produtoSelecionado.getId() + "
-        // Produto: "
-        // + produtoSelecionado.getNome());
-        // }
-
-        // }
-        // });
+        
 
     }
 

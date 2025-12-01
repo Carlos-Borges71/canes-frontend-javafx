@@ -7,13 +7,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Produto {
 
-    private Long id;
+    private Integer id;
     private String codigo;
     private String nome;
     private Integer estoque;
     private Double valorCompra;
     private Double valorVenda;
     private Integer quantcompra;
+    private String fornec;
 
     private Fornecedor fornecedor;
     private List<Pedido> pedidos;
@@ -21,8 +22,8 @@ public class Produto {
     public Produto() {
     }
 
-    public Produto(String codigo, String nome, Integer estoque, Double valorCompra,
-            Double valorVenda, Integer quantcompra) {
+    public Produto(Integer id,String codigo, String nome, Integer estoque, Double valorCompra,
+            Double valorVenda, Integer quantcompra, String fornec) {
 
         this.codigo = codigo;
         this.nome = nome;
@@ -30,14 +31,16 @@ public class Produto {
         this.valorCompra = valorCompra;
         this.valorVenda = valorVenda;
         this.quantcompra = quantcompra;
+        this.id = id;
+        this.fornec = fornec;
 
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -93,32 +96,15 @@ public class Produto {
         return fornecedor;
     }
 
+    
+
     public List<Pedido> getPedidos() {
         return pedidos;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
-    }
+   
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Produto other = (Produto) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        return true;
+    public String getFornec() {
+        return fornec;
     }
 }

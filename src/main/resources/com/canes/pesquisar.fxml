@@ -209,12 +209,14 @@
                   <Insets bottom="20.0" />
                </padding>
                <children>
-                  <TableView fx:id="tabelaProduto" layoutX="16.0" layoutY="66.0" prefHeight="292.0" prefWidth="888.0">
+                  <TableView fx:id="tabelaProduto" layoutX="16.0" layoutY="66.0" prefHeight="292.0" prefWidth="1104.0" style="-fx-background-position: center;">
                      <columns>
-                        <TableColumn fx:id="colNomeProduto" prefWidth="300.00001525878906" style="-fx-font-size: 16px" text="Produto" />
-                        <TableColumn fx:id="colCodigoProduto" prefWidth="208.80001831054688" style="-fx-font-size: 16px" text="Código" />
-                        <TableColumn fx:id="colValorProduto" prefWidth="161.5999755859375" style="-fx-font-size: 16px" text="Valor" />
-                        <TableColumn fx:id="colEstoqueProduto" prefWidth="195.199951171875" style="-fx-font-size: 16px" text="Quantidade Estoque" />
+                        <TableColumn fx:id="colIdProduto" prefWidth="104.80001831054688" style="-fx-font-size: 16px" text="ID" />
+                        <TableColumn fx:id="colCodigoProduto" prefWidth="190.39999389648438" style="-fx-font-size: 16px" text="Código" />
+                        <TableColumn fx:id="colNomeProduto" prefWidth="282.3999938964844" style="-fx-font-size: 16px;" text="Produto" />
+                        <TableColumn fx:id="colValorProduto" prefWidth="176.0" style="-fx-font-size: 16px" text="Valor" />
+                        <TableColumn fx:id="colEstoqueProduto" prefWidth="116.79998779296875" style="-fx-font-size: 16px" text="Estoque" />
+                        <TableColumn fx:id="colFornecedorProduto" prefWidth="225.59991455078125" style="-fx-font-size: 16px" text="Fornecedor" />
                      </columns>
                   </TableView>
                   <TextField fx:id="txtFiltrarProduto" layoutX="24.0" layoutY="14.0" prefHeight="37.0" prefWidth="323.0" promptText="Digite para filtrar" style="-fx-background-color: Transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;">
