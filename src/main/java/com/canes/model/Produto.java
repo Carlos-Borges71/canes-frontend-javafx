@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Produto {
 
-    private Integer id;
+    private Long id;
     private String codigo;
     private String nome;
     private Integer estoque;
@@ -22,7 +22,7 @@ public class Produto {
     public Produto() {
     }
 
-    public Produto(Integer id,String codigo, String nome, Integer estoque, Double valorCompra,
+    public Produto(Long id,String codigo, String nome, Integer estoque, Double valorCompra,
             Double valorVenda, Integer quantcompra, String fornec) {
 
         this.codigo = codigo;
@@ -36,11 +36,11 @@ public class Produto {
 
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

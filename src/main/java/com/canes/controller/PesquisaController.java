@@ -31,7 +31,6 @@ import com.canes.util.MoedaCorrenteCellFactory;
 import com.canes.util.ScreenUtils;
 
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -572,7 +571,7 @@ public class PesquisaController {
                         endereco
 
                 ));
-                
+
                 listaFiltrada = new FilteredList<>(listaUsuarios, p -> true);
 
                 tabelaUsuario.setItems(listaFiltrada);
@@ -656,6 +655,7 @@ public class PesquisaController {
 
                 // Montar string com todos os telefones
                 String numerosTelefone;
+
                 if (clients.isEmpty()) {
                     numerosTelefone = "Cliente sem telefone";
 
@@ -680,7 +680,7 @@ public class PesquisaController {
 
                     endereco = String.format("%s, %s - %s, %s/%s (%s)",
                             logradouro, numero, bairro, cidade, estado, cep);
-                   
+
                 } else {
                     endereco = "Cliente sem endereço";
 
@@ -689,23 +689,28 @@ public class PesquisaController {
                 String instant = c != null && c.getInstante() != null ? c.getInstante() : null;
                 String inst = formatter.format(Instant.parse(instant));
 
-                // proteger campos de Fornecedor também
                 Long codigo = c.getId();
                 String nome = c != null && c.getNome() != null ? c.getNome() : "";
 
-                Pedido ordes = pedidosSeguros.stream()
-                        .filter(o -> o != null && o.getCliente() != null && o.getCliente().getId().equals(clientId))
-                        .findFirst()
-                        .orElse(null);
+               
+                List<String> orders = pedidosSeguros.stream()
+                        .filter(p -> p != null && p.getCliente() != null
+                                && p.getCliente().getId().equals(clientId))
+                        .map(p -> {
+                            String idStr = (p.getId() != null) ? p.getId().toString() : "SEM ID";
+                            String statusStr = (p.getStatus() != null) ? p.getStatus() : "SEM STATUS";
+                            return idStr + " - (" + statusStr + ")"; // <-- aqui pega ID e Status
+                        })
+                        .toList();
 
-                String numeroPedido = "";
-                if (ordes != null) {
-                    Long id = ordes.getId() != null ? ordes.getId() : null;
-                    String status = ordes.getStatus() != null ? ordes.getStatus() : "";
-                    numeroPedido = String.format("%s, (%s)",
-                            id, status);
+                // Montar string com todos os telefones
+                String numeroPedido;
+
+                if (orders.isEmpty()) {
+                    numeroPedido = "Cliente sem pedido";
+
                 } else {
-                    numeroPedido = "Cliente sem pedido!";
+                    numeroPedido = String.join(" , ", orders);
                 }
 
                 listaClientes.add(new ClienteTabelaDPO(
@@ -756,7 +761,6 @@ public class PesquisaController {
         colCodigoFornec.setCellValueFactory(new PropertyValueFactory<>("id"));
         colProdutoFornec.setCellValueFactory(new PropertyValueFactory<>("produtos"));
         colNotaFiscalFornec.setCellValueFactory(new PropertyValueFactory<>("notasFiscais"));
-       
 
         try {
             FornecedorService fornecedorService = new FornecedorService();
@@ -799,8 +803,6 @@ public class PesquisaController {
                 } else {
                     numerosTelefone = String.join(", ", telefonesUsuario);
                 }
-
-                
 
                 // Buscar todos os produtos do fornecedor
                 List<String> produtoFornecedor = produtosSeguros.stream()
@@ -855,7 +857,6 @@ public class PesquisaController {
                 String nome = f != null && f.getEmpresa() != null ? f.getEmpresa() : "";
                 String cnpj = f != null && f.getCnpjCpf() != null ? f.getCnpjCpf() : "";
 
-               
                 listaFornecedores.add(new FornecedorDTO(
                         codigo,
                         nome,
@@ -896,8 +897,6 @@ public class PesquisaController {
 
         }
 
-       
-
         Label placeholderProduto = new Label("Nenhum Produto encontrado!");
         placeholderProduto.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
         tabelaProduto.setPlaceholder(placeholderProduto);
@@ -922,7 +921,7 @@ public class PesquisaController {
             List<Produto> produtosSeguros = prod != null ? prod : List.of();
 
             for (Produto p : produtosSeguros) {
-                Integer id = p.getId();
+                Long id = p.getId();
                 String codigo = p.getCodigo();
                 String nome = p != null && p.getNome() != null ? p.getNome() : "";
                 Integer estoque = p != null && p.getEstoque() != null ? p.getEstoque() : null;
@@ -971,8 +970,6 @@ public class PesquisaController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        
 
     }
 

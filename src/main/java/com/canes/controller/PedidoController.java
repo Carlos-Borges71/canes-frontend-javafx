@@ -5,15 +5,22 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
+import com.canes.model.Pedido;
+import com.canes.model.PedidoProduto;
 import com.canes.model.Produto;
 import com.canes.model.Telefone;
 import com.canes.model.dpo.PedidoDPO;
+import com.canes.services.ClienteService;
+import com.canes.services.PedidoService;
+import com.canes.services.ProdutoService;
 import com.canes.services.TelefoneService;
+import com.canes.util.AlertUtil;
 import com.canes.util.MaskTextField;
 import com.canes.util.RelogioUtil;
 import com.canes.util.ScreenUtils;
@@ -119,6 +126,11 @@ public class PedidoController {
 
     private DecimalFormat df;
 
+    private Long idCliente;
+
+    private ClienteService clienteService;
+    private TelefoneService telefoneService;
+
     // private CadastroController cadastroController;
 
     NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
@@ -170,6 +182,7 @@ public class PedidoController {
             Stage stage = new Stage();
             stage.setTitle("Cadastro Cliente");
             stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // bloqueia a tela principal até fechar
             stage.show();
 
             // ✅ Se quiser capturar os valores depois que fechar a tela:
@@ -195,6 +208,17 @@ public class PedidoController {
     }
 
     public void initialize() {
+
+        colItem.setCellValueFactory(new PropertyValueFactory<>("item"));
+        colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        colProduto.setCellValueFactory(new PropertyValueFactory<>("produto"));
+        colQuant.setCellValueFactory(new PropertyValueFactory<>("quant"));
+
+        colValorUnitario.setCellValueFactory(new PropertyValueFactory<>("valorUnitario"));
+        realColuna(colValorUnitario);
+
+        colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+        realColuna(colTotal);
 
         RelogioUtil.iniciarRelogio(txtRelogio);
 
@@ -369,12 +393,52 @@ public class PedidoController {
                                         String formaEscolhida = ((FormaPagamentoController) controller)
                                                 .getFormaSelecionada();
 
-                                        // Recupera a escolha feita
+                                        try {
 
-                                        if (formaEscolhida != null) {
-                                            txtPagamento.setText(formaEscolhida);
+                                            ClienteService clienteService = new ClienteService();
+                                            TelefoneService telefoneService = new TelefoneService();
 
+                                            List<Cliente> todosCliente = clienteService.buscarTodos();
+                                            List<Telefone> todosTelefones = telefoneService.buscarTodos();
+
+                                            String telefoneDigitado = txtTelefone.getText();
+
+                                            for (Cliente c : todosCliente) {
+                                                for (Telefone t : todosTelefones) {
+
+                                                    // Evita NullPointerException
+                                                    if (t.getCliente() == null || t.getCliente().getId() == null) {
+                                                        continue;
+                                                    }
+
+                                                    // Confere se telefone pertence ao cliente
+                                                    if (c.getId().equals(t.getCliente().getId())) {
+
+                                                        // Confere se número é igual
+                                                        if (telefoneDigitado.equals(t.getNumero())) {
+                                                            Long idCliente = c.getId();
+
+                                                            List<PedidoDPO> produtosTabela = new ArrayList<>(
+                                                                    tabelaPedido.getItems());
+
+                                                            formaPagamentoController.receberDados(idCliente, lblTotal,
+                                                                    txtStatus, produtosTabela);
+
+                                                            // Recupera a escolha feita
+
+                                                            if (formaEscolhida != null) {
+                                                                txtPagamento.setText(formaEscolhida);
+
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        } catch (Exception e) {
+                                            System.out.println(e.getMessage());
                                         }
+
                                     }
                                 });
                     } catch (IOException e) {
@@ -438,6 +502,7 @@ public class PedidoController {
                                         Telefone telefone = ((CadastroClienteController) controller).getTelefoneSalvo();
                                         Endereco enderco = ((CadastroClienteController) controller).getEnderecoSalvo();
                                         System.out.println(cliente.getNome());
+                                        idCliente = cliente.getId();
 
                                         if (cliente != null) {
                                             txtCliente.setText(cliente.getNome());
@@ -546,60 +611,94 @@ public class PedidoController {
     @FXML
     void onEnterAction(ActionEvent event) {
         try {
-            colItem.setCellValueFactory(new PropertyValueFactory<>("item"));
+            // colItem.setCellValueFactory(new PropertyValueFactory<>("item"));
 
-            colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+            // colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
 
-            colProduto.setCellValueFactory(new PropertyValueFactory<>("produto"));
+            // colProduto.setCellValueFactory(new PropertyValueFactory<>("produto"));
 
-            colQuant.setCellValueFactory(new PropertyValueFactory<>("quant"));
+            // colQuant.setCellValueFactory(new PropertyValueFactory<>("quant"));
 
-            colValorUnitario.setCellValueFactory(new PropertyValueFactory<>("valorUnitario"));
-            realColuna(colValorUnitario);
+            // colValorUnitario.setCellValueFactory(new
+            // PropertyValueFactory<>("valorUnitario"));
+            // realColuna(colValorUnitario);
 
-            colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
-            realColuna(colTotal);
+            // colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+            // realColuna(colTotal);
+
+            // Configura colunas somente 1 vez (não dentro do método!)
+            // configurarColunasSeNecessario();
+
+            ProdutoService produtoService = new ProdutoService();
+            List<Produto> produtos = produtoService.buscarTodos();
 
             String codigo = txtCodigo.getText();
-            String produt = "Calça";
+            Produto encontrado = null;
+
+            // Busca o produto certo
+            for (Produto p : produtos) {
+                if (codigo.equals(p.getCodigo())) {
+                    encontrado = p;
+                    break;
+                }
+            }
+
+            // Se não encontrou, mostra erro e sai
+            if (encontrado == null) {
+                AlertUtil.mostrarErro("Código não cadastrado!");
+                txtCodigo.setText("");
+                return;
+            }
+
+            // =============================
+            // PRODUTO OK
+            // =============================
+
+            String vlrVenda = String.format(new Locale("pt", "BR"), "%.2f", encontrado.getValorVenda());
+            txtValorUnitario.setText(vlrVenda);
+           
+
+            String nomeProduto = encontrado.getNome();
             int quant = Integer.parseInt(txtQuant.getText());
-            double unitario = TextFieldUtil.converterParaDouble(txtValorUnitario.getText());
-            double total = quant * unitario;
-            PedidoDPO p = new PedidoDPO(item, codigo, produt, quant, unitario, total);
+            double valorUnit = encontrado.getValorVenda();
+            double total = quant * valorUnit;
 
-            tabelaPedido.getItems().add(p);
+            PedidoDPO pe = new PedidoDPO(item, codigo, nomeProduto, quant, valorUnit, total);
 
-            tabelaPedido.scrollTo(p);
+            tabelaPedido.getItems().add(pe);
+            tabelaPedido.scrollTo(pe);
 
-            item += 1;
+            item++;
 
             totalQuant();
             totalValor();
             desconto();
 
             txtCodigo.clear();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertUtil.mostrarErro("Erro ao processar: " + e.getMessage());
+
+        }
     }
 
     public void receberProduto(Produto produto) {
         if (produto != null) {
 
-            colItem.setCellValueFactory(new PropertyValueFactory<>("item"));
+            // colItem.setCellValueFactory(new PropertyValueFactory<>("item"));
 
-            colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+            // colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
 
-            colProduto.setCellValueFactory(new PropertyValueFactory<>("produto"));
+            // colProduto.setCellValueFactory(new PropertyValueFactory<>("produto"));
 
-            colQuant.setCellValueFactory(new PropertyValueFactory<>("quant"));
+            // colQuant.setCellValueFactory(new PropertyValueFactory<>("quant"));
 
-            colValorUnitario.setCellValueFactory(new PropertyValueFactory<>("valorUnitario"));
-            realColuna(colValorUnitario);
+            // colValorUnitario.setCellValueFactory(new PropertyValueFactory<>("valorUnitario"));
+            // realColuna(colValorUnitario);
 
-            colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
-            realColuna(colTotal);
+            // colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+            // realColuna(colTotal);
 
             String codigo = produto.getCodigo();
             String produt = produto.getNome();
@@ -659,7 +758,7 @@ public class PedidoController {
 
         BigDecimal resultado = totalBig.subtract(desc);
 
-        lblTotal.setText(nf.format(resultado).replace("R$",""));
+        lblTotal.setText(nf.format(resultado).replace("R$", ""));
 
     }
 

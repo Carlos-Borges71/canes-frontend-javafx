@@ -8,9 +8,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
-import com.canes.model.Cliente;
+import org.json.JSONObject;
+
 import com.canes.model.Pedido;
-import com.canes.model.dpo.ClienteDPO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,27 +29,43 @@ public class PedidoService {
         this.objectMapper = new ObjectMapper();
     }
 
-    public Long salvarPedido(Pedido pedido) throws IOException, InterruptedException, ConnectException {
+    public static Long salvarPedido(String statusPedido, Double valor, String data, Long clienteId)
+        throws IOException, InterruptedException {
 
-        String json = mapper.writeValueAsString(pedido);
+    String json = "{\n" +
+            "  \"status\": \"" + statusPedido + "\"";
+    json += ", \"valor\": " + valor;
+    json += ", \"data\": \"" + data + "\"";
+    json += ", \"cliente\": {\"id\": " + clienteId + "}";
+    json += "\n}";
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
+    HttpClient client = HttpClient.newHttpClient();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(BASE_URL))
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(json))
+            .build();
 
-        if (response.statusCode() == 200 || response.statusCode() == 201) {
-            Pedido pedidoSalvo = mapper.readValue(response.body(), Pedido.class);
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            return pedidoSalvo.getId();
-        } else {
-            System.out.println(json + response);
-            throw new RuntimeException("Erro ao salvar cliente: " + response.body());
-        }
+    int status = response.statusCode();
+
+    if (status == 201 || status == 200) {
+        // Extrai o ID retornado
+        JSONObject obj = new JSONObject(response.body());
+        Long idPedido = obj.getLong("id");
+
+        //System.out.println("Pedido salvo com ID: " + idPedido);
+
+        return idPedido;
+    } else {
+        System.out.println("Erro ao salvar pedido: " + status);
+        System.out.println("Resposta: " + response.body());
+        return null;
     }
+}
+
 
     public List<Pedido> buscarTodos() throws IOException, InterruptedException ,ConnectException{
         HttpRequest request = HttpRequest.newBuilder()

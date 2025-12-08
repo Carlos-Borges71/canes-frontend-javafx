@@ -74,14 +74,14 @@
                   <Font name="Verdana Bold" size="30.0" />
                </font>
             </TextField>
-            <TextField fx:id="txtTelefone" alignment="BOTTOM_CENTER" layoutX="232.0" layoutY="548.0" onAction="#pressedEnter" prefHeight="78.0" prefWidth="203.0" style="-fx-background-radius: 20;" text="(21) 99999-5555">
+            <TextField fx:id="txtTelefone" alignment="BOTTOM_CENTER" layoutX="232.0" layoutY="548.0" onAction="#pressedEnter" prefHeight="78.0" prefWidth="203.0" style="-fx-background-radius: 20;">
                <font>
                   <Font name="Verdana Bold" size="18.0" />
                </font>
                <padding>
                   <Insets bottom="15.0" />
                </padding></TextField>
-            <TextField fx:id="txtValorUnitario" alignment="BASELINE_RIGHT" editable="false" focusTraversable="false" layoutX="353.0" layoutY="203.0" prefHeight="90.0" prefWidth="286.0" style="-fx-background-radius: 20;" text="R$ 120,00">
+            <TextField fx:id="txtValorUnitario" alignment="BASELINE_RIGHT" editable="false" focusTraversable="false" layoutX="353.0" layoutY="203.0" prefHeight="90.0" prefWidth="286.0" style="-fx-background-radius: 20;">
                <font>
                   <Font name="Verdana Bold" size="30.0" />
                </font>
@@ -174,7 +174,7 @@
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <TextField fx:id="txtCliente" alignment="BASELINE_LEFT" editable="false" focusTraversable="false" layoutX="14.0" layoutY="549.0" prefHeight="78.0" prefWidth="203.0" style="-fx-background-radius: 20;" text="Catarina Soares">
+            <TextField fx:id="txtCliente" alignment="BASELINE_LEFT" editable="false" focusTraversable="false" layoutX="14.0" layoutY="549.0" prefHeight="78.0" prefWidth="203.0" style="-fx-background-radius: 20;">
                <padding>
                   <Insets bottom="15.0" left="5.0" />
                </padding>
@@ -265,7 +265,7 @@
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <TextField fx:id="txtPagamento" alignment="BOTTOM_CENTER" editable="false" focusTraversable="false" layoutX="447.0" layoutY="548.0" prefHeight="78.0" prefWidth="203.0" style="-fx-background-radius: 20;" text="Visa Electron">
+            <TextField fx:id="txtPagamento" alignment="BOTTOM_CENTER" editable="false" focusTraversable="false" layoutX="447.0" layoutY="548.0" prefHeight="78.0" prefWidth="203.0" style="-fx-background-radius: 20;">
                <font>
                   <Font name="Verdana Bold" size="18.0" />
                </font>
@@ -297,7 +297,7 @@
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <TextField fx:id="txtStatus" alignment="BOTTOM_CENTER" editable="false" focusTraversable="false" layoutX="1031.0" layoutY="10.0" prefHeight="63.0" prefWidth="284.0" style="-fx-background-radius: 20;" text="AGUARDANDO PAGAMENTO">
+            <TextField fx:id="txtStatus" alignment="BOTTOM_CENTER" editable="false" focusTraversable="false" layoutX="1031.0" layoutY="10.0" prefHeight="63.0" prefWidth="284.0" style="-fx-background-radius: 20;">
                <padding>
                   <Insets bottom="10.0" />
                </padding>

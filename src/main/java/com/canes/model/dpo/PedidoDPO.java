@@ -9,6 +9,9 @@ public class PedidoDPO {
     private Double valorUnitario;
     private Double total;
 
+    public PedidoDPO(){
+        
+    }
 
     public PedidoDPO(Integer item, String codigo,  String produto, Integer quant, Double valorUnitario, Double total) {
         this.item = item;

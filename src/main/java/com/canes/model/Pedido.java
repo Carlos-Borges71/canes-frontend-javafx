@@ -1,6 +1,5 @@
 package com.canes.model;
 
-import java.time.Instant;
 import java.util.List;
 
 
@@ -12,12 +11,14 @@ public class Pedido {
     private Double valor;
     private String data;
     private Cliente cliente;
+    
     private List<Pagamento> pagamentos;
     private List<PedidoProduto> pedido;
 
     public Pedido() {
     }
 
+   
     public Pedido(Long id, String status,  Double valor, String data, List<Produto> produtos, List<Pagamento> pagamentos,List<PedidoProduto> pedido) {
         this.id = id;
         this.status = status;
@@ -27,7 +28,8 @@ public class Pedido {
         this.pagamentos = pagamentos;
         this.pedido = pedido;
     }
-
+    
+   
     public Long getId() {
         return id;
     }

@@ -6,15 +6,17 @@ public class Pagamento {
     private String data;
     private String tipo;
     private Double valorPagamento;
+    private Pedido pedido;
 
     public Pagamento(){
 
     }
 
-    public Pagamento(Long id, String data, String tipo, Double valorPagamento) {
+    public Pagamento(Long id, String data, String tipo, Double valorPagamento, Pedido pedido) {
         this.id = id;
         this.data = data;
         this.valorPagamento = valorPagamento;
+        this.pedido = pedido;
     }
 
     public Long getId() {
@@ -47,6 +49,14 @@ public class Pagamento {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
     
 

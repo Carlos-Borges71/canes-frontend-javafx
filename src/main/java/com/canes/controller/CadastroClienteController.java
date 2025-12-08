@@ -16,6 +16,7 @@ import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
 import com.canes.services.TelefoneService;
 import com.canes.util.AlertUtil;
+import com.canes.util.BuscaCep;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -73,6 +74,9 @@ public class CadastroClienteController {
 
     @FXML
     private VBox vBoxTelClient;
+
+    @FXML
+    private ImageView btnSearch;
 
     private List<TextField> campos = new ArrayList<>();
 
@@ -290,9 +294,32 @@ public class CadastroClienteController {
         Platform.runLater(() -> {
             txtcelClient.setText(telefone);
             // if (txtcelClient != null) {
-            //     txtcelClient.setText(telefone);
+            // txtcelClient.setText(telefone);
             // }
         });
+
+    }
+
+    @FXML
+    void onClickedSearch(MouseEvent event) {
+
+        try {
+
+            String cep = txtCepClient.getText().replaceAll("-", "");
+            Endereco end = BuscaCep.buscar(cep);
+            if(end != null){ 
+            txtLogradouroClient.setText(end.getLogradouro());
+            txtBairroClient.setText(end.getBairro());
+            txtCidadeClient.setText(end.getCidade());
+            txtEstadoClient.setText(end.getEstado());
+
+            }else{
+                AlertUtil.mostrarErro("Cep não encontrado!");
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
     }
 

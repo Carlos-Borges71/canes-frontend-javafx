@@ -119,7 +119,7 @@ public class ProdutoController {
             for (Produto p : produtosSeguros) {
 
                 // proteger campos de Fornecedor também
-                Integer id = p.getId();
+                Long id = p.getId();
                 String codigo = p != null && p.getCodigo() != null ? p.getCodigo() : "";
                 String nome = p != null && p.getNome() != null ? p.getNome() : "";
                 Integer estoque = p != null && p.getEstoque() != null ? p.getEstoque() : null;
