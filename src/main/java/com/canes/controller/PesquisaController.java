@@ -1,5 +1,6 @@
 package com.canes.controller;
 
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -26,6 +27,7 @@ import com.canes.services.PedidoService;
 import com.canes.services.ProdutoService;
 import com.canes.services.TelefoneService;
 import com.canes.services.UsuarioService;
+import com.canes.util.AlertUtil;
 import com.canes.util.HouverEffectUtil;
 import com.canes.util.MoedaCorrenteCellFactory;
 import com.canes.util.ScreenUtils;
@@ -596,9 +598,20 @@ public class PesquisaController {
 
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (java.net.UnknownHostException e) {
+            AlertUtil.mostrarErro("Sem conexão com a internet! Verifique sua rede.");
 
+        } catch (java.net.ConnectException e) {
+            AlertUtil.mostrarErro("Não foi possível conectar ao servidor.");
+            
+        } catch (java.net.SocketTimeoutException e) {
+            AlertUtil.mostrarErro("A busca demorou muito (timeout). Tente novamente.");
+
+        } catch (IOException e) {
+            AlertUtil.mostrarErro("Erro de comunicação com o servidor.");
+
+        } catch (Exception e) {
+            AlertUtil.mostrarErro("Ocorreu um erro inesperado: " + e.getMessage());
         }
 
         Label placeholderCliente = new Label("Nenhum Cliente encontrado!");

@@ -31,8 +31,8 @@ public class ProdutoService {
 
     }
     
-    public static void salvarProduto(String codigo, String nome, Integer estoque, Double valorCompra, Double valorVenda,
-            Integer quantcompra, Long fornecedorId) throws Exception {
+    public static void salvarProduto(String codigo, String nome, Double valorCompra, Double valorVenda,
+            Integer quantcompra, Long fornecedorId, Long notaFiscalId) throws Exception {
 
        
         String json = String.format("""
@@ -40,14 +40,14 @@ public class ProdutoService {
 
         "codigo": "%s",
         "nome": "%s",
-        "estoque": "%s",
         "valorCompra": "%s",
         "valorVenda": "%s",
         "quantcompra": "%s",
-        "fornecedor": {"id": %d}
+        "fornecedor": {"id": %d},
+        "nota": {"id": %d}
         }
         """,
-        codigo, nome, estoque, valorCompra, valorVenda, quantcompra, fornecedorId);
+        codigo, nome,valorCompra, valorVenda, quantcompra, fornecedorId, notaFiscalId);
 
         HttpClient client = HttpClient.newHttpClient();
 

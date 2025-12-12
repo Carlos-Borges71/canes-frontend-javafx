@@ -13,11 +13,11 @@ public class NotaFiscal {
         
     }
 
-    public NotaFiscal(Integer notaFiscal, String data, Fornecedor fornecedor, List<Produto> produtos) {
+    public NotaFiscal(Integer notaFiscal, String data, Fornecedor fornecedor) {
         this.notaFiscal = notaFiscal;
         this.data = data;
         this.fornecedor = fornecedor;
-        this.produtos = produtos;
+        
     }
 
     public long getId() {

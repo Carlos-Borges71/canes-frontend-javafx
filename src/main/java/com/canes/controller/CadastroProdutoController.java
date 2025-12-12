@@ -50,12 +50,14 @@ public class CadastroProdutoController {
     private VBox vBoxTelClient;
 
     private Long fornecedorId;
+    private long notaFiscalId;
 
     @FXML
     private Label lblFornecedor;
 
-    public void setFornecedor(Long fornecedorId) {
+    public void setFornecedor(Long fornecedorId, Long notaFiscalId) {
         this.fornecedorId = fornecedorId;
+        this.notaFiscalId = notaFiscalId;
 
         // Exibe o nome do fornecedor na tela, se quiser
     }
@@ -98,12 +100,11 @@ public class CadastroProdutoController {
         //Double.parseDouble(txtValorVenda.getText().replaceAll("[^\\d,\\.]", "").replace(".", "").replace(",", "."));
         
         Integer quantCompra = Integer.parseInt(txtQuantidade.getText());
-        Integer estoque = 5;
-        System.out.println(codigo + nome + valorCompra + valorVenda + quantCompra);
+        
         
         ProdutoService produtoService = new ProdutoService();
 
-        produtoService.salvarProduto(codigo, nome, estoque, valorCompra, valorVenda, quantCompra, fornecedorId);
+        produtoService.salvarProduto(codigo, nome, valorCompra, valorVenda, quantCompra, fornecedorId, notaFiscalId);
 
         txtProduto.clear();
         txtCodigo.clear();

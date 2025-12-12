@@ -31,42 +31,44 @@ public class NotaFiscalService {
 
     }
 
-    public static void salvarNotaFiscal(Integer notafiscal, String data, Long fornecedorId) throws Exception {
+   public static Long salvarNotaFiscal(Integer notafiscal, String data, Long fornecedorId) throws Exception {
 
-        String json = String.format("""
-                {
-
+    String json = String.format("""
+            {
                 "notaFiscal": "%s",
-
                 "data": "%s",
-
                 "fornecedor": {"id": %d}
-                }
-                """,
-                notafiscal, data, fornecedorId);
+            }
+            """,
+            notafiscal, data, fornecedorId);
 
-        HttpClient client = HttpClient.newHttpClient();
+    HttpClient client = HttpClient.newHttpClient();
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(BASE_URL))
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(json))
+            .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        int status = response.statusCode();
-        if (status == 200 || status == 201) {
+    int status = response.statusCode();
 
-            // AlertUtil.mostrarSucesso("inserido com sucesso!");
+    if (status == 200 || status == 201) {
 
-        } else {
-            System.out.println(response.body());
-            System.out.println(json);
-            AlertUtil.mostrarErro("Erro ao inserir:\n " + response.body());
+        // Converte o JSON retornado
+        com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+        NotaFiscal nota = mapper.readValue(response.body(), NotaFiscal.class);
 
-        }
+        return nota.getId(); // <-- retorna o ID salvo
+    } else {
+        System.out.println(response.body());
+        System.out.println(json);
+        AlertUtil.mostrarErro("Erro ao inserir:\n " + response.body());
+        return null;
     }
+}
+
 
     public List<NotaFiscal> buscarTodos() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()

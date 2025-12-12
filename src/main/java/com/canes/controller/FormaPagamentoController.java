@@ -5,8 +5,6 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import com.canes.model.Pagamento;
-import com.canes.model.Pedido;
 import com.canes.model.Produto;
 import com.canes.model.dpo.PedidoDPO;
 import com.canes.services.ClienteService;

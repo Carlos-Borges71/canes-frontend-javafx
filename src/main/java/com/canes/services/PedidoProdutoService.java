@@ -8,8 +8,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
-import org.json.JSONObject;
-
 import com.canes.model.PedidoProduto;
 import com.canes.util.AlertUtil;
 import com.fasterxml.jackson.core.type.TypeReference;

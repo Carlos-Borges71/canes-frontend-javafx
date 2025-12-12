@@ -11,21 +11,16 @@ import java.util.Locale;
 
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
-import com.canes.model.Pedido;
-import com.canes.model.PedidoProduto;
 import com.canes.model.Produto;
 import com.canes.model.Telefone;
 import com.canes.model.dpo.PedidoDPO;
 import com.canes.services.ClienteService;
-import com.canes.services.PedidoService;
 import com.canes.services.ProdutoService;
 import com.canes.services.TelefoneService;
 import com.canes.util.AlertUtil;
 import com.canes.util.MaskTextField;
 import com.canes.util.RelogioUtil;
 import com.canes.util.ScreenUtils;
-import com.canes.util.TextFieldUtil;
-
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -206,8 +201,12 @@ public class PedidoController {
             e.printStackTrace();
         }
     }
+    
 
     public void initialize() {
+        
+
+        
 
         colItem.setCellValueFactory(new PropertyValueFactory<>("item"));
         colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
@@ -220,6 +219,12 @@ public class PedidoController {
         colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
         realColuna(colTotal);
 
+         tabelaPedido.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        Label placeholder = new Label("Aguardando Pedido!");
+        placeholder.setStyle("-fx-text-fill: #152266 ; -fx-font-weight: bold; -fx-font-size: 40px");
+
+       tabelaPedido.setPlaceholder(placeholder);
+       
         RelogioUtil.iniciarRelogio(txtRelogio);
 
         MaskTextField.valor(txtDesconto);
@@ -230,11 +235,9 @@ public class PedidoController {
         MaskTextField.number(txtQuant);
         MaskTextField.applyPhoneMask(txtTelefone);
 
-        tabelaPedido.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        Label placeholder = new Label("Aguardando Pedido!");
-        placeholder.setStyle("-fx-text-fill: #152266 ; -fx-font-weight: bold; -fx-font-size: 40px");
+       
 
-        tabelaPedido.setPlaceholder(placeholder);
+      
 
         // Zebrando a tabela
         tabelaPedido.setRowFactory(tv -> new TableRow<>() {
@@ -255,23 +258,10 @@ public class PedidoController {
             }
         });
 
-        // alterando a cor quando selecionada a linha
-        // tabelaPedido.setRowFactory(tv -> new TableRow<>() {
-        // @Override
-        // protected void updateItem(tblExibirPedido item, boolean empty) {
-        // super.updateItem(item, empty);
+        
 
-        // if (empty || item == null) {
-        // setStyle("");
 
-        // } else if (isSelected()) {
-        // setStyle("-fx-background-color: #90caf9");
-
-        // } else {
-        // setStyle("");
-        // }
-        // }
-        // });
+       
 
         simbols.setDecimalSeparator(',');
         simbols.setGroupingSeparator('.');
@@ -598,7 +588,7 @@ public class PedidoController {
 
     }
 
-    Integer item = 1;
+    Long item = 1L;
 
     @FXML
     void onEnterActionDesconto(ActionEvent event) {
@@ -610,24 +600,8 @@ public class PedidoController {
 
     @FXML
     void onEnterAction(ActionEvent event) {
+
         try {
-            // colItem.setCellValueFactory(new PropertyValueFactory<>("item"));
-
-            // colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
-
-            // colProduto.setCellValueFactory(new PropertyValueFactory<>("produto"));
-
-            // colQuant.setCellValueFactory(new PropertyValueFactory<>("quant"));
-
-            // colValorUnitario.setCellValueFactory(new
-            // PropertyValueFactory<>("valorUnitario"));
-            // realColuna(colValorUnitario);
-
-            // colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
-            // realColuna(colTotal);
-
-            // Configura colunas somente 1 vez (não dentro do método!)
-            // configurarColunasSeNecessario();
 
             ProdutoService produtoService = new ProdutoService();
             List<Produto> produtos = produtoService.buscarTodos();
@@ -656,10 +630,9 @@ public class PedidoController {
 
             String vlrVenda = String.format(new Locale("pt", "BR"), "%.2f", encontrado.getValorVenda());
             txtValorUnitario.setText(vlrVenda);
-           
 
             String nomeProduto = encontrado.getNome();
-            int quant = Integer.parseInt(txtQuant.getText());
+            Integer quant = Integer.parseInt(txtQuant.getText());
             double valorUnit = encontrado.getValorVenda();
             double total = quant * valorUnit;
 
@@ -670,13 +643,18 @@ public class PedidoController {
 
             item++;
 
+            // 🔹 ADICIONA/ATUALIZA A LINHA DE TOTAL
+            //atualizarLinhaTotal();
+
             totalQuant();
             totalValor();
             desconto();
 
             txtCodigo.clear();
 
-        } catch (Exception e) {
+        
+       
+        }catch (Exception e) {
             e.printStackTrace();
             AlertUtil.mostrarErro("Erro ao processar: " + e.getMessage());
 
@@ -686,23 +664,9 @@ public class PedidoController {
     public void receberProduto(Produto produto) {
         if (produto != null) {
 
-            // colItem.setCellValueFactory(new PropertyValueFactory<>("item"));
-
-            // colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
-
-            // colProduto.setCellValueFactory(new PropertyValueFactory<>("produto"));
-
-            // colQuant.setCellValueFactory(new PropertyValueFactory<>("quant"));
-
-            // colValorUnitario.setCellValueFactory(new PropertyValueFactory<>("valorUnitario"));
-            // realColuna(colValorUnitario);
-
-            // colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
-            // realColuna(colTotal);
-
             String codigo = produto.getCodigo();
             String produt = produto.getNome();
-            int quant = Integer.parseInt(txtQuant.getText());
+            Integer quant = Integer.parseInt(txtQuant.getText());
             double unitario = produto.getValorVenda();
             String txtUnitario = String.valueOf(unitario);
 
@@ -714,13 +678,59 @@ public class PedidoController {
 
             tabelaPedido.scrollTo(p);
 
-            item += 1;
+            item++;
 
             totalQuant();
             totalValor();
             desconto();
 
         }
+    }
+
+    private void atualizarLinhaTotal() {
+        
+        ObservableList<PedidoDPO> lista = tabelaPedido.getItems();
+
+        // remover total antigo, caso exista
+        lista.removeIf(PedidoDPO::isTotalRow);
+
+        // calcular total
+        double soma = lista.stream()
+                .mapToDouble(PedidoDPO::getTotal) // seu campo total
+                .sum();
+
+        Integer somaQuant = lista.stream()
+                .mapToInt(PedidoDPO::getQuant) // seu campo total
+                .sum();
+
+            
+
+        // criar a linha total
+        PedidoDPO total = new PedidoDPO(null, "", "TOTAL", somaQuant, null, soma);
+        total.setTotalRow(true);
+
+        lista.add(total);
+        
+    }
+
+    private void atualizarTotalNaTabela() {
+        ObservableList<PedidoDPO> lista = tabelaPedido.getItems();
+
+        // remove qualquer linha TOTAL antiga
+        lista.removeIf(p -> p.getProduto() != null && p.getProduto().equalsIgnoreCase("TOTAL"));
+
+        // soma
+        double soma = lista.stream()
+                .mapToDouble(PedidoDPO::getTotal)
+                .sum();
+
+        // adiciona a nova linha
+        PedidoDPO total = new PedidoDPO(null, "", "TOTAL", null, 0.0, soma);
+        lista.add(total);
+
+        // 🔥 importantíssimo → força atualização da tabela!
+        Platform.runLater(() -> tabelaPedido.refresh());
+        System.out.println(lista);
     }
 
     @FXML
@@ -738,13 +748,13 @@ public class PedidoController {
     }
 
     private void totalQuant() {
-        int total = tabelaPedido.getItems().stream().mapToInt(PedidoDPO::getQuant).sum();
+        Long total = tabelaPedido.getItems().stream().mapToLong(PedidoDPO::getQuant).sum();
         String totalString = String.valueOf(total);
         lblQuant.setText(totalString);
     }
 
     private void totalValor() {
-        double total = tabelaPedido.getItems().stream().mapToDouble(PedidoDPO::getTotal).sum();
+        Double total = tabelaPedido.getItems().stream().mapToDouble(PedidoDPO::getTotal).sum();
         String totalString = String.valueOf(total);
         lblTotal.setText(totalString);
 

@@ -1,5 +1,6 @@
 package com.canes.controller;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -305,20 +306,32 @@ public class CadastroClienteController {
 
         try {
 
-            String cep = txtCepClient.getText().replaceAll("-", "");
+            String cep = txtCepClient.getText();
             Endereco end = BuscaCep.buscar(cep);
-            if(end != null){ 
-            txtLogradouroClient.setText(end.getLogradouro());
-            txtBairroClient.setText(end.getBairro());
-            txtCidadeClient.setText(end.getCidade());
-            txtEstadoClient.setText(end.getEstado());
+            if (end != null) {
+                txtLogradouroClient.setText(end.getLogradouro());
+                txtBairroClient.setText(end.getBairro());
+                txtCidadeClient.setText(end.getCidade());
+                txtEstadoClient.setText(end.getEstado());
 
-            }else{
+            } else {
                 AlertUtil.mostrarErro("Cep não encontrado!");
             }
 
+        } catch (java.net.UnknownHostException e) {
+            AlertUtil.mostrarErro("Sem conexão com a internet! Verifique sua rede.");
+
+        } catch (java.net.ConnectException e) {
+            AlertUtil.mostrarErro("Não foi possível conectar ao servidor do CEP.");
+
+        } catch (java.net.SocketTimeoutException e) {
+            AlertUtil.mostrarErro("A busca por CEP demorou muito (timeout). Tente novamente.");
+
+        } catch (IOException e) {
+            AlertUtil.mostrarErro("Erro de comunicação com o servidor.");
+
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            AlertUtil.mostrarErro("Ocorreu um erro inesperado: " + e.getMessage());
         }
 
     }

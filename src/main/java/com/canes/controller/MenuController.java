@@ -1,6 +1,8 @@
 package com.canes.controller;
 
 
+import com.canes.util.AlertUtil;
+import com.canes.util.ConexaoUtil;
 import com.canes.util.HouverEffectUtil;
 import com.canes.util.ScreenUtils;
 import javafx.event.ActionEvent;
@@ -92,6 +94,11 @@ public class MenuController {
 
     @FXML
     void onClickPesquisar(ActionEvent event) {
+
+         if (!ConexaoUtil.isConectado() || !ConexaoUtil.isConectadoAPI()) {
+        AlertUtil.mostrarErro("Sem conexão com a internet!\n ou com API!");
+        return; // não abre a tela
+    }
 
          try {
             ScreenUtils.changeScreen(event,"/com/canes/pesquisar.fxml", "Pesquisar", null);
