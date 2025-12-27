@@ -21,7 +21,7 @@
          <children>
             <Pane layoutX="15.0" layoutY="14.0" prefHeight="63.0" prefWidth="1008.0" style="-fx-background-color: fff; -fx-background-radius: 20;">
                <children>
-                  <Label layoutX="468.0" layoutY="11.0" text="Pedido" textFill="#123c6b">
+                  <Label fx:id="lblTitulo" layoutX="468.0" layoutY="11.0" text="Pedido" textFill="#123c6b">
                      <font>
                         <Font name="Verdana Bold" size="36.0" />
                      </font>

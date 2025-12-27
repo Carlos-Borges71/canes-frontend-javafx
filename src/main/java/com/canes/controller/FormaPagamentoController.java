@@ -1,11 +1,18 @@
 package com.canes.controller;
 
+import java.math.BigDecimal;
+import java.security.Key;
+import javafx.util.Duration;
+
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.canes.model.Pagamento;
 import com.canes.model.Produto;
+import com.canes.model.dpo.PagamentoDPO;
 import com.canes.model.dpo.PedidoDPO;
 import com.canes.services.ClienteService;
 import com.canes.services.PagamentoService;
@@ -13,33 +20,64 @@ import com.canes.services.PedidoProdutoService;
 import com.canes.services.PedidoService;
 import com.canes.services.ProdutoService;
 import com.canes.services.TelefoneService;
+import com.canes.util.AlertUtil;
+import com.canes.util.MaskTextField;
+import com.canes.util.MoedaCorrenteCellFactory;
+
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class FormaPagamentoController {
 
     @FXML
-    private RadioButton radioDinheiro;
+    private Label lblStatus;
 
     @FXML
-    private RadioButton radioMaestro;
+    private Label lblValor;
 
     @FXML
-    private RadioButton radioMaster;
+    private Pane paneCliente;
 
     @FXML
-    private RadioButton radioPix;
+    private TextField txtPagamento;
 
     @FXML
-    private RadioButton radiovisa;
+    private TextField txtValor;
 
     @FXML
-    private RadioButton radiovisaelectron;
+    private AnchorPane rootPane;
+
+    @FXML
+    private VBox vboxPagamento;
+
+    @FXML
+    private ImageView imgOk;
 
     private ClienteService clienteService;
     private TelefoneService telefoneService;
@@ -47,64 +85,105 @@ public class FormaPagamentoController {
     private ObservableList<PedidoDPO> pedidosRecebidos;
     private TextField txtTelefone;
 
-    private String formaSelecionada;
+    // private String formaSelecionada;
+
+    private Long idCliente;
+    private String total;
+    private String status;
+    private List<PedidoDPO> produtosTabela;
+    private String newStatus;
+
+    private TextField txtPagamento2;
+
+    private BigDecimal valorDigitado;
+    private BigDecimal valorRestante;
+    private Long pedidoId = null;
+
+    private String statusSelecionado;
+    private String formaPagamento;
+    private BigDecimal totalPago = BigDecimal.ZERO;
+
+    public String getStatusSelecionada() {
+        statusSelecionado = lblStatus.getText();
+        return statusSelecionado;
+    }
 
     public String getFormaSelecionada() {
-        return formaSelecionada;
+        return formaPagamento;
     }
 
-    @FXML
-    private void confirmar() {
-        ToggleGroup grupoPagamento = new ToggleGroup();
-        radioDinheiro.setToggleGroup(grupoPagamento);
-        radioPix.setToggleGroup(grupoPagamento);
-
-        if (radioDinheiro.isSelected()) {
-            formaSelecionada = "Dinheiro";
-        } else if (radioMaestro.isSelected()) {
-            formaSelecionada = "Maestro";
-        } else if (radioMaster.isSelected()) {
-            formaSelecionada = "MasterCard";
-        } else if (radioPix.isSelected()) {
-            formaSelecionada = "Pix";
-        } else if (radiovisa.isSelected()) {
-            formaSelecionada = "Visa";
-        } else if (radiovisaelectron.isSelected()) {
-            formaSelecionada = "VisaEletron";
-        }
-
-        // Fecha a janela
-        Stage stage = (Stage) radioDinheiro.getScene().getWindow();
-        stage.close();
+    public BigDecimal getTotalRecebido() {
+        return totalPago;
     }
 
-    // public void initialize(){
-    // receberDados(pedidos, null);
+    // public void prepararFechamento(Stage stage) {
+    // stage.setOnHiding(event -> {
+    // newStatus = lblStatus.getText();
+    // System.out.println("Forma capturada: " + newStatus);
+    // });
     // }
 
-    public void receberDados(Long idCliente, Label lbltotal, TextField txtStatus, List<PedidoDPO> produtosTabela) {
+    Instant instante = Instant.now();
+    DateTimeFormatter formatter = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+            .withZone(ZoneOffset.UTC);
 
-        Instant instante = Instant.now();
-        DateTimeFormatter formatter = DateTimeFormatter
-                .ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
-                .withZone(ZoneOffset.UTC);
+    String instanteFormatado = formatter.format(instante);
+    String data = instanteFormatado.formatted(instanteFormatado);
 
-        String instanteFormatado = formatter.format(instante);
-        String data = instanteFormatado.formatted(instanteFormatado);
+    PedidoService pedidoService = new PedidoService();
 
-        String status = txtStatus.getText();
-        Double valor = Double.parseDouble(lbltotal.getText().replaceAll("[^0-9,]", "").replace(",", "."));
+    public Long salvarPedido() {
+        try {
 
-        PedidoService pedidoService = new PedidoService();
+            Double valor = Double.parseDouble(total.replaceAll("[^0-9,]", "").replace(",", "."));
+
+            Long pedidoId = pedidoService.salvarPedido(getStatusSelecionada(), valor, data, idCliente);
+            return pedidoId;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public void salvarPagamento(Long pedidoId, BigDecimal valorDigitado) {
+
+        try {
+            Double valorPagamento = valorDigitado.doubleValue();
+
+            PagamentoService pagamentoService = new PagamentoService();
+            pagamentoService.salvarPagamento(
+                    data,
+                    getFormaSelecionada(),
+                    valorPagamento,
+                    pedidoId);
+
+            imgOk.setVisible(true);
+
+            PauseTransition pause = new PauseTransition(Duration.seconds(2)); // 2 segundos
+            pause.setOnFinished(e -> imgOk.setVisible(false));
+            pause.play();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void salvarDados() {
+
         PedidoProdutoService pedidoProdutoService = new PedidoProdutoService();
         ProdutoService produtoService = new ProdutoService();
-        PagamentoService pagamentoService = new PagamentoService();
 
         try {
 
-            Long pedidoId = pedidoService.salvarPedido(status, valor, data, idCliente );
+            if (pedidoId == null) {
+                pedidoId = salvarPedido(); // ✅ SEM Long
 
-            System.out.println("DEBUG: PedidoID antes do loop = " + pedidoId);
+                if (pedidoId == null) {
+                    System.out.println("Erro ao salvar pedido.");
+                    return;
+                }
+            }
 
             List<Produto> busca = produtoService.buscarTodos();
 
@@ -136,21 +215,199 @@ public class FormaPagamentoController {
 
             }
 
-            pagamentoService.salvarPagamento(
-                data,
-                getFormaSelecionada(),
-                valor,
-                pedidoId
-            );
-
         } catch (Exception e) {
-            System.out.println("Erro ao salvar pedido: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
+    }
+
+    public void receberDados(Long idCliente, String total, List<PedidoDPO> produtosTabela) {
+
+        this.idCliente = idCliente;
+        this.total = total;
+        this.produtosTabela = produtosTabela;
+
+        valorRestante = MaskTextField.parseValor(total);
+        lblValor.setText(total);
+
+        Platform.runLater(() -> {
+
+            lblValor.setText(total);
+
+            System.out.println("Valor recebido " + total);
+        });
 
         // for (PedidoDPO p : pedidosRecebidos) {
         // System.out.println(p.getCodigo() + " " + idCliente);
         // System.out.println(p.getProduto() + " " + idCliente);
         // }
 
+    }
+
+    public void initialize() {
+
+        MaskTextField.valor(txtValor);
+
+        newStatus = txtPagamento.getText();
+
+        txtPagamento.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+
+                newScene.getAccelerators().put(
+                        new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.CONTROL_DOWN),
+                        this::criarHBox);
+
+                newScene.getAccelerators().put(
+                        new KeyCodeCombination(KeyCode.ADD),
+                        this::criarHBox);
+            }
+        });
+
+        txtPagamento.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.getAccelerators().put(new KeyCodeCombination(KeyCode.ADD, KeyCombination.CONTROL_DOWN),
+                        () -> criarHBox());
+            }
+        });
+
+        rootPane.addEventFilter(KeyEvent.KEY_PRESSED, evet -> {
+            if (evet.getCode() == KeyCode.F1) {
+                lblStatus.setText("AGUARDANDO_PAGAMENTO");
+
+            }
+            if (evet.getCode() == KeyCode.F2) {
+                lblStatus.setText("PAGO");
+
+            }
+            if (evet.getCode() == KeyCode.F3) {
+                lblStatus.setText("CANCELADO");
+
+            }
+            if (evet.getCode() == KeyCode.F4) {
+                txtPagamento.setText("Dinheiro");
+
+            }
+            if (evet.getCode() == KeyCode.F5) {
+                txtPagamento.setText("Pix");
+
+            }
+            if (evet.getCode() == KeyCode.F6) {
+                txtPagamento.setText("Maestro");
+
+            }
+            if (evet.getCode() == KeyCode.F7) {
+                txtPagamento.setText("VisaElectron");
+
+            }
+            if (evet.getCode() == KeyCode.F8) {
+                txtPagamento.setText("MasterCard");
+
+            }
+            if (evet.getCode() == KeyCode.F9) {
+                txtPagamento.setText("Visa");
+
+            }
+            if (evet.getCode() == KeyCode.F10) {
+                try {
+
+                    BigDecimal valorDigitado = MaskTextField.parseValor(txtValor.getText());
+
+                    if (valorDigitado.compareTo(BigDecimal.ZERO) <= 0) {
+                        AlertUtil.mostrarErro("Informe um valor válido.");
+                        return;
+                    }
+
+                    if (valorDigitado.compareTo(valorRestante) > 0) {
+                        AlertUtil.mostrarErro("Valor maior que o saldo restante.");
+                        return;
+                    }
+                    // 🔵 SOMA AO TOTAL PAGO
+                    totalPago = totalPago.add(valorDigitado);
+
+                    salvarDados();
+                    // Long pedidoId = pedidoService.buscarUltimoPedidoId();
+
+                    // ✅ salva UM pagamento
+                    salvarPagamento(pedidoId, valorDigitado);
+
+                    // 🔽 atualiza valor restante
+                    valorRestante = valorRestante.subtract(valorDigitado);
+
+                    // 🟢 quitou tudo
+                    if (valorRestante.compareTo(BigDecimal.ZERO) == 0) {
+                        lblValor.setText("0,00");
+
+                        fecharComDelay();
+                    }
+
+                    // 🟡 ainda falta pagar → pode escolher outra forma
+                    lblValor.setText(valorRestante.toString().replace(".", ","));
+                    txtValor.clear();
+                    txtPagamento.clear();
+                    txtPagamento.requestFocus();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    AlertUtil.mostrarErro("Valor inválido.");
+                }
+
+            }
+
+            // if (evet.getCode() == KeyCode.F11) {
+            // try{
+            // PagamentoService pagamentoService = new PagamentoService();
+            // Long pagamentoId = pagamentoService.buscarUltimoPagamentoId();
+
+            // }catch(Exception e){
+            // System.out.println(e.getMessage());
+            // }
+            // }
+        });
+
+    }
+
+    private void fecharComDelay() {
+
+        // 1️⃣ SALVA OS DADOS
+        statusSelecionado = lblStatus.getText();
+        formaPagamento = txtPagamento.getText();
+
+        //totalRecebido = valorDigitado;
+
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(3)); // 2 segundos
+        pause.setOnFinished(e -> stage.close());
+        pause.play();
+    }
+
+    private void criarHBox() {
+        HBox hbox = new HBox();
+
+        Label lblPagamento = new Label("Pagamento:");
+        TextField txtPagamento2 = new TextField();
+        Label lblValor = new Label("Valor:");
+        TextField txtValor2 = new TextField();
+
+        lblPagamento.setStyle("-fx-text-fill: fff;");
+        lblPagamento.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+        lblValor.setStyle("-fx-text-fill: fff ;");
+        lblValor.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+
+        txtPagamento2.setStyle(
+                "-fx-background-color: transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff; -fx-font-size: 18px;");
+        txtValor2.setStyle(
+                "-fx-background-color: transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;-fx-font-size: 18px;");
+
+        txtPagamento2.setPrefWidth(180);
+        txtPagamento2.setPrefHeight(40);
+        txtValor2.setPrefWidth(180);
+        txtValor2.setPrefHeight(35);
+
+        hbox.setSpacing(15);
+        hbox.getChildren().addAll(lblPagamento, txtPagamento2, lblValor, txtValor2);
+        hbox.setAlignment(Pos.CENTER_LEFT);
+        hbox.setPadding(new Insets(5));
+
+        vboxPagamento.getChildren().add(hbox);
     }
 }

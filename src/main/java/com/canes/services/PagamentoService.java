@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Comparator;
 import java.util.List;
 
 import com.canes.model.Pagamento;
@@ -14,19 +15,17 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PagamentoService {
-private final HttpClient httpClient;
+    private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
 
-     
-
-     HttpClient client = HttpClient.newHttpClient();
+    HttpClient client = HttpClient.newHttpClient();
     ObjectMapper mapper = new ObjectMapper();
 
     private static final String BASE_URL = "http://localhost:8080/pagamentos";
 
-    public PagamentoService(){
+    public PagamentoService() {
 
-    this.httpClient = HttpClient.newHttpClient();
+        this.httpClient = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper();
 
     }
@@ -35,20 +34,20 @@ private final HttpClient httpClient;
     private String tipo;
     private Double valorPagamento;
     private Pedido pedido;
-    
-    public static void salvarPagamento(String data, String tipo, Double valorPagamneto, Long pedidoId) throws Exception {
 
-       
+    public static void salvarPagamento(String data, String tipo, Double valorPagamneto, Long pedidoId)
+            throws Exception {
+
         String json = String.format("""
-        {
+                {
 
-        "data": "%s",
-        "tipo": "%s",        
-        "valorPagamento": "%s",
-        "pedido": {"id": %d}
-        }
-        """,
-        data, tipo,valorPagamneto, pedidoId);
+                "data": "%s",
+                "tipo": "%s",
+                "valorPagamento": "%s",
+                "pedido": {"id": %d}
+                }
+                """,
+                data, tipo, valorPagamneto, pedidoId);
 
         HttpClient client = HttpClient.newHttpClient();
 
@@ -63,7 +62,7 @@ private final HttpClient httpClient;
         int status = response.statusCode();
         if (status == 200 || status == 201) {
 
-            AlertUtil.mostrarSucesso("Dados inserido com sucesso!");
+            // AlertUtil.mostrarSucesso("Dados inserido com sucesso!");
 
         } else {
             System.out.println(response.body());
@@ -88,4 +87,7 @@ private final HttpClient httpClient;
             throw new RuntimeException("Erro ao buscar pagamentos: " + response.statusCode());
         }
     }
+
+   
+
 }

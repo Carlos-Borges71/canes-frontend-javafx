@@ -21,6 +21,8 @@ import com.canes.util.AlertUtil;
 import com.canes.util.MaskTextField;
 import com.canes.util.RelogioUtil;
 import com.canes.util.ScreenUtils;
+
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -44,6 +46,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class PedidoController {
 
@@ -74,6 +77,9 @@ public class PedidoController {
 
     @FXML
     private Label lblTotal;
+
+    @FXML
+    private Label lblTitulo;
 
     @FXML
     private TableView<PedidoDPO> tabelaPedido;
@@ -201,12 +207,24 @@ public class PedidoController {
             e.printStackTrace();
         }
     }
-    
 
-    public void initialize() {
-        
+    private void calcularTroco() {
 
-        
+        BigDecimal subtotal = MaskTextField.parseValor(txtSubTotal.getText());
+        BigDecimal recebido = MaskTextField.parseValor(txtTotalRecebido.getText());
+
+        BigDecimal troco = recebido.subtract(subtotal);
+
+        // se ainda não recebeu o suficiente
+        if (troco.compareTo(BigDecimal.ZERO) < 0) {
+            txtTroco.setText("0");
+            return;
+        }
+
+        txtTroco.setText(String.valueOf(troco));
+    }
+
+    private void tabela() {
 
         colItem.setCellValueFactory(new PropertyValueFactory<>("item"));
         colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
@@ -219,12 +237,42 @@ public class PedidoController {
         colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
         realColuna(colTotal);
 
-         tabelaPedido.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tabelaPedido.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         Label placeholder = new Label("Aguardando Pedido!");
         placeholder.setStyle("-fx-text-fill: #152266 ; -fx-font-weight: bold; -fx-font-size: 40px");
 
-       tabelaPedido.setPlaceholder(placeholder);
-       
+        tabelaPedido.setPlaceholder(placeholder);
+    }
+
+    public void initialize() {
+
+        txtTotalRecebido.textProperty().addListener((obs, oldText, newText) -> {
+            calcularTroco();
+        });
+
+        System.out.println(lblTotal.getText());
+
+        tabela();
+
+        // colItem.setCellValueFactory(new PropertyValueFactory<>("item"));
+        // colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        // colProduto.setCellValueFactory(new PropertyValueFactory<>("produto"));
+        // colQuant.setCellValueFactory(new PropertyValueFactory<>("quant"));
+
+        // colValorUnitario.setCellValueFactory(new
+        // PropertyValueFactory<>("valorUnitario"));
+        // realColuna(colValorUnitario);
+
+        // colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+        // realColuna(colTotal);
+
+        // tabelaPedido.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        // Label placeholder = new Label("Aguardando Pedido!");
+        // placeholder.setStyle("-fx-text-fill: #152266 ; -fx-font-weight: bold;
+        // -fx-font-size: 40px");
+
+        // tabelaPedido.setPlaceholder(placeholder);
+
         RelogioUtil.iniciarRelogio(txtRelogio);
 
         MaskTextField.valor(txtDesconto);
@@ -234,10 +282,7 @@ public class PedidoController {
         MaskTextField.valor(txtValorUnitario);
         MaskTextField.number(txtQuant);
         MaskTextField.applyPhoneMask(txtTelefone);
-
-       
-
-      
+        MaskTextField.quantNumbery(txtCodigo, 15);
 
         // Zebrando a tabela
         tabelaPedido.setRowFactory(tv -> new TableRow<>() {
@@ -257,11 +302,6 @@ public class PedidoController {
                 }
             }
         });
-
-        
-
-
-       
 
         simbols.setDecimalSeparator(',');
         simbols.setGroupingSeparator('.');
@@ -374,67 +414,119 @@ public class PedidoController {
 
                 {
                     try {
-                        ScreenUtils.changeScreenController(txtPagamento, "/com/canes/formaPagamento.fxml",
-                                "Selecionar forma de Pagamento", controller -> {
-                                    if (controller instanceof FormaPagamentoController) {
+                        if (txtTelefone.getText().isEmpty()) {
+                            AlertUtil.mostrarErro("Digite um número de telefone!");
+                            return;
+                        }
 
-                                        FormaPagamentoController formaPagamentoController = (FormaPagamentoController) controller;
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/canes/formaPagamento1.fxml"));
+                        Parent root = loader.load();
+                        FormaPagamentoController controller = loader.getController();
 
-                                        String formaEscolhida = ((FormaPagamentoController) controller)
-                                                .getFormaSelecionada();
+                        // ScreenUtils.changeScreenController(txtPagamento,
+                        // "/com/canes/formaPagamento1.fxml",
+                        // "Selecionar forma de Pagamento", controller -> {
+                        // if (controller instanceof FormaPagamentoController) {
 
-                                        try {
+                        // FormaPagamentoController formaPagamentoController =
+                        // (FormaPagamentoController) controller;
 
-                                            ClienteService clienteService = new ClienteService();
-                                            TelefoneService telefoneService = new TelefoneService();
+                        // try {
 
-                                            List<Cliente> todosCliente = clienteService.buscarTodos();
-                                            List<Telefone> todosTelefones = telefoneService.buscarTodos();
+                        ClienteService clienteService = new ClienteService();
+                        TelefoneService telefoneService = new TelefoneService();
 
-                                            String telefoneDigitado = txtTelefone.getText();
+                        List<Cliente> todosCliente = clienteService.buscarTodos();
+                        List<Telefone> todosTelefones = telefoneService.buscarTodos();
 
-                                            for (Cliente c : todosCliente) {
-                                                for (Telefone t : todosTelefones) {
+                        String telefoneDigitado = txtTelefone.getText();
 
-                                                    // Evita NullPointerException
-                                                    if (t.getCliente() == null || t.getCliente().getId() == null) {
-                                                        continue;
-                                                    }
+                        for (Cliente c : todosCliente) {
+                            for (Telefone t : todosTelefones) {
 
-                                                    // Confere se telefone pertence ao cliente
-                                                    if (c.getId().equals(t.getCliente().getId())) {
+                                // Evita NullPointerException
+                                if (t.getCliente() == null || t.getCliente().getId() == null) {
+                                    continue;
+                                }
 
-                                                        // Confere se número é igual
-                                                        if (telefoneDigitado.equals(t.getNumero())) {
-                                                            Long idCliente = c.getId();
+                                // Confere se telefone pertence ao cliente
+                                if (c.getId().equals(t.getCliente().getId())) {
 
-                                                            List<PedidoDPO> produtosTabela = new ArrayList<>(
-                                                                    tabelaPedido.getItems());
+                                    // Confere se número é igual
+                                    if (telefoneDigitado.equals(t.getNumero())) {
+                                        Long idCliente = c.getId();
 
-                                                            formaPagamentoController.receberDados(idCliente, lblTotal,
-                                                                    txtStatus, produtosTabela);
+                                        List<PedidoDPO> produtosTabela = new ArrayList<>(
+                                                tabelaPedido.getItems());
+                                        String total = lblTotal.getText();
+                                        String status = txtStatus.getText();
+                                        controller.receberDados(idCliente, total,
+                                                produtosTabela);
 
-                                                            // Recupera a escolha feita
-
-                                                            if (formaEscolhida != null) {
-                                                                txtPagamento.setText(formaEscolhida);
-
-                                                            }
-                                                        }
-
-                                                    }
-                                                }
-                                            }
-                                        } catch (Exception e) {
-                                            System.out.println(e.getMessage());
-                                        }
+                                        // Recupera a escolha feita
 
                                     }
-                                });
-                    } catch (IOException e) {
 
+                                }
+                            }
+                        }
+
+                        Stage stage = new Stage();
+                        stage.setScene(new Scene(root));
+                        stage.initModality(Modality.APPLICATION_MODAL); // bloqueia a tela principal até fechar
+                        stage.setTitle("FORMA DE PAGAMENTO");
+
+                        // controller.prepararFechamento(stage);
+
+                        // Mostra e espera fechar
+                        stage.showAndWait();
+
+                        String formaEscolhida = controller.getStatusSelecionada();
+                        System.out.println("Forma escolida " + formaEscolhida);
+
+                        if (formaEscolhida != null) {
+                            txtStatus.setText(formaEscolhida);
+
+                        }
+                        String formaPagamento = controller.getFormaSelecionada();
+                        System.out.println("Forma pagamento " + formaPagamento);
+
+                        if (formaPagamento != null) {
+                            txtPagamento.setText(formaPagamento);
+                        }
+
+                        String totalrecebido = String.valueOf(controller.getTotalRecebido());
+
+                        if (totalrecebido != null) {
+                            txtTotalRecebido.setText(totalrecebido);
+                        }
+                        
+                        lblTitulo.setText("Imprimindo ......");
+
+                        Stage stage1 = (Stage) tabelaPedido.getScene().getWindow();
+
+                        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+                        pause.setOnFinished(e -> {
+                            lblTitulo.setText("Pedido");
+                            // se quiser, pode fechar a tela aqui:
+                            // stage1.close();
+                        });
+
+                        pause.play();
+
+                        novoPedido();
+
+                    } catch (Exception e) {
                         e.printStackTrace();
+
                     }
+
+                    // }
+                    // });
+                    // } catch (IOException e) {
+
+                    // e.printStackTrace();
+                    // }
                 }
 
                 );
@@ -644,7 +736,7 @@ public class PedidoController {
             item++;
 
             // 🔹 ADICIONA/ATUALIZA A LINHA DE TOTAL
-            //atualizarLinhaTotal();
+            // atualizarLinhaTotal();
 
             totalQuant();
             totalValor();
@@ -652,13 +744,38 @@ public class PedidoController {
 
             txtCodigo.clear();
 
-        
-       
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             AlertUtil.mostrarErro("Erro ao processar: " + e.getMessage());
 
         }
+    }
+
+    private void novoPedido() {
+
+        // 1️⃣ Limpa a tabela
+        tabelaPedido.getItems().clear();
+
+        // 2️⃣ Reseta contador de itens
+        item = 1L;
+
+        // 3️⃣ Limpa totais
+        lblTotal.setText("0,00");
+        lblQuant.setText("0");
+        lblDesconto.setText("0,00");
+        txtQuant.setText("1");
+
+        // 4️⃣ Limpa campos de entrada
+        txtCodigo.clear();
+        txtValorUnitario.clear();
+        txtStatus.clear();
+        txtPagamento.clear();
+        txtTotalRecebido.clear();
+        txtCliente.clear();
+        txtTelefone.clear();
+
+        // 5️⃣ Foco no código
+        txtCodigo.requestFocus();
     }
 
     public void receberProduto(Produto produto) {
@@ -688,7 +805,7 @@ public class PedidoController {
     }
 
     private void atualizarLinhaTotal() {
-        
+
         ObservableList<PedidoDPO> lista = tabelaPedido.getItems();
 
         // remover total antigo, caso exista
@@ -703,14 +820,12 @@ public class PedidoController {
                 .mapToInt(PedidoDPO::getQuant) // seu campo total
                 .sum();
 
-            
-
         // criar a linha total
         PedidoDPO total = new PedidoDPO(null, "", "TOTAL", somaQuant, null, soma);
         total.setTotalRow(true);
 
         lista.add(total);
-        
+
     }
 
     private void atualizarTotalNaTabela() {

@@ -6,10 +6,12 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Comparator;
 import java.util.List;
 
 import org.json.JSONObject;
 
+import com.canes.model.Pagamento;
 import com.canes.model.Pedido;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,12 +58,12 @@ public class PedidoService {
         JSONObject obj = new JSONObject(response.body());
         Long idPedido = obj.getLong("id");
 
-        //System.out.println("Pedido salvo com ID: " + idPedido);
+        System.out.println("Pedido salvo com ID: " + idPedido);
 
         return idPedido;
     } else {
         System.out.println("Erro ao salvar pedido: " + status);
-        System.out.println("Resposta: " + response.body());
+        System.out.println("Resposta: " +json);
         return null;
     }
 }
@@ -81,5 +83,14 @@ public class PedidoService {
         } else {
             throw new RuntimeException("Erro ao buscar pedido: " + response.statusCode());
         }
+    }
+
+     public Long buscarUltimoPedidoId()
+            throws IOException, InterruptedException {
+
+        return buscarTodos().stream()
+                .max(Comparator.comparing(Pedido::getId))
+                .map(Pedido::getId)
+                .orElse(null);
     }
 }

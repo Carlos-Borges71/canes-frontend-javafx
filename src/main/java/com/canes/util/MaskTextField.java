@@ -296,6 +296,16 @@ public class MaskTextField {
         }
     }
 
+    public static BigDecimal parseValor(String valor) {
+    if (valor == null || valor.isBlank()) {
+        return BigDecimal.ZERO;
+    }
+    return new BigDecimal(
+            valor.replaceAll("[^0-9,]", "").replace(",", ".")
+    );
+}
+
+
     
    
 }
