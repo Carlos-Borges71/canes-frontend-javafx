@@ -1,6 +1,9 @@
 package com.canes.controller;
 
+
+
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -8,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
@@ -19,6 +23,7 @@ import com.canes.model.Telefone;
 import com.canes.model.Usuario;
 import com.canes.model.dpo.ClienteTabelaDPO;
 import com.canes.model.dpo.FornecedorDTO;
+import com.canes.model.dpo.PedidoDPO;
 import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
 import com.canes.services.FornecedorService;
@@ -29,13 +34,16 @@ import com.canes.services.TelefoneService;
 import com.canes.services.UsuarioService;
 import com.canes.util.AlertUtil;
 import com.canes.util.HouverEffectUtil;
+import com.canes.util.MaskTextField;
 import com.canes.util.MoedaCorrenteCellFactory;
 import com.canes.util.ScreenUtils;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -138,6 +146,45 @@ public class PesquisaController {
     private TableView<Produto> tabelaProduto;
 
     @FXML
+    private TableColumn<Pedido, String> colClientePedido;
+
+    @FXML
+    private TableColumn<Pedido, String> colDataPedido;
+
+    @FXML
+    private TableColumn<Pedido, Long> colIdPedido;
+
+    @FXML
+    private TableColumn<Pedido, String> colStatusPedido;
+
+    @FXML
+    private TableColumn<Pedido, String> colProdutoPedido;
+
+    @FXML
+    private TableColumn<Pedido, Double> colValorPedido;
+
+    @FXML
+    private TableColumn<Pedido, String> colPagamentoPedido;
+
+    @FXML
+    private Label lblPedido;
+
+    @FXML
+    private Pane panePedido;
+
+    @FXML
+    private Button btnLimparPedido;
+
+    @FXML
+    private Button btnPedido;
+
+    @FXML
+    private TableView<Pedido> tabelaPedido;
+
+    @FXML
+    private TextField txtFiltrarPedido;
+
+    @FXML
     private Button btnFiltrar;
 
     @FXML
@@ -153,6 +200,8 @@ public class PesquisaController {
     private FilteredList<FornecedorDTO> listaFiltradaFornecedor;
 
     private FilteredList<Produto> listaFiltradaProduto;
+
+    private FilteredList<Pedido> listaFiltradaPedido;
 
     @FXML
     private Pane paneCliente;
@@ -244,375 +293,8 @@ public class PesquisaController {
         lblFornec.setTextFill(Color.WHITE);
         paneProduto.setVisible(false);
         lblProduto.setTextFill(Color.WHITE);
-    }
-
-    @FXML
-    void onActionUser(ActionEvent event) {
-
-        Platform.runLater(() -> {
-            txtFiltrar.requestFocus();
-            // txtNomeProduto.selectAll(); // opcional: seleciona todo o texto
-        });
-
-        paneUser.setVisible(true);
-        paneCliente.setVisible(false);
-        lbluser.setTextFill(Color.RED);
-        lblClient.setTextFill(Color.WHITE);
-        paneFornec.setVisible(false);
-        lblFornec.setTextFill(Color.WHITE);
-        paneProduto.setVisible(false);
-        lblProduto.setTextFill(Color.WHITE);
-    }
-
-    @FXML
-    void onActionFornec(ActionEvent event) {
-
-        Platform.runLater(() -> {
-            txtFiltrarFornec.requestFocus();
-            // txtNomeProduto.selectAll(); // opcional: seleciona todo o texto
-        });
-
-        paneUser.setVisible(false);
-        paneCliente.setVisible(false);
-        lbluser.setTextFill(Color.WHITE);
-        lblClient.setTextFill(Color.WHITE);
-        paneFornec.setVisible(true);
-        lblFornec.setTextFill(Color.RED);
-        paneProduto.setVisible(false);
-        lblProduto.setTextFill(Color.WHITE);
-    }
-
-    @FXML
-    void onActionVoltar(MouseEvent event) {
-
-        try {
-            ScreenUtils.changeScreenMouse(event, "/com/canes/view/menu.fxml", "Menu", null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @FXML
-    void onActionProduto(ActionEvent event) {
-
-        paneUser.setVisible(false);
-        paneCliente.setVisible(false);
-        lbluser.setTextFill(Color.WHITE);
-        lblClient.setTextFill(Color.WHITE);
-        paneFornec.setVisible(false);
-        lblFornec.setTextFill(Color.WHITE);
-        paneProduto.setVisible(true);
-        lblProduto.setTextFill(Color.RED);
-        txtFiltrarProduto.requestFocus();
-    }
-
-    @FXML
-    void limparCliente(ActionEvent event) {
-        txtFiltrarCliente.clear();
-
-    }
-
-    @FXML
-    void limparUsuario(ActionEvent event) {
-        txtFiltrar.clear();
-    }
-
-    @FXML
-    void limparFornec(ActionEvent event) {
-        txtFiltrarFornec.clear();
-    }
-
-    @FXML
-    void limparProduto(ActionEvent event) {
-        txtFiltrarProduto.clear();
-    }
-
-    @FXML
-    void onMouseEteredFiltrar(MouseEvent event) {
-
-        HouverEffectUtil.apllyHouverSobre(btnFiltrar);
-
-    }
-
-    @FXML
-    void onMouseExitedFiltrar(MouseEvent event) {
-
-        HouverEffectUtil.apllyHouverSair(btnFiltrar);
-    }
-
-    @FXML
-    public void initialize() {
-        Platform.runLater(() -> {
-            txtFiltrar.requestFocus();
-            // txtNomeProduto.selectAll(); // opcional: seleciona todo o texto
-        });
-
-        formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").withZone(ZoneId.systemDefault());
-
-        lbluser.setMouseTransparent(true);
-        lblClient.setMouseTransparent(true);
-        lblFornec.setMouseTransparent(true);
-        lblProduto.setMouseTransparent(true);
-
-        btnUser.setOnMouseExited(e -> {
-            HouverEffectUtil.apllyHouverSair(btnUser);
-        });
-
-        btnUser.setOnMouseEntered(e -> {
-            HouverEffectUtil.apllyHouverSobre(btnUser);
-
-        });
-
-        btnClient.setOnMouseExited(e -> {
-            HouverEffectUtil.apllyHouverSair(btnClient);
-        });
-
-        btnClient.setOnMouseEntered(e -> {
-            HouverEffectUtil.apllyHouverSobre(btnClient);
-        });
-
-        btnFornec.setOnMouseExited(e -> {
-            HouverEffectUtil.apllyHouverSair(btnFornec);
-        });
-
-        btnFornec.setOnMouseEntered(e -> {
-            HouverEffectUtil.apllyHouverSobre(btnFornec);
-        });
-
-        btnProduto.setOnMouseExited(e -> {
-            HouverEffectUtil.apllyHouverSair(btnProduto);
-        });
-
-        btnProduto.setOnMouseEntered(e -> {
-            HouverEffectUtil.apllyHouverSobre(btnProduto);
-        });
-
-        btnLimparUsuario.setOnMouseExited(e -> {
-            HouverEffectUtil.apllyHouverSair(btnLimparUsuario);
-        });
-
-        btnLimparUsuario.setOnMouseEntered(e -> {
-            HouverEffectUtil.apllyHouverSobre(btnLimparUsuario);
-        });
-
-        btnLimparCliente.setOnMouseExited(e -> {
-            HouverEffectUtil.apllyHouverSair(btnLimparCliente);
-        });
-
-        btnLimparCliente.setOnMouseEntered(e -> {
-            HouverEffectUtil.apllyHouverSobre(btnLimparCliente);
-        });
-
-        btnLimparFornec.setOnMouseExited(e -> {
-            HouverEffectUtil.apllyHouverSair(btnLimparFornec);
-        });
-
-        btnLimparFornec.setOnMouseEntered(e -> {
-            HouverEffectUtil.apllyHouverSobre(btnLimparFornec);
-        });
-
-        btnLimparProduto.setOnMouseExited(e -> {
-            HouverEffectUtil.apllyHouverSair(btnLimparProduto);
-        });
-
-        btnLimparProduto.setOnMouseEntered(e -> {
-            HouverEffectUtil.apllyHouverSobre(btnLimparProduto);
-        });
-
-        Label placeholder = new Label("Nenhum usuário encontrado!");
-        placeholder.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
-
-        tabelaUsuario.setPlaceholder(placeholder);
-
-        colCodigo.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        colSetor.setCellValueFactory(new PropertyValueFactory<>("setor"));
-        colTelefone.setCellValueFactory(new PropertyValueFactory<>("telefones"));
-        colData.setCellValueFactory(new PropertyValueFactory<>("instante"));
-        colEndereco.setCellValueFactory(new PropertyValueFactory<>("endereco"));
-
-        // Usuario u1 = new Usuario(1, "Carlos Borges", "ADM", "Carlos",
-        // Instant.parse("2025-09-10T12:00:09Z"), "123",
-        // Arrays.asList(new Telefone(1, "(99) 88888-0000")),
-        // Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ",
-        // "26.000-000")),
-        // Arrays.asList(new Cliente("Sebastião Soares ", Instant.now(),
-        // Arrays.asList(new Telefone()), Arrays.asList(new
-        // Endereco()),Arrays.asList(new Pedido()))));
-        // Usuario u2 = new Usuario(2, "Cintia Yellon", "ADMINISTRATIVO", "GRU",
-        // Instant.now(), "123",
-        // Arrays.asList(new Telefone(1, "(99) 99988-0000"), new Telefone(2, "(21)
-        // 99888-8776")),
-        // Arrays.asList(new Endereco("Rua Alan", "234", "Centro", "Rio", "RJ",
-        // "26.000-000")),
-        // Arrays.asList(new Cliente("Antonio Pires ", Instant.now(), Arrays.asList(new
-        // Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
-        // Usuario u3 = new Usuario(3, "Joâo Pedro", "ADM", "GRU", Instant.now(), "123",
-        // Arrays.asList(new Telefone(3, "(65)4343-4343")),
-        // Arrays.asList(new Endereco("Rua Orca", "234", "Centro", "Rio de Janeiro",
-        // "RJ", "26.000-000")),
-        // Arrays.asList(new Cliente("Danilo Silva", Instant.now(), Arrays.asList(new
-        // Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
-        // Usuario u4 = new Usuario(4, "Terla Gomes", "ADM", "GRU", Instant.now(),
-        // "123",
-        // Arrays.asList(new Telefone(1, "(99) 823888-0000")),
-        // Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ",
-        // "26.000-000")),
-        // Arrays.asList(new Cliente("Willian Lima", Instant.now(), Arrays.asList(new
-        // Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
-        // Usuario u5 = new Usuario(5, "Joana Black", "ADM", "GRU", Instant.now(),
-        // "123",
-        // Arrays.asList(new Telefone(1, "(99) 88888-0000")),
-        // Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ",
-        // "26.000-000")),
-        // Arrays.asList(new Cliente("José Soares ", Instant.now(), Arrays.asList(new
-        // Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
-        // Usuario u6 = new Usuario(6, "Flavio Blue", "ADM", "GRU", Instant.now(),
-        // "123",
-        // Arrays.asList(new Telefone(1, "(99) 877788-0000")),
-        // Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ",
-        // "26.000-000")),
-        // Arrays.asList(new Cliente("Cristian Morais", Instant.now(), Arrays.asList(new
-        // Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
-        // Usuario u7 = new Usuario(7, "Yasmin Red", "ADM", "GRU", Instant.now(), "123",
-        // Arrays.asList(new Telefone(1, "(99) 88888-0000")),
-        // Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ",
-        // "26.000-000")),
-        // Arrays.asList(new Cliente("Washington Torres Soares ", Instant.now(),
-        // Arrays.asList(new Telefone()), Arrays.asList(new
-        // Endereco()),Arrays.asList(new Pedido()))));
-        // Usuario u8 = new Usuario(8, "Washington Pink", "ADM", "GRU", Instant.now(),
-        // "123",
-        // Arrays.asList(new Telefone(1, "(99) 76588-0000")),
-        // Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ",
-        // "26.000-000")),
-        // Arrays.asList(new Cliente("Flavio Tulio", Instant.now(), Arrays.asList(new
-        // Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
-        // Usuario u9 = new Usuario(9, "Karla Khaki", "ADM", "GRU", Instant.now(),
-        // "123",
-        // Arrays.asList(new Telefone(1, "(99) 09038-0000")),
-        // Arrays.asList(new Endereco("Rua Abc", "234", "Centro", "Rio", "RJ",
-        // "26.000-000")),
-        // Arrays.asList(new Cliente("Luis Carlos", Instant.now(), Arrays.asList(new
-        // Telefone()), Arrays.asList(new Endereco()),Arrays.asList(new Pedido())),new
-        // Cliente("Lucca ferraz Carlos", Instant.now(), Arrays.asList(new Telefone()),
-        // Arrays.asList(new Endereco()),Arrays.asList(new Pedido()))));
-
-        try {
-            UsuarioService usuarioService = new UsuarioService();
-            TelefoneService telefoneService = new TelefoneService();
-            EnderecoService enderecoService = new EnderecoService();
-
-            List<Usuario> usuarios = usuarioService.buscarTodos();
-            List<Telefone> telefones = telefoneService.buscarTodos();
-            List<Endereco> end = enderecoService.buscarTodos();
-
-            ObservableList<Usuario> listaUsuarios = FXCollections.observableArrayList();
-
-            // evita NullPointer se alguma lista vier nula
-            List<Usuario> usuariosSeguros = usuarios != null ? usuarios : List.of();
-            List<Telefone> telefonesSeguros = telefones != null ? telefones : List.of();
-            List<Endereco> enderecosSeguros = end != null ? end : List.of();
-
-            for (Usuario u : usuariosSeguros) {
-
-                Long userId = u != null ? u.getId() : null;
-
-                // Buscar todos os telefones do usuário
-                List<String> telefonesUsuario = telefonesSeguros.stream()
-                        .filter(t -> t != null && t.getOperador() != null && t.getOperador().getId().equals(userId))
-                        .map(Telefone::getNumero)
-                        .filter(Objects::nonNull)
-                        .toList();
-
-                // Montar string com todos os telefones
-                String numerosTelefone;
-                if (telefonesUsuario.isEmpty()) {
-                    numerosTelefone = "Usuário sem telefone";
-                } else {
-                    numerosTelefone = String.join(", ", telefonesUsuario);
-                }
-
-                // buscar endereço correspondente
-                Endereco ender = enderecosSeguros.stream()
-                        .filter(e -> e != null && e.getOperador() != null && e.getOperador().getId().equals(userId))
-                        .findFirst()
-                        .orElse(null);
-
-                String endereco = "";
-                if (ender != null) {
-                    String logradouro = ender.getLogradouro() != null ? ender.getLogradouro() : "";
-                    String numero = ender.getNumero() != null ? ender.getNumero() : "";
-                    String bairro = ender.getBairro() != null ? ender.getBairro() : "";
-                    String cidade = ender.getCidade() != null ? ender.getCidade() : "";
-                    String estado = ender.getEstado() != null ? ender.getEstado() : "";
-                    String cep = ender.getCep() != null ? ender.getCep() : "";
-
-                    endereco = String.format("%s, %s - %s, %s/%s (%s)",
-                            logradouro, numero, bairro, cidade, estado, cep);
-                } else {
-                    endereco = "Usuário sem endereço";
-                }
-
-                // proteger campos de Usuario também
-                Long codigo = u.getId();
-                String nome = u != null && u.getNome() != null ? u.getNome() : "";
-                String login = u != null && u.getLogin() != null ? u.getLogin() : "";
-                String setor = u != null && u.getSetor() != null ? u.getSetor() : "";
-                String instant = u != null && u.getInstante() != null ? u.getInstante() : null;
-                String inst = formatter.format(Instant.parse(instant));
-                listaUsuarios.add(new Usuario(
-                        codigo,
-                        nome,
-                        setor,
-                        login,
-                        inst,
-                        null,
-                        numerosTelefone,
-                        endereco
-
-                ));
-
-                listaFiltrada = new FilteredList<>(listaUsuarios, p -> true);
-
-                tabelaUsuario.setItems(listaFiltrada);
-                txtFiltrar.textProperty().addListener((obs, oldValue, newValue) -> {
-                    String filtro = newValue.toLowerCase();
-                    listaFiltrada.setPredicate(usuario -> {
-                        if (filtro == null || filtro.isEmpty()) {
-                            return true;
-                        }
-
-                        return usuario.getNome().toLowerCase().contains(filtro) ||
-                                String.valueOf(usuario.getId()).contains(filtro) ||
-                                usuario.getSetor().toLowerCase().contains(filtro) ||
-                                usuario.getEndereco().toLowerCase().contains(filtro) ||
-                                usuario.getLogin().contains(filtro) ||
-                                usuario.getInstante().contains(filtro) ||
-                                usuario.getSetor().toLowerCase().contains(filtro) ||
-                                usuario.getTelefones().toLowerCase().contains(filtro);
-
-                    });
-                });
-
-            }
-
-        } catch (java.net.UnknownHostException e) {
-            AlertUtil.mostrarErro("Sem conexão com a internet! Verifique sua rede.");
-
-        } catch (java.net.ConnectException e) {
-            AlertUtil.mostrarErro("Não foi possível conectar ao servidor.");
-            
-        } catch (java.net.SocketTimeoutException e) {
-            AlertUtil.mostrarErro("A busca demorou muito (timeout). Tente novamente.");
-
-        } catch (IOException e) {
-            AlertUtil.mostrarErro("Erro de comunicação com o servidor.");
-
-        } catch (Exception e) {
-            AlertUtil.mostrarErro("Ocorreu um erro inesperado: " + e.getMessage());
-        }
+        panePedido.setVisible(false);
+        lblPedido.setTextFill(Color.WHITE);
 
         Label placeholderCliente = new Label("Nenhum Cliente encontrado!");
         placeholderCliente.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
@@ -705,7 +387,6 @@ public class PesquisaController {
                 Long codigo = c.getId();
                 String nome = c != null && c.getNome() != null ? c.getNome() : "";
 
-               
                 List<String> orders = pedidosSeguros.stream()
                         .filter(p -> p != null && p.getCliente() != null
                                 && p.getCliente().getId().equals(clientId))
@@ -760,6 +441,46 @@ public class PesquisaController {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @FXML
+    void onActionUser(ActionEvent event) {
+
+        Platform.runLater(() -> {
+            txtFiltrar.requestFocus();
+            // txtNomeProduto.selectAll(); // opcional: seleciona todo o texto
+        });
+
+        paneUser.setVisible(true);
+        paneCliente.setVisible(false);
+        lbluser.setTextFill(Color.RED);
+        lblClient.setTextFill(Color.WHITE);
+        paneFornec.setVisible(false);
+        lblFornec.setTextFill(Color.WHITE);
+        paneProduto.setVisible(false);
+        lblProduto.setTextFill(Color.WHITE);
+        panePedido.setVisible(false);
+        lblPedido.setTextFill(Color.WHITE);
+    }
+
+    @FXML
+    void onActionFornec(ActionEvent event) {
+
+        Platform.runLater(() -> {
+            txtFiltrarFornec.requestFocus();
+            // txtNomeProduto.selectAll(); // opcional: seleciona todo o texto
+        });
+
+        paneUser.setVisible(false);
+        paneCliente.setVisible(false);
+        lbluser.setTextFill(Color.WHITE);
+        lblClient.setTextFill(Color.WHITE);
+        paneFornec.setVisible(true);
+        lblFornec.setTextFill(Color.RED);
+        paneProduto.setVisible(false);
+        lblProduto.setTextFill(Color.WHITE);
+        panePedido.setVisible(false);
+        lblPedido.setTextFill(Color.WHITE);
 
         Label placeholderFornec = new Label("Nenhum Fornecedor encontrado!");
         placeholderFornec.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
@@ -909,6 +630,38 @@ public class PesquisaController {
             e.printStackTrace();
 
         }
+    }
+
+    @FXML
+    void onActionVoltar(MouseEvent event) {
+
+        try {
+            ScreenUtils.changeScreenMouse(event, "/com/canes/view/menu.fxml", "Menu", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @FXML
+    void onActionProduto(ActionEvent event) {
+
+        Platform.runLater(() -> {
+            txtFiltrarProduto.requestFocus();
+            // txtNomeProduto.selectAll(); // opcional: seleciona todo o texto
+        });
+
+        paneUser.setVisible(false);
+        paneCliente.setVisible(false);
+        lbluser.setTextFill(Color.WHITE);
+        lblClient.setTextFill(Color.WHITE);
+        paneFornec.setVisible(false);
+        lblFornec.setTextFill(Color.WHITE);
+        paneProduto.setVisible(true);
+        lblProduto.setTextFill(Color.RED);
+        txtFiltrarProduto.requestFocus();
+        panePedido.setVisible(false);
+        lblPedido.setTextFill(Color.WHITE);
 
         Label placeholderProduto = new Label("Nenhum Produto encontrado!");
         placeholderProduto.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
@@ -983,7 +736,430 @@ public class PesquisaController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    @FXML
+    void limparCliente(ActionEvent event) {
+        txtFiltrarCliente.clear();
+
+    }
+
+    @FXML
+    void limparPedido(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionPedido(ActionEvent event) {
+
+        Platform.runLater(() -> {
+            txtFiltrarPedido.requestFocus();
+            // txtNomeProduto.selectAll(); // opcional: seleciona todo o texto
+        });
+
+        paneUser.setVisible(false);
+        paneCliente.setVisible(false);
+        lbluser.setTextFill(Color.WHITE);
+        lblClient.setTextFill(Color.WHITE);
+        paneFornec.setVisible(false);
+        lblFornec.setTextFill(Color.WHITE);
+        paneProduto.setVisible(false);
+        lblProduto.setTextFill(Color.WHITE);
+        panePedido.setVisible(true);
+        lblPedido.setTextFill(Color.RED);
+
+        Label placeholderPedido = new Label("Nenhum Pedido encontrado!");
+        placeholderPedido.setStyle("-fx-text-fill: fff; -fx-font-size: 16px");
+        tabelaPedido.setPlaceholder(placeholderPedido);
+
+        tabelaPedido.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        colIdPedido.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colStatusPedido.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colValorPedido.setCellValueFactory(new PropertyValueFactory<>("valor"));
+
+        colDataPedido.setCellValueFactory(new PropertyValueFactory<>("data"));
+        colDataPedido.setCellValueFactory(cell -> {
+            Pedido p = cell.getValue();
+            String instante = p.getData();
+            if (instante == null) {
+                return new SimpleStringProperty("");
+            }
+            String dataFormatada = formatter.format(Instant.parse(instante));
+            return new SimpleStringProperty(dataFormatada);
+        });
+
+        colValorPedido.setCellFactory(MoedaCorrenteCellFactory.forTableColumn());
+
+        colProdutoPedido.setCellValueFactory(cell -> {
+            Pedido p = cell.getValue();
+
+            if (p.getProdutos() == null || p.getProdutos().isEmpty()) {
+                return new SimpleStringProperty("");
+            }
+
+            String produtos = p.getProdutos()
+                    .stream()
+                    .map(Produto::getNome)
+                    .collect(Collectors.joining(", "));
+
+            return new SimpleStringProperty(produtos);
+        });
+
+        colPagamentoPedido.setCellValueFactory(cell -> {
+            Pedido p = cell.getValue();
+
+            if (p == null || p.getPagamentos() == null || p.getPagamentos().isEmpty()) {
+                return new SimpleStringProperty("");
+            }
+
+            String pagamentos = p.getPagamentos()
+                    .stream()
+                    .map(pg -> {
+
+                        String forma = pg.getTipo() != null ? pg.getTipo() : "";
+
+                        // double → BigDecimal (CORRETO)
+                        BigDecimal valor = BigDecimal.valueOf(pg.getValorPagamento());
+
+                        // BigDecimal → R$ 0,00
+                        String valorFormatado = MaskTextField.bigDecimalParaMoedaBR(valor);
+
+                        return forma + " - " + valorFormatado;
+                    })
+                    .collect(Collectors.joining(", "));
+
+            return new SimpleStringProperty(pagamentos);
+        });
+
+        colClientePedido.setCellValueFactory(cell -> {
+            Pedido p = cell.getValue();
+
+            if (p.getCliente() == null) {
+                return new SimpleStringProperty("");
+            }
+
+            return new SimpleStringProperty(p.getCliente().getNome());
+        });
+
+        try {
+            PedidoService pedidoService = new PedidoService();
+            List<Pedido> pedidos = pedidoService.buscarTodos();
+
+            ObservableList<Pedido> listaPedido = FXCollections
+                    .observableArrayList(pedidos != null ? pedidos : List.of());
+
+            listaFiltradaPedido = new FilteredList<>(listaPedido, p -> true);
+            tabelaPedido.setItems(listaFiltradaPedido);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        txtFiltrarPedido.textProperty().addListener((obs, oldValue, newValue) -> {
+            String filtro = newValue == null ? "" : newValue.toLowerCase().trim();
+
+            listaFiltradaPedido.setPredicate(pedido -> {
+
+                if (filtro.isEmpty()) {
+                    return true;
+                }
+
+                // ID
+                boolean matchId = pedido.getId() != null &&
+                        String.valueOf(pedido.getId()).contains(filtro);
+
+                // STATUS
+                boolean matchStatus = pedido.getStatus() != null &&
+                        pedido.getStatus().toLowerCase().contains(filtro);
+
+                // CLIENTE
+                boolean matchCliente = pedido.getCliente() != null &&
+                        pedido.getCliente().getNome() != null &&
+                        pedido.getCliente().getNome().toLowerCase().contains(filtro);
+
+                // PRODUTOS (lista)
+                boolean matchProduto = pedido.getProdutos() != null &&
+                        pedido.getProdutos().stream()
+                                .anyMatch(produto -> produto.getNome() != null &&
+                                        produto.getNome().toLowerCase().contains(filtro));
+
+                // PAGAMENTOS (opcional)
+                boolean matchPagamento = pedido.getPagamentos() != null &&
+                        pedido.getPagamentos().stream()
+                                .anyMatch(pg -> pg.getTipo() != null &&
+                                        pg.getTipo().toLowerCase().contains(filtro));
+                // 🔥 DATA
+                boolean matchData = false;
+                if (pedido.getData() != null) {
+                    //matchData = pedido.getData().toLowerCase().contains(filtro);
+                    // OU se for Instant:
+                    Instant inst = Instant.parse(pedido.getData());
+                    matchData = formatter.format(inst).contains(filtro);
+                }
+
+                return matchId
+                        || matchStatus
+                        || matchCliente
+                        || matchProduto
+                        || matchData
+                        || matchPagamento;
+            });
+        });
+
+    }
+
+    @FXML
+    void limparUsuario(ActionEvent event) {
+        txtFiltrar.clear();
+    }
+
+    @FXML
+    void limparFornec(ActionEvent event) {
+        txtFiltrarFornec.clear();
+    }
+
+    @FXML
+    void limparProduto(ActionEvent event) {
+        txtFiltrarProduto.clear();
+    }
+
+    @FXML
+    void onMouseEteredFiltrar(MouseEvent event) {
+
+        HouverEffectUtil.apllyHouverSobre(btnFiltrar);
+
+    }
+
+    @FXML
+    void onMouseExitedFiltrar(MouseEvent event) {
+
+        HouverEffectUtil.apllyHouverSair(btnFiltrar);
+    }
+
+    @FXML
+    public void initialize() {
+
+        try {
+
+            formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").withZone(ZoneId.systemDefault());
+
+            configurarTabelaUsuario();
+            configurarFiltroUsuario();
+
+            carregarUsuarios();
+
+            Platform.runLater(() -> txtFiltrar.requestFocus());
+
+            lbluser.setMouseTransparent(true);
+            lblClient.setMouseTransparent(true);
+            lblFornec.setMouseTransparent(true);
+            lblProduto.setMouseTransparent(true);
+            lblPedido.setMouseTransparent(true);
+
+            btnPedido.setOnMouseExited(e -> {
+                HouverEffectUtil.apllyHouverSair(btnPedido);
+            });
+
+            btnPedido.setOnMouseEntered(e -> {
+                HouverEffectUtil.apllyHouverSobre(btnPedido);
+
+            });
+
+            btnUser.setOnMouseExited(e -> {
+                HouverEffectUtil.apllyHouverSair(btnUser);
+            });
+
+            btnUser.setOnMouseEntered(e -> {
+                HouverEffectUtil.apllyHouverSobre(btnUser);
+
+            });
+
+            btnClient.setOnMouseExited(e -> {
+                HouverEffectUtil.apllyHouverSair(btnClient);
+            });
+
+            btnClient.setOnMouseEntered(e -> {
+                HouverEffectUtil.apllyHouverSobre(btnClient);
+            });
+
+            btnFornec.setOnMouseExited(e -> {
+                HouverEffectUtil.apllyHouverSair(btnFornec);
+            });
+
+            btnFornec.setOnMouseEntered(e -> {
+                HouverEffectUtil.apllyHouverSobre(btnFornec);
+            });
+
+            btnProduto.setOnMouseExited(e -> {
+                HouverEffectUtil.apllyHouverSair(btnProduto);
+            });
+
+            btnProduto.setOnMouseEntered(e -> {
+                HouverEffectUtil.apllyHouverSobre(btnProduto);
+            });
+
+            btnLimparUsuario.setOnMouseExited(e -> {
+                HouverEffectUtil.apllyHouverSair(btnLimparUsuario);
+            });
+
+            btnLimparUsuario.setOnMouseEntered(e -> {
+                HouverEffectUtil.apllyHouverSobre(btnLimparUsuario);
+            });
+
+            btnLimparCliente.setOnMouseExited(e -> {
+                HouverEffectUtil.apllyHouverSair(btnLimparCliente);
+            });
+
+            btnLimparCliente.setOnMouseEntered(e -> {
+                HouverEffectUtil.apllyHouverSobre(btnLimparCliente);
+            });
+
+            btnLimparFornec.setOnMouseExited(e -> {
+                HouverEffectUtil.apllyHouverSair(btnLimparFornec);
+            });
+
+            btnLimparFornec.setOnMouseEntered(e -> {
+                HouverEffectUtil.apllyHouverSobre(btnLimparFornec);
+            });
+
+            btnLimparProduto.setOnMouseExited(e -> {
+                HouverEffectUtil.apllyHouverSair(btnLimparProduto);
+            });
+
+            btnLimparProduto.setOnMouseEntered(e -> {
+                HouverEffectUtil.apllyHouverSobre(btnLimparProduto);
+            });
+
+        } catch (Exception e) {
+            AlertUtil.mostrarErro("Erro no initialize: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+
+    private void configurarTabelaUsuario() {
+
+        Label placeholder = new Label("Nenhum usuário encontrado!");
+        placeholder.setStyle("-fx-text-fill: white; -fx-font-size: 16px");
+        tabelaUsuario.setPlaceholder(placeholder);
+
+        tabelaUsuario.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        colCodigo.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        colSetor.setCellValueFactory(new PropertyValueFactory<>("setor"));
+        colTelefone.setCellValueFactory(new PropertyValueFactory<>("telefones"));
+        colEndereco.setCellValueFactory(new PropertyValueFactory<>("endereco"));
+
+        // DATA FORMATADA
+        colData.setCellValueFactory(cell -> {
+            Usuario u = cell.getValue();
+            return new SimpleStringProperty(
+                    u != null && u.getInstante() != null ? u.getInstante() : "");
+        });
+    }
+
+    private void carregarUsuarios() {
+
+        try {
+            UsuarioService usuarioService = new UsuarioService();
+            TelefoneService telefoneService = new TelefoneService();
+            EnderecoService enderecoService = new EnderecoService();
+
+            List<Usuario> usuarios = usuarioService.buscarTodos();
+            List<Telefone> telefones = telefoneService.buscarTodos();
+            List<Endereco> enderecos = enderecoService.buscarTodos();
+
+            ObservableList<Usuario> listaUsuarios = FXCollections.observableArrayList();
+
+            List<Usuario> usuariosSeguros = usuarios != null ? usuarios : List.of();
+            List<Telefone> telefonesSeguros = telefones != null ? telefones : List.of();
+            List<Endereco> enderecosSeguros = enderecos != null ? enderecos : List.of();
+
+            for (Usuario u : usuariosSeguros) {
+
+                Long userId = u.getId();
+
+                /* ================= TELEFONES ================= */
+                List<String> telefonesUsuario = telefonesSeguros.stream()
+                        .filter(t -> t.getOperador() != null &&
+                                t.getOperador().getId().equals(userId))
+                        .map(Telefone::getNumero)
+                        .filter(Objects::nonNull)
+                        .toList();
+
+                String telefonesStr = telefonesUsuario.isEmpty()
+                        ? "Sem telefone"
+                        : String.join(", ", telefonesUsuario);
+
+                /* ================= ENDEREÇO ================= */
+                Endereco endereco = enderecosSeguros.stream()
+                        .filter(e -> e.getOperador() != null &&
+                                e.getOperador().getId().equals(userId))
+                        .findFirst()
+                        .orElse(null);
+
+                String enderecoStr = endereco == null ? "Sem endereço"
+                        : String.format("%s, %s - %s, %s/%s (%s)",
+                                safe(endereco.getLogradouro()),
+                                safe(endereco.getNumero()),
+                                safe(endereco.getBairro()),
+                                safe(endereco.getCidade()),
+                                safe(endereco.getEstado()),
+                                safe(endereco.getCep()));
+
+                /* ================= DATA ================= */
+                String dataFormatada = "";
+                try {
+                    if (u.getInstante() != null && !u.getInstante().isBlank()) {
+                        dataFormatada = formatter.format(Instant.parse(u.getInstante()));
+                    }
+                } catch (Exception e) {
+                    dataFormatada = "";
+                }
+
+                listaUsuarios.add(new Usuario(
+                        u.getId(),
+                        safe(u.getNome()),
+                        safe(u.getSetor()),
+                        safe(u.getLogin()),
+                        dataFormatada,
+                        null,
+                        telefonesStr,
+                        enderecoStr));
+            }
+
+            listaFiltrada = new FilteredList<>(listaUsuarios, p -> true);
+            tabelaUsuario.setItems(listaFiltrada);
+
+        } catch (Exception e) {
+            AlertUtil.mostrarErro("Erro ao carregar usuários: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private String safe(String valor) {
+        return valor == null ? "" : valor;
+    }
+
+    private void configurarFiltroUsuario() {
+
+        txtFiltrar.textProperty().addListener((obs, oldV, newV) -> {
+            String filtro = newV.toLowerCase();
+
+            listaFiltrada.setPredicate(u -> {
+                if (filtro.isEmpty())
+                    return true;
+
+                return u.getNome().toLowerCase().contains(filtro)
+                        || String.valueOf(u.getId()).contains(filtro)
+                        || u.getSetor().toLowerCase().contains(filtro)
+                        || u.getLogin().toLowerCase().contains(filtro)
+                        || u.getEndereco().toLowerCase().contains(filtro)
+                        || u.getTelefones().toLowerCase().contains(filtro);
+            });
+        });
     }
 
 }

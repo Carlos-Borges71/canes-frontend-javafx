@@ -1,13 +1,18 @@
 package com.canes.model.dpo;
 
 public class PedidoDPO {
-
+    private Long id;
     private Long item;
     private String codigo;
     private String produto;
     private Integer quant;
     private Double valorUnitario;
     private Double total;
+    private String cliente;
+    private String status;
+    private String pagamento;
+    private String data;
+    
 
     private boolean totalRow;
 
@@ -17,13 +22,18 @@ public class PedidoDPO {
         
     }
 
-    public PedidoDPO(Long item, String codigo,  String produto, Integer quant, Double valorUnitario, Double total) {
+    public PedidoDPO(Long item, String codigo,  String produto, Integer quant, Double valorUnitario, Double total, String cliente, String status,String pagamento, String data, Long id) {
         this.item = item;
         this.codigo = codigo;
         this.produto = produto;
         this.quant = quant;
         this.valorUnitario = valorUnitario;
         this.total = total;
+        this.cliente = cliente;
+        this.status = status;
+        this.pagamento = pagamento;
+        this.data = data;
+        this.id = id;
     }
 
      public boolean isTotalRow() {
@@ -85,6 +95,46 @@ public class PedidoDPO {
 
     public void setTotal(Double total) {
         this.total = total;
+    }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(String pagamento) {
+        this.pagamento = pagamento;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
     
     

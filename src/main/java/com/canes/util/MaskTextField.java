@@ -1,6 +1,5 @@
 package com.canes.util;
 
-
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -15,10 +14,11 @@ public class MaskTextField {
 
     public static void applyCepMask(TextField textField) {
 
-        final boolean[] isUpdating = {false};        
+        final boolean[] isUpdating = { false };
 
         textField.textProperty().addListener((obs, oldValue, newValue) -> {
-            if (isUpdating[0]) return;
+            if (isUpdating[0])
+                return;
 
             // Remove qualquer caractere que não seja número
             String digits = newValue.replaceAll("[^\\d]", "");
@@ -32,8 +32,8 @@ public class MaskTextField {
 
             if (len > 5) {
                 formatted.append(digits.substring(0, 5))
-                         .append("-")
-                         .append(digits.substring(5));
+                        .append("-")
+                        .append(digits.substring(5));
             } else {
                 formatted.append(digits);
             }
@@ -44,7 +44,7 @@ public class MaskTextField {
             textField.setText(masked);
             textField.positionCaret(masked.length()); // mantém o cursor no fim
             isUpdating[0] = false;
-   });
+        });
     }
 
     public static void applyStateMask(TextField textField) {
@@ -67,10 +67,11 @@ public class MaskTextField {
     }
 
     public static void applyPhoneMask(TextField textField) {
-        final boolean[] isUpdating = {false};
+        final boolean[] isUpdating = { false };
 
         textField.textProperty().addListener((obs, oldValue, newValue) -> {
-            if (isUpdating[0]) return;
+            if (isUpdating[0])
+                return;
 
             // Remove tudo que não for número
             String digits = newValue.replaceAll("[^\\d]", "");
@@ -82,7 +83,8 @@ public class MaskTextField {
             StringBuilder formatted = new StringBuilder();
             int len = digits.length();
 
-            if (len >= 1) formatted.append("(");
+            if (len >= 1)
+                formatted.append("(");
 
             if (len >= 2) {
                 formatted.append(digits.substring(0, 2)).append(") ");
@@ -107,10 +109,8 @@ public class MaskTextField {
         });
     }
 
-    public static void limitarCaracteresFixos(TextField textField, int tamanhoFixo) {    
-    
-        
-   
+    public static void limitarCaracteresFixos(TextField textField, int tamanhoFixo) {
+
         textField.setTextFormatter(new TextFormatter<>(change -> {
             if (change.getText().isEmpty()) {
                 // Permite apagar sempre
@@ -136,14 +136,11 @@ public class MaskTextField {
         }));
     }
 
-    
-    
+    public static void applyCnpjMask(TextField textField) {
 
-     public static void applyCnpjMask(TextField textField) {
-        
-    
         textField.textProperty().addListener((obs, oldValue, newValue) -> {
-            if (newValue == null) return;
+            if (newValue == null)
+                return;
 
             // Remove tudo que não for número
             String digits = newValue.replaceAll("\\D", "");
@@ -165,10 +162,14 @@ public class MaskTextField {
 
             for (int i = 0; i < len; i++) {
                 formatted.append(digits.charAt(i));
-                if (i == 1) formatted.append(".");
-                if (i == 4) formatted.append(".");
-                if (i == 7) formatted.append("/");
-                if (i == 11) formatted.append("-");
+                if (i == 1)
+                    formatted.append(".");
+                if (i == 4)
+                    formatted.append(".");
+                if (i == 7)
+                    formatted.append("/");
+                if (i == 11)
+                    formatted.append("-");
             }
 
             String finalText = formatted.toString();
@@ -186,26 +187,17 @@ public class MaskTextField {
      * Retorna o CNPJ apenas com números (sem máscara).
      */
     public static String getValueCnpj(TextField field) {
-        if (field.getText() == null) return "";
+        if (field.getText() == null)
+            return "";
         return field.getText().replaceAll("\\D", "");
     }
 
-        
-
-   
-    
-
     public static void validarNaoVazio(TextField textfield, Button botao) {
-        
-        botao.disableProperty().bind(Bindings.createBooleanBinding(() ->
-        textfield.getText().trim().isEmpty(), textfield.textProperty()
-        ));
+
+        botao.disableProperty().bind(
+                Bindings.createBooleanBinding(() -> textfield.getText().trim().isEmpty(), textfield.textProperty()));
     }
 
-
-
-
-    
     public static void number(TextField field) {
         field.setTextFormatter(new TextFormatter<>(change -> {
             String newText = change.getControlNewText();
@@ -229,16 +221,33 @@ public class MaskTextField {
         }));
     }
 
-    
-   
-     
-    
-   
+    public static String bigDecimalParaMoedaBR(BigDecimal valor) {
+        if (valor == null) {
+            return "R$ 0,00";
+        }
+
+        NumberFormat formatoBR = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+        return formatoBR.format(valor);
+    }
+
     public static void valor(TextField field) {
         valor(field, new Locale("pt", "BR"), 2);
     }
 
-    
+    public static BigDecimal stringParaBigDecimalBR(String valor) {
+
+        if (valor == null || valor.isBlank()) {
+            return BigDecimal.ZERO;
+        }
+
+        // Remove R$, espaços e pontos de milhar
+        valor = valor.replace("R$", "")
+                .replace(" ", "")
+                .replace(".", "")
+                .replace(",", ".");
+
+        return new BigDecimal(valor);
+    }
 
     /**
      * Aplica máscara de moeda configurável (locale e casas decimais).
@@ -251,7 +260,8 @@ public class MaskTextField {
         AtomicBoolean updating = new AtomicBoolean(false);
 
         field.textProperty().addListener((obs, oldValue, newValue) -> {
-            if (updating.get()) return; // evita recursão
+            if (updating.get())
+                return; // evita recursão
             updating.set(true);
             try {
                 // remove tudo que não for dígito
@@ -282,12 +292,14 @@ public class MaskTextField {
     }
 
     /**
-     * Retorna o valor numérico do campo como BigDecimal (ex: R$ 1.234,56 -> 1234.56).
+     * Retorna o valor numérico do campo como BigDecimal (ex: R$ 1.234,56 ->
+     * 1234.56).
      * Retorna BigDecimal.ZERO se vazio ou inválido.
      */
     public static BigDecimal getValue(TextField field) {
         String text = field.getText();
-        if (text == null || text.isBlank()) return BigDecimal.ZERO;
+        if (text == null || text.isBlank())
+            return BigDecimal.ZERO;
         String digits = text.replaceAll("\\D", "");
         try {
             return new BigDecimal(digits).movePointLeft(2);
@@ -297,21 +309,11 @@ public class MaskTextField {
     }
 
     public static BigDecimal parseValor(String valor) {
-    if (valor == null || valor.isBlank()) {
-        return BigDecimal.ZERO;
+        if (valor == null || valor.isBlank()) {
+            return BigDecimal.ZERO;
+        }
+        return new BigDecimal(
+                valor.replaceAll("[^0-9,]", "").replace(",", "."));
     }
-    return new BigDecimal(
-            valor.replaceAll("[^0-9,]", "").replace(",", ".")
-    );
+
 }
-
-
-    
-   
-}
-
-
-   
-
-
-

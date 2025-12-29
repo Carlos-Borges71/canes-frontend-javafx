@@ -315,16 +315,24 @@ public class PedidoController {
         });
 
         Platform.runLater(() -> {
+
             Scene scene = txtCodigo.getScene();
+            if (scene == null)
+                return;
 
-            scene.setOnKeyPressed(e -> {
+            scene.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
                 if (e.getCode() == KeyCode.ESCAPE) {
-
                     try {
-                        ScreenUtils.changeScreenElement(txtCodigo, "/com/canes/view/menu.fxml", "MENU", null);
-                    } catch (Exception event) {
-                        event.printStackTrace();
+                        ScreenUtils.changeScreenElement(
+                                txtCodigo,
+                                "/com/canes/view/menu.fxml",
+                                "MENU",
+                                null);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
+
+                    e.consume(); // impede conflito
                 }
             });
         });
@@ -416,6 +424,7 @@ public class PedidoController {
                     try {
                         if (txtTelefone.getText().isEmpty()) {
                             AlertUtil.mostrarErro("Digite um número de telefone!");
+                            txtTelefone.requestFocus();
                             return;
                         }
 
@@ -500,21 +509,20 @@ public class PedidoController {
                         if (totalrecebido != null) {
                             txtTotalRecebido.setText(totalrecebido);
                         }
-                        
-                        lblTitulo.setText("Imprimindo ......");
+
+                        lblTitulo.setText("Imprimindo ...");
 
                         Stage stage1 = (Stage) tabelaPedido.getScene().getWindow();
 
                         PauseTransition pause = new PauseTransition(Duration.seconds(3));
                         pause.setOnFinished(e -> {
                             lblTitulo.setText("Pedido");
+                            novoPedido();
                             // se quiser, pode fechar a tela aqui:
                             // stage1.close();
                         });
 
                         pause.play();
-
-                        novoPedido();
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -728,7 +736,8 @@ public class PedidoController {
             double valorUnit = encontrado.getValorVenda();
             double total = quant * valorUnit;
 
-            PedidoDPO pe = new PedidoDPO(item, codigo, nomeProduto, quant, valorUnit, total);
+            PedidoDPO pe = new PedidoDPO(item, codigo, nomeProduto, quant, valorUnit, total, null, null, null, null,
+                    null);
 
             tabelaPedido.getItems().add(pe);
             tabelaPedido.scrollTo(pe);
@@ -790,7 +799,7 @@ public class PedidoController {
             txtValorUnitario.setText(nf.format(unitario));
             double total = quant * unitario;
 
-            PedidoDPO p = new PedidoDPO(item, codigo, produt, quant, unitario, total);
+            PedidoDPO p = new PedidoDPO(item, codigo, produt, quant, unitario, total, null, null, null, null, null);
             tabelaPedido.getItems().add(p);
 
             tabelaPedido.scrollTo(p);
@@ -821,7 +830,7 @@ public class PedidoController {
                 .sum();
 
         // criar a linha total
-        PedidoDPO total = new PedidoDPO(null, "", "TOTAL", somaQuant, null, soma);
+        PedidoDPO total = new PedidoDPO(null, "", "TOTAL", somaQuant, null, soma, null, null, null, null, null);
         total.setTotalRow(true);
 
         lista.add(total);
@@ -840,7 +849,7 @@ public class PedidoController {
                 .sum();
 
         // adiciona a nova linha
-        PedidoDPO total = new PedidoDPO(null, "", "TOTAL", null, 0.0, soma);
+        PedidoDPO total = new PedidoDPO(null, "", "TOTAL", null, 0.0, soma, null, null, null, null, null);
         lista.add(total);
 
         // 🔥 importantíssimo → força atualização da tabela!

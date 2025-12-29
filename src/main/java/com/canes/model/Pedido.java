@@ -42,9 +42,7 @@ public class Pedido {
         return status;
     }
 
-    public List<Produto> getProduto() {
-        return produtos;
-    }
+    
 
     public void setStatus(String status) {
         this.status = status;

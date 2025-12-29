@@ -150,11 +150,11 @@ public class FormaPagamentoController {
 
         try {
             Double valorPagamento = valorDigitado.doubleValue();
-
+            String tipo = txtPagamento.getText();
             PagamentoService pagamentoService = new PagamentoService();
             pagamentoService.salvarPagamento(
                     data,
-                    getFormaSelecionada(),
+                    tipo,
                     valorPagamento,
                     pedidoId);
 

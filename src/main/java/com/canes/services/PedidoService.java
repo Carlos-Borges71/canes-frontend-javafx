@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import com.canes.model.Pagamento;
 import com.canes.model.Pedido;
+import com.canes.model.dpo.PedidoDPO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -85,12 +86,12 @@ public class PedidoService {
         }
     }
 
-     public Long buscarUltimoPedidoId()
-            throws IOException, InterruptedException {
+    //  public Long buscarUltimoPedidoId()
+    //         throws IOException, InterruptedException {
 
-        return buscarTodos().stream()
-                .max(Comparator.comparing(Pedido::getId))
-                .map(Pedido::getId)
-                .orElse(null);
-    }
+    //     return buscarTodos().stream()
+    //             .max(Comparator.comparing(PedidoDPO::getId))
+    //             .map(Pedido::getId)
+    //             .orElse(null);
+    // }
 }
