@@ -1,18 +1,17 @@
 package com.canes.controller;
 
 import java.math.BigDecimal;
-import java.security.Key;
+import java.text.NumberFormat;
+
 import javafx.util.Duration;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-import com.canes.model.Pagamento;
 import com.canes.model.Produto;
-import com.canes.model.dpo.PagamentoDPO;
 import com.canes.model.dpo.PedidoDPO;
 import com.canes.services.ClienteService;
 import com.canes.services.PagamentoService;
@@ -22,24 +21,14 @@ import com.canes.services.ProdutoService;
 import com.canes.services.TelefoneService;
 import com.canes.util.AlertUtil;
 import com.canes.util.MaskTextField;
-import com.canes.util.MoedaCorrenteCellFactory;
-
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -56,7 +45,13 @@ import javafx.stage.Stage;
 public class FormaPagamentoController {
 
     @FXML
+    private AnchorPane root;
+
+    @FXML
     private Label lblStatus;
+
+    @FXML
+    private Label lblTotal;
 
     @FXML
     private Label lblValor;
@@ -131,6 +126,8 @@ public class FormaPagamentoController {
     String instanteFormatado = formatter.format(instante);
     String data = instanteFormatado.formatted(instanteFormatado);
 
+    NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+
     PedidoService pedidoService = new PedidoService();
 
     public Long salvarPedido() {
@@ -149,6 +146,7 @@ public class FormaPagamentoController {
     public void salvarPagamento(Long pedidoId, BigDecimal valorDigitado) {
 
         try {
+
             Double valorPagamento = valorDigitado.doubleValue();
             String tipo = txtPagamento.getText();
             PagamentoService pagamentoService = new PagamentoService();
@@ -244,6 +242,7 @@ public class FormaPagamentoController {
     }
 
     public void initialize() {
+        lblStatus.setText("AGUARDANDO_PAGAMENTO");
 
         MaskTextField.valor(txtValor);
 
@@ -308,6 +307,10 @@ public class FormaPagamentoController {
             }
             if (evet.getCode() == KeyCode.F10) {
                 try {
+                    if (lblValor == null || lblStatus == null) {
+                        AlertUtil.mostrarErro("Preencha valor ou o status do pagamento");
+                        return;
+                    }
 
                     BigDecimal valorDigitado = MaskTextField.parseValor(txtValor.getText());
 
@@ -315,24 +318,58 @@ public class FormaPagamentoController {
                         AlertUtil.mostrarErro("Informe um valor válido.");
                         return;
                     }
-
-                    if (valorDigitado.compareTo(valorRestante) > 0) {
+                    System.out.println(txtPagamento.getText());
+                    if (valorDigitado.compareTo(valorRestante) > 0
+                            && !"Dinheiro".equalsIgnoreCase(txtPagamento.getText().trim())) {
                         AlertUtil.mostrarErro("Valor maior que o saldo restante.");
                         return;
                     }
                     // 🔵 SOMA AO TOTAL PAGO
                     totalPago = totalPago.add(valorDigitado);
 
+                    String txt = lblValor.getText();
+
+                    BigDecimal valor = new BigDecimal(
+                            txt.replaceAll("[^0-9,.-]", "") // remove tudo que não é número
+                                    .replace(",", "."));
+
+
+
+                    String txt1 = txtValor.getText();
+
+                    BigDecimal valor1 = new BigDecimal(
+                            txt1.replaceAll("[^0-9,.-]", "") // remove tudo que não é número
+                                    .replace(",", "."));  
+
+                    if (valor1.compareTo(valor) >= 0) {
+                        lblStatus.setText("PAGO");
+                    }
+                    BigDecimal valorPagamento = valorDigitado;
+
+                    if (valorDigitado.compareTo(valor) > 0) {
+                        valorPagamento = valor;
+                    }
+
                     salvarDados();
                     // Long pedidoId = pedidoService.buscarUltimoPedidoId();
 
-                    // ✅ salva UM pagamento
-                    salvarPagamento(pedidoId, valorDigitado);
+                    salvarPagamento(pedidoId, valorPagamento);
 
                     // 🔽 atualiza valor restante
                     valorRestante = valorRestante.subtract(valorDigitado);
 
-                    // 🟢 quitou tudo
+                    if (valorRestante.compareTo(BigDecimal.ZERO) < 0) {
+                        lblTotal.setText("Troco:");
+
+                        String texto = nf.format(valorRestante);
+
+                        lblValor.setText(texto.replace("-", ""));
+
+                        fecharComDelay();
+                        return;
+
+                    }
+
                     if (valorRestante.compareTo(BigDecimal.ZERO) == 0) {
                         lblValor.setText("0,00");
 
@@ -340,7 +377,8 @@ public class FormaPagamentoController {
                     }
 
                     // 🟡 ainda falta pagar → pode escolher outra forma
-                    lblValor.setText(valorRestante.toString().replace(".", ","));
+
+                    lblValor.setText(nf.format(valorRestante));
                     txtValor.clear();
                     txtPagamento.clear();
                     txtPagamento.requestFocus();
@@ -371,11 +409,11 @@ public class FormaPagamentoController {
         statusSelecionado = lblStatus.getText();
         formaPagamento = txtPagamento.getText();
 
-        //totalRecebido = valorDigitado;
+        // totalRecebido = valorDigitado;
 
         Stage stage = (Stage) rootPane.getScene().getWindow();
 
-        PauseTransition pause = new PauseTransition(Duration.seconds(3)); // 2 segundos
+        PauseTransition pause = new PauseTransition(Duration.seconds(5)); // 2 segundos
         pause.setOnFinished(e -> stage.close());
         pause.play();
     }

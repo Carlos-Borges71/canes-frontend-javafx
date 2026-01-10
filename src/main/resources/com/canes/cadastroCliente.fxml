@@ -46,12 +46,12 @@
                         <Insets left="8.0" />
                      </padding>
                   </TextField>
-                  <TextField fx:id="txtCidadeClient" layoutX="590.0" layoutY="151.0" prefWidth="152.0" style="-fx-border-radius: 7; -fx-background-color: transparent; -fx-border-color: fff; -fx-text-fill: fff;">
+                  <TextField fx:id="txtBairroClient" layoutX="374.0" layoutY="150.0" prefWidth="152.0" style="-fx-border-radius: 7; -fx-background-color: transparent; -fx-border-color: fff; -fx-text-fill: fff;">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                   </TextField>
-                  <TextField fx:id="txtBairroClient" layoutX="374.0" layoutY="150.0" prefWidth="152.0" style="-fx-border-radius: 7; -fx-background-color: transparent; -fx-border-color: fff; -fx-text-fill: fff;">
+                  <TextField fx:id="txtCidadeClient" layoutX="590.0" layoutY="151.0" prefWidth="152.0" style="-fx-border-radius: 7; -fx-background-color: transparent; -fx-border-color: fff; -fx-text-fill: fff;">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>

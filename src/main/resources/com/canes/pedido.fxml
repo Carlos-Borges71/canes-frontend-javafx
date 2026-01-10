@@ -17,11 +17,11 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
    <children>
-      <AnchorPane prefHeight="762.0" prefWidth="1342.0" style="-fx-border-color: fff; -fx-border-radius: 30; -fx-opacity: 60;">
+      <AnchorPane fx:id="root" prefHeight="762.0" prefWidth="1342.0" style="-fx-border-color: fff; -fx-border-radius: 30; -fx-opacity: 60;">
          <children>
             <Pane layoutX="15.0" layoutY="14.0" prefHeight="63.0" prefWidth="1008.0" style="-fx-background-color: fff; -fx-background-radius: 20;">
                <children>
-                  <Label fx:id="lblTitulo" layoutX="468.0" layoutY="11.0" text="Pedido" textFill="#123c6b">
+                  <Label fx:id="lblTitulo" alignment="CENTER" contentDisplay="CENTER" layoutX="21.0" layoutY="9.0" prefHeight="46.0" prefWidth="983.0" text="Pedido" textFill="#123c6b">
                      <font>
                         <Font name="Verdana Bold" size="36.0" />
                      </font>

@@ -2,7 +2,6 @@ package com.canes.controller;
 
 
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.Instant;
@@ -23,7 +22,6 @@ import com.canes.model.Telefone;
 import com.canes.model.Usuario;
 import com.canes.model.dpo.ClienteTabelaDPO;
 import com.canes.model.dpo.FornecedorDTO;
-import com.canes.model.dpo.PedidoDPO;
 import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
 import com.canes.services.FornecedorService;
@@ -43,7 +41,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -746,7 +743,7 @@ public class PesquisaController {
 
     @FXML
     void limparPedido(ActionEvent event) {
-
+        txtFiltrarPedido.clear();
     }
 
     @FXML
@@ -1029,6 +1026,14 @@ public class PesquisaController {
 
             btnLimparProduto.setOnMouseEntered(e -> {
                 HouverEffectUtil.apllyHouverSobre(btnLimparProduto);
+            });
+
+             btnLimparPedido.setOnMouseExited(e -> {
+                HouverEffectUtil.apllyHouverSair(btnLimparPedido);
+            });
+
+            btnLimparPedido.setOnMouseEntered(e -> {
+                HouverEffectUtil.apllyHouverSobre(btnLimparPedido);
             });
 
         } catch (Exception e) {

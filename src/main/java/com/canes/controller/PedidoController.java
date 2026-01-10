@@ -467,7 +467,7 @@ public class PedidoController {
 
                                         List<PedidoDPO> produtosTabela = new ArrayList<>(
                                                 tabelaPedido.getItems());
-                                        String total = lblTotal.getText();
+                                        String total = "R$ "+lblTotal.getText();
                                         String status = txtStatus.getText();
                                         controller.receberDados(idCliente, total,
                                                 produtosTabela);
@@ -510,7 +510,7 @@ public class PedidoController {
                             txtTotalRecebido.setText(totalrecebido);
                         }
 
-                        lblTitulo.setText("Imprimindo ...");
+                        lblTitulo.setText("Aguarde Imprimindo ...");
 
                         Stage stage1 = (Stage) tabelaPedido.getScene().getWindow();
 
@@ -745,7 +745,7 @@ public class PedidoController {
             item++;
 
             // 🔹 ADICIONA/ATUALIZA A LINHA DE TOTAL
-            // atualizarLinhaTotal();
+            //atualizarLinhaTotal();
 
             totalQuant();
             totalValor();
@@ -830,7 +830,7 @@ public class PedidoController {
                 .sum();
 
         // criar a linha total
-        PedidoDPO total = new PedidoDPO(null, "", "TOTAL", somaQuant, null, soma, null, null, null, null, null);
+        PedidoDPO total = new PedidoDPO(null, "", "TOTAL "+ soma, 0, null, 0.0, null, null, null, null, null);
         total.setTotalRow(true);
 
         lista.add(total);

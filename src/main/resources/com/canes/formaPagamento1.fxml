@@ -20,7 +20,7 @@
          <children>
             <Pane fx:id="paneCliente" layoutX="9.0" layoutY="85.0" prefHeight="309.0" prefWidth="940.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff; -fx-text-fill: fff;">
                <children>
-                  <Label layoutX="21.0" layoutY="27.0" text="Valor:" textFill="WHITE">
+                  <Label fx:id="lblTotal" layoutX="21.0" layoutY="27.0" text="Valor:" textFill="WHITE">
                      <font>
                         <Font name="Verdana Bold" size="24.0" />
                      </font>
@@ -78,12 +78,12 @@
                         <Image url="@img/price_check_79dp_75FB4C_FILL0_wght400_GRAD0_opsz48.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="lblValor" layoutX="119.0" layoutY="27.0" text="R$ 250,90" textFill="#1ee435">
+                  <Label fx:id="lblValor" layoutX="119.0" layoutY="27.0" textFill="#1ee435">
                      <font>
                         <Font name="Verdana Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="lblStatus" layoutX="440.0" layoutY="27.0" text="Pago" textFill="#1ee435">
+                  <Label fx:id="lblStatus" layoutX="440.0" layoutY="27.0" textFill="#1ee435">
                      <font>
                         <Font name="Verdana Bold" size="24.0" />
                      </font>
