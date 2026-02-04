@@ -1,15 +1,37 @@
 package com.canes.controller;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import com.canes.util.HouverEffectUtil;
 import com.canes.util.MaskTextField;
 import com.canes.util.ScreenUtils;
 import com.canes.util.TextFieldUtil;
 import com.canes.util.UserSession;
+import com.canes.model.Cliente;
+import com.canes.model.Endereco;
+import com.canes.model.Fornecedor;
+import com.canes.model.Pedido;
+import com.canes.model.Produto;
+import com.canes.model.Telefone;
+import com.canes.model.Usuario;
+import com.canes.services.ClienteService;
+import com.canes.services.EnderecoService;
+import com.canes.services.PedidoService;
+import com.canes.services.ProdutoService;
+import com.canes.services.TelefoneService;
+import com.canes.services.UsuarioService;
 import com.canes.util.AlertUtil;
 import com.canes.util.ValidadorSenha;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -107,7 +129,7 @@ public class AtualizarController {
     private TextField txtReNoSenha;
 
     @FXML
-    private ComboBox<?> txtSetor;
+    private ComboBox<String> txtSetor;
 
     @FXML
     private VBox vBoxMenos;
@@ -137,6 +159,24 @@ public class AtualizarController {
 
     @FXML
     private Button btnProduto;
+
+    @FXML
+    private Button btnBuscarPedido;
+
+    @FXML
+    private Button btnPedido;
+
+    @FXML
+    private Pane panePedido;
+
+    @FXML
+    private TextField txtCodigoPedido;
+
+    @FXML
+    private TextField txtStatusPedido;
+
+    @FXML
+    private TextField txtValorPedido;
 
     @FXML
     private Button btnCadastrarFornec;
@@ -217,6 +257,9 @@ public class AtualizarController {
     private Label lbluser;
 
     @FXML
+    private Label lblPedido;
+
+    @FXML
     private Pane paneCliente;
 
     @FXML
@@ -275,6 +318,7 @@ public class AtualizarController {
 
     @FXML
     void onActionProduto(ActionEvent event) {
+        Platform.runLater(() -> txtCodigoFornec.requestFocus());
 
         paneProduto.setVisible(true);
         lblProduto.setTextFill(Color.RED);
@@ -284,16 +328,173 @@ public class AtualizarController {
         lblClient.setTextFill(Color.WHITE);
         paneFornec.setVisible(false);
         lblFornec.setTextFill(Color.WHITE);
+        panePedido.setVisible(false);
+        lblPedido.setTextFill(Color.WHITE);
 
     }
 
     @FXML
     void onClickBuscar(ActionEvent event) {
 
+        try {
+            TelefoneService telefoneService = new TelefoneService();
+            EnderecoService enderecoService = new EnderecoService();
+
+            Map<String, Usuario> mapaTelefoneUsuario = new HashMap<>();
+            Map<Long, Endereco> mapaUsuarioEndereco = new HashMap<>();
+
+            // 1️⃣ Mapa cliente -> endereco
+            for (Endereco e : enderecoService.buscarTodos()) {
+                if (e.getOperador() != null) {
+                    mapaUsuarioEndereco.put(e.getOperador().getId(), e);
+                }
+            }
+
+            // 2️⃣ Mapa telefone -> usuario
+            for (Telefone t : telefoneService.buscarTodos()) {
+
+                if (t.getNumero() == null || t.getOperador() == null)
+                    continue;
+
+                mapaTelefoneUsuario.put(t.getNumero(), t.getOperador());
+            }
+
+            // 3️⃣ Busca
+            String telefoneDigitado = txtCelUsuario.getText();
+            txtcel.setText(telefoneDigitado);
+
+            Usuario usuario = mapaTelefoneUsuario.get(telefoneDigitado);
+
+            if (usuario != null) {
+
+                txtNome.setText(usuario.getNome());
+                txtLogin.setText(usuario.getLogin());
+                passwordSenha.setText(usuario.getSenha());
+                txtSetor.setValue(usuario.getSetor());
+
+                // ✅ AGORA SIM
+                Endereco endereco = mapaUsuarioEndereco.get(usuario.getId());
+
+                if (endereco != null) {
+                    txtLogradouro.setText(endereco.getLogradouro());
+                    txtCidade.setText(endereco.getCidade());
+                    txtBairro.setText(endereco.getBairro());
+                    txtNumero.setText(endereco.getNumero());
+                    txtEstado.setText(endereco.getEstado());
+                    txtCep.setText(endereco.getCep());
+
+                } else {
+                    AlertUtil.mostrarErro("Endereço não encontrado.");
+                }
+
+            } else {
+                AlertUtil.mostrarErro("Usuário não encontrado.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
     }
 
     @FXML
     void onClickBuscarCliente(ActionEvent event) {
+
+        try {
+            TelefoneService telefoneService = new TelefoneService();
+            EnderecoService enderecoService = new EnderecoService();
+
+            Map<String, Cliente> mapaTelefoneCliente = new HashMap<>();
+            Map<Long, Endereco> mapaClienteEndereco = new HashMap<>();
+
+            // 1️⃣ Mapa cliente -> endereco
+            for (Endereco e : enderecoService.buscarTodos()) {
+                if (e.getCliente() != null) {
+                    mapaClienteEndereco.put(e.getCliente().getId(), e);
+                }
+            }
+
+            // 2️⃣ Mapa telefone -> usuario
+            for (Telefone t : telefoneService.buscarTodos()) {
+
+                if (t.getNumero() == null || t.getCliente() == null)
+                    continue;
+
+                mapaTelefoneCliente.put(t.getNumero(), t.getCliente());
+            }
+
+            // 3️⃣ Busca
+            String telefoneDigitado = txtcelClient.getText();
+            txtCelClient1.setText(telefoneDigitado);
+
+            Cliente cliente = mapaTelefoneCliente.get(telefoneDigitado);
+
+            if (cliente != null) {
+                txtNomeClient.setText(cliente.getNome());
+
+                // ✅ AGORA SIM
+                Endereco endereco = mapaClienteEndereco.get(cliente.getId());
+
+                if (endereco != null) {
+                    txtLogradouroClient.setText(endereco.getLogradouro());
+                    txtCidadeClient.setText(endereco.getCidade());
+                    txtBairroClient.setText(endereco.getBairro());
+                    txtNumeroClient.setText(endereco.getNumero());
+                    txtEstadoClient.setText(endereco.getEstado());
+                    txtCepClient.setText(endereco.getCep());
+                } else {
+                    AlertUtil.mostrarErro("Endereço não encontrado.");
+                }
+
+            } else {
+                AlertUtil.mostrarErro("Cliente não encontrado.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+    }
+
+    @FXML
+    void onClickAtualizarPedido(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onClickBuscarPedido(ActionEvent event) {
+        try {
+            PedidoService pedidoService = new PedidoService();
+            List<Pedido> pedido = pedidoService.buscarTodos();
+
+            boolean encontrado = false;
+
+            for (Pedido p : pedido) {
+                if (txtCodigoPedido.getText().equals(p.getId().toString())) {
+
+                    BigDecimal valorPedido = new BigDecimal(p.getValor());
+
+                    txtStatusPedido.setText(p.getStatus());
+                    txtValorPedido.setText(numberFormat(valorPedido));
+
+                    encontrado = true;
+                    break;
+                }
+            }
+
+            if (!encontrado) {
+                AlertUtil.mostrarErro("Pedido não encontrado.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertUtil.mostrarErro("Erro ao busca Pedido.");
+        }
+
+    }
+
+    @FXML
+    void onclickLimparPedido(ActionEvent event) {
 
     }
 
@@ -305,11 +506,114 @@ public class AtualizarController {
     @FXML
     void onClickBuscarFornec(ActionEvent event) {
 
+        try {
+            TelefoneService telefoneService = new TelefoneService();
+            EnderecoService enderecoService = new EnderecoService();
+
+            Map<String, Fornecedor> mapaTelefoneFornecedor = new HashMap<>();
+            Map<Long, Endereco> mapaFornecedorEndereco = new HashMap<>();
+
+            // 1️⃣ Mapa fornecedor -> endereco
+            for (Endereco e : enderecoService.buscarTodos()) {
+                if (e.getFornecedor() != null) {
+                    mapaFornecedorEndereco.put(e.getFornecedor().getId(), e);
+                }
+            }
+
+            // 2️⃣ Mapa telefone -> fornecedor
+            for (Telefone t : telefoneService.buscarTodos()) {
+
+                if (t.getNumero() == null || t.getFornecedor() == null)
+                    continue;
+
+                mapaTelefoneFornecedor.put(t.getNumero(), t.getFornecedor());
+            }
+
+            // 3️⃣ Busca
+            String telefoneDigitado = txtCelFornec.getText();
+            txtCelFornec1.setText(telefoneDigitado);
+
+            Fornecedor fornecedor = mapaTelefoneFornecedor.get(telefoneDigitado);
+
+            if (fornecedor != null) {
+                txtNomeFornec.setText(fornecedor.getEmpresa());
+                txtCnpjFornec.setText(fornecedor.getCnpjCpf());
+
+                // ✅ AGORA SIM
+                Endereco endereco = mapaFornecedorEndereco.get(fornecedor.getId());
+
+                if (endereco != null) {
+                    txtLogradouroFornec.setText(endereco.getLogradouro());
+                    txtCidadeFornec.setText(endereco.getCidade());
+                    txtBairroFornec.setText(endereco.getBairro());
+                    txtNumeroFornec.setText(endereco.getNumero());
+                    txtEstadoFornec.setText(endereco.getEstado());
+                    txtCepFornec.setText(endereco.getCep());
+                } else {
+                    AlertUtil.mostrarErro("Endereço não encontrado.");
+                }
+
+            } else {
+                AlertUtil.mostrarErro("Fornecedor não encontrado.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+    }
+
+    private static String numberFormat(BigDecimal valor) {
+
+        if (valor == null) {
+            return "0,00";
+        }
+        NumberFormat nf = NumberFormat.getNumberInstance(new Locale("pt", "BR"));
+        nf.setMinimumFractionDigits(2);
+        nf.setMaximumFractionDigits(2);
+
+        return nf.format(valor);
     }
 
     @FXML
     void onClickBuscarProduto(ActionEvent event) {
 
+        try {
+
+            ProdutoService produtoService = new ProdutoService();
+            List<Produto> produto = produtoService.buscarTodos();
+
+            boolean encontrado = false;
+            for (Produto p : produto) {
+
+                if (txtCodigoFornec.getText().equals(p.getCodigo())) {
+                    BigDecimal valorCompra = new BigDecimal(p.getValorCompra());
+                    BigDecimal valorVenda = new BigDecimal(p.getValorVenda());
+
+                    txtProdutoFornec.setText(p.getNome());
+                    txtNotaFiscalFornec.setText(p.getNota().getNotaFiscal().toString());
+                    txtValorCompraFornec.setText(numberFormat(valorCompra));
+                    txtValorVendaFornec.setText(numberFormat(valorVenda));
+
+                    txtQuantFornec.setText(p.getQuantcompra().toString());
+
+                    encontrado = true;
+                    break;
+                }
+            }
+
+            if (!encontrado) {
+                AlertUtil.mostrarErro("Produto não encontrado.");
+            }
+
+        } catch (
+
+        Exception e) {
+            e.printStackTrace();
+            AlertUtil.mostrarErro("Erro ao buscar produto.");
+
+        }
     }
 
     @FXML
@@ -320,10 +624,12 @@ public class AtualizarController {
         txtTamanhoFornec.clear();
         txtValorCompraFornec.clear();
         txtQuantFornec.clear();
+        txtValorVendaFornec.clear();
     }
 
     @FXML
     void onActionFornec(ActionEvent event) {
+        Platform.runLater(() -> txtCelFornec.requestFocus());
         paneUser.setVisible(false);
         paneCliente.setVisible(false);
         lbluser.setTextFill(Color.WHITE);
@@ -332,25 +638,30 @@ public class AtualizarController {
         lblFornec.setTextFill(Color.RED);
         paneProduto.setVisible(false);
         lblProduto.setTextFill(Color.WHITE);
+        panePedido.setVisible(false);
+        lblPedido.setTextFill(Color.WHITE);
 
     }
 
     @FXML
     void onActionPedido(ActionEvent event) {
-
-        paneProduto.setVisible(true);
-        lblProduto.setTextFill(Color.RED);
+        Platform.runLater(() -> txtCodigoPedido.requestFocus());
+        paneProduto.setVisible(false);
+        lblProduto.setTextFill(Color.WHITE);
         paneUser.setVisible(false);
         paneCliente.setVisible(false);
         lbluser.setTextFill(Color.WHITE);
         lblClient.setTextFill(Color.WHITE);
         paneFornec.setVisible(false);
         lblFornec.setTextFill(Color.WHITE);
+        panePedido.setVisible(true);
+        lblPedido.setTextFill(Color.RED);
 
     }
 
     @FXML
     void onActionUser(ActionEvent event) {
+        Platform.runLater(() -> txtCelUsuario.requestFocus());
         paneUser.setVisible(true);
         paneCliente.setVisible(false);
         lbluser.setTextFill(Color.RED);
@@ -359,6 +670,8 @@ public class AtualizarController {
         lblFornec.setTextFill(Color.WHITE);
         paneProduto.setVisible(false);
         lblProduto.setTextFill(Color.WHITE);
+        panePedido.setVisible(false);
+        lblPedido.setTextFill(Color.WHITE);
 
     }
 
@@ -374,6 +687,9 @@ public class AtualizarController {
 
     @FXML
     void onactionClient(ActionEvent event) {
+
+        Platform.runLater(() -> txtcelClient.requestFocus());
+
         paneUser.setVisible(false);
         paneCliente.setVisible(true);
         lbluser.setTextFill(Color.WHITE);
@@ -474,6 +790,8 @@ public class AtualizarController {
     @FXML
     void onclickLimparClient(ActionEvent event) {
 
+        Platform.runLater(() -> txtcelClient.requestFocus());
+
         txtNomeClient.clear();
         txtcelClient.clear();
         txtLogradouroClient.clear();
@@ -482,6 +800,7 @@ public class AtualizarController {
         txtCidadeClient.clear();
         txtEstadoClient.clear();
         txtCepClient.clear();
+        txtCelClient1.clear();
 
     }
 
@@ -863,6 +1182,7 @@ public class AtualizarController {
     }
 
     public void initialize() {
+        Platform.runLater(() -> txtCelUsuario.requestFocus());
 
         // MaskTextField.validarNaoVazio(txtNome, btnCadastrar);
         // MaskTextField.validarNaoVazio(txtLogradouro, btnCadastrar);
@@ -891,6 +1211,7 @@ public class AtualizarController {
         lbluser.setMouseTransparent(true);
         lblFornec.setMouseTransparent(true);
         lblProduto.setMouseTransparent(true);
+        lblPedido.setMouseTransparent(true);
 
         btnClient.setOnMouseEntered(e -> {
             HouverEffectUtil.apllyHouverSobre(btnClient);
@@ -1012,6 +1333,14 @@ public class AtualizarController {
             HouverEffectUtil.apllyHouverSobre(btnAtualizarProduto);
         });
 
+        btnPedido.setOnMouseExited(e -> {
+            HouverEffectUtil.apllyHouverSair(btnPedido);
+        });
+
+        btnPedido.setOnMouseEntered(e -> {
+            HouverEffectUtil.apllyHouverSobre(btnPedido);
+        });
+
         MaskTextField.applyPhoneMask(txtcel);
 
         MaskTextField.applyCepMask(txtCep);
@@ -1052,6 +1381,7 @@ public class AtualizarController {
         MaskTextField.quantNumbery(txtQuantFornec, 2);
         MaskTextField.valor(txtValorCompraFornec);
         MaskTextField.valor(txtValorVendaFornec);
+        MaskTextField.valor(txtValorPedido);
         MaskTextField.limitarCaracteresFixos(txtTamanhoFornec, 2);
         MaskTextField.quantNumbery(txtNotaFiscalFornec, 10);
 

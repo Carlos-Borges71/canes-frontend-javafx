@@ -243,8 +243,8 @@ public class MaskTextField {
         // Remove R$, espaços e pontos de milhar
         valor = valor.replace("R$", "")
                 .replace(" ", "")
-                .replace(".", "")
-                .replace(",", ".");
+                .replace(".", ",");
+        // .replace(",", ".");
 
         return new BigDecimal(valor);
     }

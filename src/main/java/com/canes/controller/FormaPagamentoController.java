@@ -242,6 +242,9 @@ public class FormaPagamentoController {
     }
 
     public void initialize() {
+
+        Platform.runLater(() -> txtValor.requestFocus());
+
         lblStatus.setText("AGUARDANDO_PAGAMENTO");
 
         MaskTextField.valor(txtValor);
@@ -333,13 +336,11 @@ public class FormaPagamentoController {
                             txt.replaceAll("[^0-9,.-]", "") // remove tudo que não é número
                                     .replace(",", "."));
 
-
-
                     String txt1 = txtValor.getText();
 
                     BigDecimal valor1 = new BigDecimal(
                             txt1.replaceAll("[^0-9,.-]", "") // remove tudo que não é número
-                                    .replace(",", "."));  
+                                    .replace(",", "."));
 
                     if (valor1.compareTo(valor) >= 0) {
                         lblStatus.setText("PAGO");
@@ -381,7 +382,7 @@ public class FormaPagamentoController {
                     lblValor.setText(nf.format(valorRestante));
                     txtValor.clear();
                     txtPagamento.clear();
-                    txtPagamento.requestFocus();
+                    txtValor.requestFocus();
 
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -37,7 +37,7 @@
                                     <Insets left="5.0" right="15.0" top="5.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="txtPagamento" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-radius: 7; -fx-border-color: fff; -fx-text-fill: fff;">
+                              <TextField fx:id="txtPagamento" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-radius: 7; -fx-text-fill: fff;">
                                  <font>
                                     <Font name="Verdana" size="20.0" />
                                  </font>

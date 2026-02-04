@@ -18,11 +18,12 @@ public class Produto {
 
     private Fornecedor fornecedor;
     private List<Pedido> pedidos;
+    private NotaFiscal nota;
 
     public Produto() {
     }
 
-    public Produto(Long id,String codigo, String nome, Integer estoque, Double valorCompra,
+    public Produto(Long id, String codigo, String nome, Integer estoque, Double valorCompra,
             Double valorVenda, Integer quantcompra, String fornec) {
 
         this.codigo = codigo;
@@ -96,15 +97,20 @@ public class Produto {
         return fornecedor;
     }
 
-    
-
     public List<Pedido> getPedidos() {
         return pedidos;
     }
 
-   
-
     public String getFornec() {
         return fornec;
     }
+
+    public NotaFiscal getNota() {
+        return nota;
+    }
+
+    public void setNota(NotaFiscal nota) {
+        this.nota = nota;
+    }
+
 }

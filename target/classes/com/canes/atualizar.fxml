@@ -17,12 +17,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" prefWidth="1188.0" spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #1B1A16, #141442); -fx-border-color: fff;" stylesheets="@usuario.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.controller.AtualizarController">
+<VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" prefHeight="810.0" prefWidth="1328.0" spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #1B1A16, #141442); -fx-border-color: fff;" stylesheets="@usuario.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.controller.AtualizarController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
    <children>
-      <AnchorPane prefHeight="768.0" prefWidth="1188.0" style="-fx-border-color: fff; -fx-border-radius: 30;">
+      <AnchorPane prefHeight="768.0" prefWidth="1287.0" style="-fx-border-color: fff; -fx-border-radius: 30;">
          <children>
             <ImageView fitHeight="233.0" fitWidth="332.0" layoutX="11.5" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -92,7 +92,7 @@
                   <Font name="Verdana Bold" size="24.0" />
                </font>
             </Label>
-            <Pane fx:id="paneUser" layoutX="114.0" layoutY="290.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;">
+            <Pane fx:id="paneUser" layoutX="214.0" layoutY="299.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;">
                <children>
                   <Label layoutX="383.0" layoutY="61.0" text="Nome:" textFill="WHITE" />
                   <TextField fx:id="txtNome" layoutX="429.0" layoutY="58.0" prefHeight="25.0" prefWidth="306.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent; -fx-text-fill: fff;">
@@ -314,7 +314,7 @@
                         <Insets />
                      </opaqueInsets>
                   </TextField>
-                  <Button fx:id="btnBuscar" layoutX="221.0" layoutY="54.0" mnemonicParsing="false" onAction="#onclickBuscar" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Buscar" textFill="WHITE">
+                  <Button fx:id="btnBuscar" layoutX="221.0" layoutY="54.0" mnemonicParsing="false" onAction="#onClickBuscar" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Buscar" textFill="WHITE">
                      <font>
                         <Font name="Verdana Bold" size="14.0" />
                      </font>
@@ -337,7 +337,7 @@
                   <Insets bottom="20.0" />
                </padding>
             </Pane>
-            <Pane fx:id="paneCliente" layoutX="114.0" layoutY="290.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
+            <Pane fx:id="paneCliente" layoutX="214.0" layoutY="299.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
                <children>
                   <TextField fx:id="txtNomeClient" layoutX="399.0" layoutY="73.0" prefHeight="25.0" prefWidth="364.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent; -fx-text-fill: fff;">
                      <font>
@@ -466,7 +466,7 @@
                   <Insets bottom="20.0" />
                </padding>
             </Pane>
-            <Pane fx:id="paneFornec" layoutX="114.0" layoutY="290.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
+            <Pane fx:id="paneFornec" layoutX="214.0" layoutY="299.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
                <children>
                   <TextField fx:id="txtNomeFornec" layoutX="73.0" layoutY="93.0" prefHeight="25.0" prefWidth="393.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent; -fx-text-fill: fff;">
                      <font>
@@ -604,7 +604,7 @@
                   <Insets bottom="20.0" />
                </padding>
             </Pane>
-            <Pane fx:id="paneProduto" layoutX="114.0" layoutY="290.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
+            <Pane fx:id="paneProduto" layoutX="214.0" layoutY="299.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
                <children>
                   <VBox fx:id="vBoxTelClient1" layoutX="164.0" layoutY="136.0" />
                   <Button fx:id="btnLimparProduto" layoutX="561.0" layoutY="275.0" mnemonicParsing="false" onAction="#onclickLimparProduto" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Limpar" textFill="WHITE">
@@ -708,6 +708,84 @@
                   <Insets bottom="20.0" />
                </padding>
             </Pane>
+            <Pane fx:id="panePedido" layoutX="214.0" layoutY="299.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
+               <children>
+                  <VBox fx:id="vBoxTelClient11" layoutX="164.0" layoutY="136.0" />
+                  <Button fx:id="btnLimparProduto1" layoutX="462.0" layoutY="226.0" mnemonicParsing="false" onAction="#onclickLimparPedido" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Limpar" textFill="WHITE">
+                     <font>
+                        <Font name="Verdana Bold" size="14.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button fx:id="btnAtualizarProduto1" layoutX="586.0" layoutY="225.0" mnemonicParsing="false" onAction="#onClickAtualizarPedido" onMouseEntered="#onMouseEntered" onMouseExited="#onMouseExited" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Atualizar" textFill="WHITE">
+                     <font>
+                        <Font name="Verdana Bold" size="14.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <HBox layoutX="214.0" layoutY="241.0" prefHeight="38.0" prefWidth="200.0">
+                     <children>
+                        <VBox fx:id="vBoxTelFornec211" prefHeight="33.0" prefWidth="174.0" />
+                     </children>
+                  </HBox>
+                  <TextField fx:id="txtStatusPedido" layoutX="262.0" layoutY="117.0" prefHeight="25.0" prefWidth="182.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent; -fx-text-fill: fff;">
+                     <font>
+                        <Font name="Verdana" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="8.0" />
+                     </padding>
+                  </TextField>
+                  <Label layoutX="217.0" layoutY="121.0" text="Status:" textFill="WHITE" />
+                  <TextField fx:id="txtCodigoPedido" layoutX="383.0" layoutY="25.0" prefHeight="25.0" prefWidth="122.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent; -fx-text-fill: fff;">
+                     <font>
+                        <Font name="Verdana" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="8.0" />
+                     </padding>
+                  </TextField>
+                  <Label layoutX="131.0" layoutY="24.0" text="Digite o Código do pedido:" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtValorPedido" layoutX="567.0" layoutY="117.0" prefHeight="25.0" prefWidth="122.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent; -fx-text-fill: fff;">
+                     <font>
+                        <Font name="Verdana" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="8.0" />
+                     </padding>
+                  </TextField>
+                  <Label layoutX="526.0" layoutY="121.0" text="Valor:" textFill="WHITE" />
+                  <Button fx:id="btnBuscarPedido" layoutX="518.0" layoutY="22.0" mnemonicParsing="false" onAction="#onClickBuscarPedido" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Buscar" textFill="WHITE">
+                     <font>
+                        <Font name="Verdana Bold" size="14.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" />
+               </padding>
+            </Pane>
+            <Button fx:id="btnPedido" layoutX="1087.0" layoutY="198.0" mnemonicParsing="false" onAction="#onActionPedido" opacity="0.3" prefHeight="73.0" prefWidth="174.0" style="-fx-background-color: #87CCfC; -fx-background-radius: 50;">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Label fx:id="lblPedido" layoutX="1120.0" layoutY="220.0" text="Pedido" textFill="WHITE">
+               <font>
+                  <Font name="Verdana Bold" size="24.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>

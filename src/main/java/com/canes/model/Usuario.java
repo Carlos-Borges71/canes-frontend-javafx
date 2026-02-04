@@ -5,44 +5,42 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Usuario {
 
-    
     private Long id;
-    private String nome;    
+    private String nome;
     private String login;
-    private String setor;   
+    private String setor;
     private String instante;
     private String senha;
-    
+
     private String telefones;
     private String endereco;
- private Cliente clientes;
- 
-   
+    private Cliente clientes;
 
-    public Usuario(){        
+    public Usuario() {
     }
 
-    public Usuario( Long id, String nome, String setor,  String login, String instante, String senha, String telefones, String endereco) {
+    public Usuario(Long id, String nome, String setor, String login, String instante, String senha, String telefones,
+            String endereco) {
         this.id = id;
         this.setor = setor;
         this.nome = nome;
         this.login = login;
-        this.instante = instante;    
+        this.instante = instante;
         this.telefones = telefones;
         this.endereco = endereco;
-        //this.clientes = clientes;
+        // this.clientes = clientes;
         this.senha = senha;
-        
+
     }
-  
+
     public Long getId() {
         return id;
     }
+
     public void setSetId(Long id) {
         this.id = id;
     }
 
-    
     public String getSetor() {
         return setor;
     }
@@ -83,24 +81,20 @@ public class Usuario {
         this.instante = instante;
     }
 
-    
-    
     public String getTelefones() {
         return telefones;
     }
 
     // public void setTelefone(List<Telefone> telefones) {
-    //     this.telefones = telefones;
+    // this.telefones = telefones;
     // }
 
     public String getEndereco() {
         return endereco;
     }
-     
-    public Cliente getClientes(){
+
+    public Cliente getClientes() {
         return clientes;
     }
-    
- 
-    
+
 }
