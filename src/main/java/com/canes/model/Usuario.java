@@ -37,7 +37,7 @@ public class Usuario {
         return id;
     }
 
-    public void setSetId(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

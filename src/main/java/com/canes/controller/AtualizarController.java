@@ -299,6 +299,12 @@ public class AtualizarController {
     private Button btnLimparProduto;
 
     @FXML
+    private Button btnLimparPedido;
+
+    @FXML
+    private Button btnAtualizarPedido;
+
+    @FXML
     private TextField txtCelClient1;
 
     @FXML
@@ -315,6 +321,8 @@ public class AtualizarController {
 
     @FXML
     private Label lblProduto;
+
+    private Long usuarioId;
 
     @FXML
     void onActionProduto(ActionEvent event) {
@@ -334,7 +342,64 @@ public class AtualizarController {
     }
 
     @FXML
+    void buscarUsuario(ActionEvent event) {
+
+        buscarUsuario();
+
+    }
+
+    @FXML
     void onClickBuscar(ActionEvent event) {
+
+        buscarUsuario();
+
+    }
+
+    private void atualizarUsuario() {
+
+        try {
+            Map<String, Object> dados = new HashMap<>();
+
+            dados.put("setor", txtSetor.getValue().toString());
+            dados.put("nome", txtNome.getText());
+            dados.put("login", txtLogin.getText());
+            dados.put("nome", txtNome.getText());
+            dados.put("senha", passwordSenha.getText());
+
+            UsuarioService usuarioService = new UsuarioService();
+            usuarioService.atualizarParcial(usuarioId, dados);
+            AlertUtil.mostrarSucesso("Usuário atualizado com sucesso!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertUtil.mostrarErro("Erro ao tentar salvar no banco\n" + e.getMessage());
+            txtCelUsuario.requestFocus();
+        }
+
+        // try {
+
+        // Usuario usuario = new Usuario();
+        // usuario.setId(usuarioId);
+        // usuario.setSetor(txtSetor.getValue().toString());
+        // usuario.setNome(txtNome.getText());
+        // usuario.setLogin(txtLogin.getText());
+        // // usuario.setInstante(instanteFormatado);
+        // usuario.setSenha(passwordSenha.getText());
+
+        // limparUsuario();
+        // AlertUtil.mostrarSucesso("Usuário atualizado com sucesso!");
+
+        // UsuarioService usuarioService = new UsuarioService();
+        // usuarioService.atualizarUsuario(usuario);
+
+        // } catch (Exception e) {
+        // AlertUtil.mostrarErro("Erro ao tentar salvar no banco\n" + e.getMessage());
+
+        // }
+
+    }
+
+    private void buscarUsuario() {
 
         try {
             TelefoneService telefoneService = new TelefoneService();
@@ -367,6 +432,8 @@ public class AtualizarController {
 
             if (usuario != null) {
 
+                usuarioId = usuario.getId();
+
                 txtNome.setText(usuario.getNome());
                 txtLogin.setText(usuario.getLogin());
                 passwordSenha.setText(usuario.getSenha());
@@ -395,10 +462,10 @@ public class AtualizarController {
             e.printStackTrace();
 
         }
+
     }
 
-    @FXML
-    void onClickBuscarCliente(ActionEvent event) {
+    private void buscarCliente() {
 
         try {
             TelefoneService telefoneService = new TelefoneService();
@@ -458,6 +525,19 @@ public class AtualizarController {
     }
 
     @FXML
+    void onClickBuscarCliente(ActionEvent event) {
+
+        buscarCliente();
+    }
+
+    @FXML
+    void buscarCliente(ActionEvent event) {
+
+        buscarCliente();
+
+    }
+
+    @FXML
     void onClickAtualizarPedido(ActionEvent event) {
 
     }
@@ -495,6 +575,9 @@ public class AtualizarController {
 
     @FXML
     void onclickLimparPedido(ActionEvent event) {
+        txtCodigoPedido.clear();
+        txtStatusPedido.clear();
+        txtValorPedido.clear();
 
     }
 
@@ -1057,37 +1140,15 @@ public class AtualizarController {
         } else if (passwordSenha.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo senha não \npode ficar vazio!.");
             return;
-        } else if (passwordReSenha.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo repita a senha não \npode ficar vazio!.");
-            return;
-        } else {
-            AlertUtil.mostrarSucesso("Cadastro do Usuário " + txtNome.getText() + "\nSalvo com sucesso");
 
-            try {
-                ScreenUtils.changeScreen(event, "/com/canes/menu.fxml", "Menu", null);
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
         }
 
-        System.out.println("Dados coletados");
-        System.out.println(txtSetor.getValue());
-        System.out.println(txtLogradouro.getText());
-        System.out.println(txtLogin.getText());
-        System.out.println(passwordSenha.getText());
-        System.out.println(txtcel.getText());
-        System.out.println(txtEstado.getText());
-        System.out.println(txtNome.getText());
-        System.out.println(txtCidade.getText());
-        for (TextField campo : campos) {
-            System.out.println(campo.getText());
-        }
+        atualizarUsuario();
+        limparUsuario();
 
     }
 
-    @FXML
-    void onclickLimpar(ActionEvent event) {
+    private void limparUsuario() {
 
         txtNome.clear();
         txtSetor.setValue(null);
@@ -1104,7 +1165,11 @@ public class AtualizarController {
         txtReNoSenha.clear();
         txtNoSenha.clear();
         txtCelUsuario.clear();
+    }
 
+    @FXML
+    void onclickLimpar(ActionEvent event) {
+        limparUsuario();
     }
 
     @FXML
@@ -1339,6 +1404,29 @@ public class AtualizarController {
 
         btnPedido.setOnMouseEntered(e -> {
             HouverEffectUtil.apllyHouverSobre(btnPedido);
+        });
+        btnLimparPedido.setOnMouseExited(e -> {
+            HouverEffectUtil.apllyHouverSair(btnLimparPedido);
+        });
+
+        btnLimparPedido.setOnMouseEntered(e -> {
+            HouverEffectUtil.apllyHouverSobre(btnLimparPedido);
+        });
+
+        btnAtualizarPedido.setOnMouseExited(e -> {
+            HouverEffectUtil.apllyHouverSair(btnAtualizarPedido);
+        });
+
+        btnAtualizarPedido.setOnMouseEntered(e -> {
+            HouverEffectUtil.apllyHouverSobre(btnAtualizarPedido);
+        });
+
+        btnBuscarPedido.setOnMouseExited(e -> {
+            HouverEffectUtil.apllyHouverSair(btnBuscarPedido);
+        });
+
+        btnBuscarPedido.setOnMouseEntered(e -> {
+            HouverEffectUtil.apllyHouverSobre(btnBuscarPedido);
         });
 
         MaskTextField.applyPhoneMask(txtcel);

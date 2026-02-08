@@ -7,6 +7,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Map;
 
 import com.canes.model.Usuario;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -61,6 +62,51 @@ public class UsuarioService {
             });
         } else {
             throw new RuntimeException("Erro ao buscar usuários: " + response.statusCode());
+        }
+    }
+
+    // atualizar tudo usuario
+
+    public Usuario atualizarUsuario(Usuario usuario)
+            throws IOException, InterruptedException, ConnectException {
+
+        if (usuario.getId() == null) {
+            throw new IllegalArgumentException("Usuário precisa ter ID para atualização.");
+        }
+
+        String json = mapper.writeValueAsString(usuario);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + usuario.getId()))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            return mapper.readValue(response.body(), Usuario.class);
+        } else {
+            throw new RuntimeException("Erro ao atualizar usuário: " + response.body());
+        }
+    }
+
+    // Atualizar parte dos usuario
+    public void atualizarParcial(Long id, Map<String, Object> campos)
+            throws IOException, InterruptedException {
+
+        String json = mapper.writeValueAsString(campos);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .header("Content-Type", "application/json")
+                .method("PATCH", HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Erro ao atualizar parcialmente: " + response.body());
         }
     }
 

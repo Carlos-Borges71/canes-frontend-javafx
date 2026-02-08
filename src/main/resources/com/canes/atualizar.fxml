@@ -106,7 +106,7 @@
                   <ComboBox fx:id="txtSetor" layoutX="152.0" layoutY="107.0" prefWidth="132.0">
                      <items>
                         <FXCollections fx:factory="observableArrayList">
-                           <String fx:value="VENDAS" />
+                           <String fx:value="VENDA" />
                            <String fx:value="ADMINISTRATIVO" />
                            <String fx:value="GERÊNCIA" />
                         </FXCollections>
@@ -309,7 +309,7 @@
                         <Font size="8.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtCelUsuario" alignment="TOP_LEFT" layoutX="64.0" layoutY="56.0" prefHeight="27.0" prefWidth="139.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7; -fx-text-fill: fff;">
+                  <TextField fx:id="txtCelUsuario" alignment="TOP_LEFT" layoutX="64.0" layoutY="56.0" onAction="#buscarUsuario" prefHeight="27.0" prefWidth="139.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7; -fx-text-fill: fff;">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -438,7 +438,7 @@
                         <Font name="Verdana" size="12.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtcelClient" alignment="TOP_LEFT" layoutX="69.0" layoutY="72.0" prefHeight="25.0" prefWidth="132.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7; -fx-text-fill: fff;">
+                  <TextField fx:id="txtcelClient" alignment="TOP_LEFT" layoutX="69.0" layoutY="72.0" onAction="#buscarCliente" prefHeight="25.0" prefWidth="132.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7; -fx-text-fill: fff;">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -711,7 +711,7 @@
             <Pane fx:id="panePedido" layoutX="214.0" layoutY="299.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
                <children>
                   <VBox fx:id="vBoxTelClient11" layoutX="164.0" layoutY="136.0" />
-                  <Button fx:id="btnLimparProduto1" layoutX="462.0" layoutY="226.0" mnemonicParsing="false" onAction="#onclickLimparPedido" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Limpar" textFill="WHITE">
+                  <Button fx:id="btnLimparPedido" layoutX="462.0" layoutY="226.0" mnemonicParsing="false" onAction="#onclickLimparPedido" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Limpar" textFill="WHITE">
                      <font>
                         <Font name="Verdana Bold" size="14.0" />
                      </font>
@@ -719,7 +719,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="btnAtualizarProduto1" layoutX="586.0" layoutY="225.0" mnemonicParsing="false" onAction="#onClickAtualizarPedido" onMouseEntered="#onMouseEntered" onMouseExited="#onMouseExited" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Atualizar" textFill="WHITE">
+                  <Button fx:id="btnAtualizarPedido" layoutX="586.0" layoutY="225.0" mnemonicParsing="false" onAction="#onClickAtualizarPedido" onMouseEntered="#onMouseEntered" onMouseExited="#onMouseExited" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Atualizar" textFill="WHITE">
                      <font>
                         <Font name="Verdana Bold" size="14.0" />
                      </font>
