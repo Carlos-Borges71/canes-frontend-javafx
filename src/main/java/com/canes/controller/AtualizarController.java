@@ -1,8 +1,6 @@
 package com.canes.controller;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +20,6 @@ import com.canes.model.Pedido;
 import com.canes.model.Produto;
 import com.canes.model.Telefone;
 import com.canes.model.Usuario;
-import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
 import com.canes.services.PedidoService;
 import com.canes.services.ProdutoService;
@@ -323,6 +320,7 @@ public class AtualizarController {
     private Label lblProduto;
 
     private Long usuarioId;
+    private Long enderecoId;
 
     @FXML
     void onActionProduto(ActionEvent event) {
@@ -376,27 +374,28 @@ public class AtualizarController {
             txtCelUsuario.requestFocus();
         }
 
-        // try {
+    }
 
-        // Usuario usuario = new Usuario();
-        // usuario.setId(usuarioId);
-        // usuario.setSetor(txtSetor.getValue().toString());
-        // usuario.setNome(txtNome.getText());
-        // usuario.setLogin(txtLogin.getText());
-        // // usuario.setInstante(instanteFormatado);
-        // usuario.setSenha(passwordSenha.getText());
+    private void atualizaredereco() {
 
-        // limparUsuario();
-        // AlertUtil.mostrarSucesso("Usuário atualizado com sucesso!");
+        try {
 
-        // UsuarioService usuarioService = new UsuarioService();
-        // usuarioService.atualizarUsuario(usuario);
+            Endereco endereco = new Endereco();
+            endereco.setId(enderecoId);
+            endereco.setLogradouro(txtLogradouro.getText());
+            endereco.setNumero(txtNumero.getText());
+            endereco.setBairro(txtBairro.getText());
+            endereco.setCidade(txtCidade.getText());
+            endereco.setEstado(txtEstado.getText());
+            endereco.setCep(txtCep.getText());
 
-        // } catch (Exception e) {
-        // AlertUtil.mostrarErro("Erro ao tentar salvar no banco\n" + e.getMessage());
+            EnderecoService enderecoService = new EnderecoService();
+            enderecoService.atualizar(endereco);
 
-        // }
+        } catch (Exception e) {
+            AlertUtil.mostrarErro("Erro ao tentar salvar endereço no banco\n" + e.getMessage());
 
+        }
     }
 
     private void buscarUsuario() {
@@ -443,6 +442,7 @@ public class AtualizarController {
                 Endereco endereco = mapaUsuarioEndereco.get(usuario.getId());
 
                 if (endereco != null) {
+                    enderecoId = endereco.getId();
                     txtLogradouro.setText(endereco.getLogradouro());
                     txtCidade.setText(endereco.getCidade());
                     txtBairro.setText(endereco.getBairro());
@@ -781,6 +781,8 @@ public class AtualizarController {
         lblFornec.setTextFill(Color.WHITE);
         paneProduto.setVisible(false);
         lblProduto.setTextFill(Color.WHITE);
+        panePedido.setVisible(false);
+        lblPedido.setTextFill(Color.WHITE);
     }
 
     //
@@ -1099,52 +1101,70 @@ public class AtualizarController {
     @FXML
     void onClickcadastrar(ActionEvent event) {
 
-        if (txtNome.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo nome não pode ficar vazio!.");
+        if (txtCelUsuario.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Celular não \npode ficar vazio!.");
+            txtCelUsuario.requestFocus();
             return;
+
+        } else if (txtNome.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo nome não pode ficar vazio!.");
+            txtNome.requestFocus();
+            return;
+
         } else if (txtLogradouro.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo Logradouro não \npode ficar vazio!.");
+            txtLogradouro.requestFocus();
             return;
+
         } else if (txtNumero.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo número não \npode ficar vazio!.");
+            txtNumero.requestFocus();
             return;
+
         } else if (txtBairro.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo Bairro não \npode ficar vazio!.");
+            txtBairro.requestFocus();
             return;
         }
 
         else if (txtCidade.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo Cidade não \npode ficar vazio!.");
+            txtCidade.requestFocus();
             return;
         }
 
         else if (txtEstado.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo Estado não \npode ficar vazio!.");
+            txtEstado.requestFocus();
             return;
         }
 
         else if (txtCep.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo CEP não \npode ficar vazio!.");
+            txtCep.requestFocus();
             return;
-        }
 
-        else if (txtcel.getText().isEmpty()) {
-            AlertUtil.mostrarErro("O campo Celular não \npode ficar vazio!.");
-            return;
         } else if (txtSetor.getValue() == null) {
             AlertUtil.mostrarErro("O campo Setor não \npode ficar vazio! \nselecione uma opção");
+            txtSetor.requestFocus();
             return;
+
         } else if (txtLogin.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo login não \npode ficar vazio!.");
+            txtLogin.requestFocus();
             return;
+
         } else if (passwordSenha.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo senha não \npode ficar vazio!.");
+            passwordSenha.requestFocus();
             return;
 
         }
 
+        atualizaredereco();
         atualizarUsuario();
         limparUsuario();
+        txtCelUsuario.requestFocus();
 
     }
 

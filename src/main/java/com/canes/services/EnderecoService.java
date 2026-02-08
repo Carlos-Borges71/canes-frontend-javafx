@@ -138,4 +138,28 @@ public class EnderecoService {
         return null;
     }
 
+    public Endereco atualizar(Endereco endereco)
+            throws IOException, InterruptedException, ConnectException {
+
+        if (endereco.getId() == null) {
+            throw new IllegalArgumentException("Endereco precisa ter ID para atualização.");
+        }
+
+        String json = mapper.writeValueAsString(endereco);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + endereco.getId()))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            return mapper.readValue(response.body(), Endereco.class);
+        } else {
+            throw new RuntimeException("Erro ao atualizar endereço: " + response.body());
+        }
+    }
+
 }
