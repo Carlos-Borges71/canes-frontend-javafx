@@ -2,7 +2,6 @@ package com.canes.model;
 
 import java.util.Set;
 
-
 public class Fornecedor {
 
     private Long id;
@@ -12,24 +11,26 @@ public class Fornecedor {
     private Telefone telefones;
     private Endereco endereco;
 
-    
     private Set<Produto> produtos;
 
-    
     private Set<NotaFiscal> notasFiscais;
 
     public Fornecedor() {
     }
 
-    public Fornecedor(Long id,String empresa, String cnpjCpf, Telefone telefones, Endereco endereco, Set<Produto> produtos ) {
-        this.id =  id;
+    public Fornecedor(Long id) {
+        this.id = id;
+    }
+
+    public Fornecedor(Long id, String empresa, String cnpjCpf, Telefone telefones, Endereco endereco,
+            Set<Produto> produtos) {
+        this.id = id;
         this.empresa = empresa;
         this.cnpjCpf = cnpjCpf;
         this.telefones = telefones;
         this.endereco = endereco;
         this.produtos = produtos;
-        //this.notasFiscais = notasFiscais;
-        
+        // this.notasFiscais = notasFiscais;
 
     }
 
@@ -79,8 +80,6 @@ public class Fornecedor {
         this.cnpjCpf = cnpjCpf;
     }
 
-   
-
     public Telefone getTelefones() {
         return telefones;
     }
@@ -97,5 +96,4 @@ public class Fornecedor {
         return produtos;
     }
 
-    
 }

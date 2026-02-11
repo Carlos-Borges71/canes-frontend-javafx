@@ -19,6 +19,10 @@ public class Usuario {
     public Usuario() {
     }
 
+    public Usuario(Long id) {
+        this.id = id;
+    }
+
     public Usuario(Long id, String nome, String setor, String login, String instante, String senha, String telefones,
             String endereco) {
         this.id = id;

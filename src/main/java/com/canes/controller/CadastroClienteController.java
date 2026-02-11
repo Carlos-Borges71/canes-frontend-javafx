@@ -9,10 +9,12 @@ import java.util.List;
 import com.canes.util.HouverEffectUtil;
 import com.canes.util.MaskTextField;
 import com.canes.util.TextFieldUtil;
+import com.canes.factory.ClienteFactory;
+import com.canes.factory.EnderecoFactory;
+import com.canes.factory.TelefoneFactory;
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Telefone;
-import com.canes.model.dpo.ClienteDPO;
 import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
 import com.canes.services.TelefoneService;
@@ -169,17 +171,17 @@ public class CadastroClienteController {
                 String nome = txtNomeClient.getText();
                 String data = instanteFormatado;
 
-                ClienteDPO clientes = new ClienteDPO(
+                Cliente clientes = new Cliente(
                         nome,
                         data
 
                 );
 
-                ClienteService clienteService = new ClienteService();
+                ClienteService clienteService = ClienteFactory.getClienteService();
                 Long clienteId = clienteService.salvarCliente(clientes);
 
                 String numeroTel = txtcelClient.getText();
-                TelefoneService telefoneService = new TelefoneService();
+                TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
 
                 telefoneService.salvarTelefone(numeroTel, null, clienteId, null);
 
@@ -199,7 +201,7 @@ public class CadastroClienteController {
                 String estado = txtEstadoClient.getText();
                 String cep = txtCepClient.getText();
 
-                EnderecoService enderecoService = new EnderecoService();
+                EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
                 enderecoService.salvarEndereco(logradouro, numero, bairro, cidade, estado, cep, null, clienteId, null);
 
                 AlertUtil.mostrarSucesso("Cadastro do Cliente " + txtNomeClient.getText() + "\nSalvo com sucesso");

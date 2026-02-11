@@ -39,12 +39,25 @@ public class Telefone {
     public Usuario getOperador() {
         return operador;
     }
-    
-    public Fornecedor getFornecedor(){
+
+    public Fornecedor getFornecedor() {
         return fornecedor;
     }
-    public Cliente getCliente(){
+
+    public Cliente getCliente() {
         return cliente;
+    }
+
+    public void setOperador(Usuario operador) {
+        this.operador = operador;
+    }
+
+    public void setFornecedor(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
 }

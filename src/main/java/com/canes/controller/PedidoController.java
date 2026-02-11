@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.canes.factory.ClienteFactory;
+import com.canes.factory.TelefoneFactory;
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Produto;
@@ -141,7 +143,7 @@ public class PedidoController {
     @FXML
     void pressedEnter(ActionEvent event) {
         try {
-            TelefoneService telefones = new TelefoneService();
+            TelefoneService telefones = TelefoneFactory.getTelefoneService();
 
             List<Telefone> listaTelefones = telefones.buscarTodos();
 
@@ -442,8 +444,8 @@ public class PedidoController {
 
                         // try {
 
-                        ClienteService clienteService = new ClienteService();
-                        TelefoneService telefoneService = new TelefoneService();
+                        ClienteService clienteService = ClienteFactory.getClienteService();
+                        TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
 
                         List<Cliente> todosCliente = clienteService.buscarTodos();
                         List<Telefone> todosTelefones = telefoneService.buscarTodos();
@@ -467,7 +469,7 @@ public class PedidoController {
 
                                         List<PedidoDPO> produtosTabela = new ArrayList<>(
                                                 tabelaPedido.getItems());
-                                        String total = "R$ "+lblTotal.getText();
+                                        String total = "R$ " + lblTotal.getText();
                                         String status = txtStatus.getText();
                                         controller.receberDados(idCliente, total,
                                                 produtosTabela);
@@ -745,7 +747,7 @@ public class PedidoController {
             item++;
 
             // 🔹 ADICIONA/ATUALIZA A LINHA DE TOTAL
-            //atualizarLinhaTotal();
+            // atualizarLinhaTotal();
 
             totalQuant();
             totalValor();
@@ -830,7 +832,7 @@ public class PedidoController {
                 .sum();
 
         // criar a linha total
-        PedidoDPO total = new PedidoDPO(null, "", "TOTAL "+ soma, 0, null, 0.0, null, null, null, null, null);
+        PedidoDPO total = new PedidoDPO(null, "", "TOTAL " + soma, 0, null, 0.0, null, null, null, null, null);
         total.setTotalRow(true);
 
         lista.add(total);

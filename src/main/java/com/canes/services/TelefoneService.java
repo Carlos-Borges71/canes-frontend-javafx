@@ -1,98 +1,78 @@
 package com.canes.services;
 
 import java.io.IOException;
-import java.net.URI;
+import java.net.ConnectException;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 
+import com.canes.config.ApiConstantes;
+import com.canes.infra.http.BaseService;
+import com.canes.model.Cliente;
+import com.canes.model.Fornecedor;
 import com.canes.model.Telefone;
-import com.canes.util.AlertUtil;
+import com.canes.model.Usuario;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class TelefoneService {
+public class TelefoneService extends BaseService {
 
-    private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
-
-    private static final String BASE_URL = "http://localhost:8080/telefones";
-
-    HttpClient client = HttpClient.newHttpClient();
-    ObjectMapper mapper = new ObjectMapper();
-
-    public TelefoneService() {
-        this.httpClient = HttpClient.newHttpClient();
-        this.objectMapper = new ObjectMapper();
+    public TelefoneService(HttpClient client, ObjectMapper mapper) {
+        super(client, mapper);
     }
 
-    public static void salvarTelefone(String numero, Long operadorId, Long clienteId, Long fornecedorId)
-            throws Exception {
+    public void salvarTelefone(String numero, Long operadorId, Long clienteId, Long fornecedorId)
+            throws IOException, InterruptedException, ConnectException {
 
-        String json = "{\n" +
-                "  \"numero\": \"" + numero + "\"";
+        // Monta objeto Endereco (Java, não JSON manual)
+        Telefone telefone = new Telefone();
+        telefone.setNumero(numero);
 
+        // Só adiciona se não for nulo
         if (operadorId != null) {
-            json += ", \"operador\": {\"id\": " + operadorId + "}";
+            telefone.setOperador(new Usuario(operadorId));
         }
 
         if (clienteId != null) {
-            json += ", \"cliente\": {\"id\": " + clienteId + "}";
+            telefone.setCliente(new Cliente(clienteId));
         }
+
         if (fornecedorId != null) {
-            json += ", \"fornecedor\": {\"id\": " + fornecedorId + "}";
+            telefone.setFornecedor(new Fornecedor(fornecedorId));
         }
 
-        json += "\n}";
-
-        // String json = String.format("""
-        // {
-
-        // "numero": "%s",
-
-        // "operador": {"id": %d}
-        // }
-        // """,
-        // numero, operadorId);
-
-        HttpClient client = HttpClient.newHttpClient();
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        int status = response.statusCode();
-        if (status == 200 || status == 201) {
-
-            // AlertUtil.mostrarSucesso("Telefone inserido com sucesso!");
-
-        } else {
-            System.out.println(response.body());
-            System.out.println(json);
-            AlertUtil.mostrarErro("Erro ao inserir:\n " + response.body());
-
-        }
+        // Usa o POST genérico do BaseService
+        post(ApiConstantes.TELEFONES, telefone, Void.class);
     }
 
-    public List<Telefone> buscarTodos() throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .GET()
-                .build();
+    public List<Telefone> buscarTodos() throws IOException, InterruptedException, ConnectException {
 
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        return getList(ApiConstantes.TELEFONES, new TypeReference<List<Telefone>>() {
+        });
+    }
 
-        if (response.statusCode() == 200) {
-            return objectMapper.readValue(response.body(), new TypeReference<List<Telefone>>() {
-            });
-        } else {
-            throw new RuntimeException("Erro ao buscar telefones: " + response.statusCode());
-        }
+    // atualizar todo endereço
+    public Telefone atualizar(Telefone telefone)
+            throws IOException, InterruptedException, ConnectException {
+
+        String url = ApiConstantes.TELEFONES + "/" + telefone.getId();
+
+        return put(url, telefone, Telefone.class);
+    }
+
+    // Atualizar parte dos endereços
+    public Telefone atualizarParcial(Long id, Telefone telefoneParcial)
+            throws IOException, InterruptedException {
+
+        String url = ApiConstantes.ENDERECOS + "/" + id;
+
+        return patch(url, telefoneParcial, Telefone.class);
+    }
+
+    // Deletar Endereço
+    public void deletar(Long id)
+            throws IOException, InterruptedException, ConnectException {
+
+        delete(ApiConstantes.TELEFONES + "/" + id);
     }
 
 }

@@ -11,10 +11,15 @@ import com.canes.util.MaskTextField;
 import com.canes.util.ScreenUtils;
 import com.canes.util.TextFieldUtil;
 import com.canes.util.UserSession;
+import com.canes.factory.ClienteFactory;
+import com.canes.factory.EnderecoFactory;
+import com.canes.factory.FornecedorFactory;
+import com.canes.factory.TelefoneFactory;
+import com.canes.factory.UsuarioFactory;
+import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Fornecedor;
 import com.canes.model.Usuario;
-import com.canes.model.dpo.ClienteDPO;
 import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
 import com.canes.services.FornecedorService;
@@ -370,7 +375,7 @@ public class CadastroController {
             fornecedor.setEmpresa(txtNomeFornec.getText());
             fornecedor.setCnpjCpf(txtCnpjFornec.getText());
 
-            FornecedorService fornecedorService = new FornecedorService();
+            FornecedorService fornecedorService = FornecedorFactory.getFornecedorService();
 
             Long fornecedorId = fornecedorService.salvarFornecedor(fornecedor);
 
@@ -400,7 +405,7 @@ public class CadastroController {
             Long notaFiscalId = ntFiscal.salvarNotaFiscal(notaFisccal, data, fornecedorId);
 
             String numeroTel = txtCelFornec.getText();
-            TelefoneService telefoneService = new TelefoneService();
+            TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
 
             telefoneService.salvarTelefone(numeroTel, null, null, fornecedorId);
 
@@ -420,7 +425,7 @@ public class CadastroController {
             String estado = txtEstadoFornec.getText();
             String cep = txtCepFornec.getText();
 
-            EnderecoService enderecoService = new EnderecoService();
+            EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
             enderecoService.salvarEndereco(logradouro, numero, bairro, cidade, estado, cep, null, null, fornecedorId);
 
             txtNomeFornec.clear();
@@ -559,17 +564,17 @@ public class CadastroController {
 
             try {
 
-                ClienteDPO cliente = new ClienteDPO();
+                Cliente cliente = new Cliente();
 
                 cliente.setNome(txtNomeClient.getText());
 
                 cliente.setInstante(instanteFormatado);
 
-                ClienteService ClienteService = new ClienteService();
+                ClienteService ClienteService = ClienteFactory.getClienteService();
                 Long clienteId = ClienteService.salvarCliente(cliente);
 
                 String numeroTel = txtcelClient.getText();
-                TelefoneService telefoneService = new TelefoneService();
+                TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
 
                 telefoneService.salvarTelefone(numeroTel, (Long) null, clienteId, null);
 
@@ -589,7 +594,7 @@ public class CadastroController {
                 String estado = txtEstadoClient.getText();
                 String cep = txtCepClient.getText();
 
-                EnderecoService enderecoService = new EnderecoService();
+                EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
                 enderecoService.salvarEndereco(logradouro, numero, bairro, cidade, estado, cep, null, clienteId, null);
 
             } catch (Exception e) {
@@ -837,11 +842,11 @@ public class CadastroController {
                 usuario.setInstante(instanteFormatado);
                 usuario.setSenha(passwordSenha.getText());
 
-                UsuarioService usuarioService = new UsuarioService();
+                UsuarioService usuarioService = UsuarioFactory.getUsuarioService();
                 Long usuarioId = usuarioService.salvarUsuario(usuario);
 
                 String numeroTel = txtcel.getText();
-                TelefoneService telefoneService = new TelefoneService();
+                TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
 
                 telefoneService.salvarTelefone(numeroTel, usuarioId, null, null);
 
@@ -861,7 +866,7 @@ public class CadastroController {
                 String estado = txtEstado.getText();
                 String cep = txtCep.getText();
 
-                EnderecoService enderecoService = new EnderecoService();
+                EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
                 enderecoService.salvarEndereco(logradouro, numero, bairro, cidade, estado, cep, usuarioId, null, null);
 
             } catch (Exception e) {
@@ -979,128 +984,125 @@ public class CadastroController {
         txtCepClient.setPromptText("Buscar");
         txtCepFornec.setPromptText("Buscar");
 
-
         txtCepClient.textProperty().addListener((obs, oldVal, newVal) -> {
 
             // Mantém apenas números
-            
+
             txtCepClient.setText(newVal);
 
             if (newVal.length() == 9 || newVal.length() == 9) {
 
-            try {
+                try {
 
-                String cep = txtCepClient.getText();
-                Endereco end = BuscaCep.buscar(cep);
-                if (end != null) {
-                    txtLogradouroClient.setText(end.getLogradouro());
-                    txtBairroClient.setText(end.getBairro());
-                    txtCidadeClient.setText(end.getCidade());
-                    txtEstadoClient.setText(end.getEstado());
+                    String cep = txtCepClient.getText();
+                    Endereco end = BuscaCep.buscar(cep);
+                    if (end != null) {
+                        txtLogradouroClient.setText(end.getLogradouro());
+                        txtBairroClient.setText(end.getBairro());
+                        txtCidadeClient.setText(end.getCidade());
+                        txtEstadoClient.setText(end.getEstado());
 
-                } else {
-                    AlertUtil.mostrarErro("Cep não encontrado!");
+                    } else {
+                        AlertUtil.mostrarErro("Cep não encontrado!");
+                    }
+
+                } catch (java.net.UnknownHostException e) {
+                    AlertUtil.mostrarErro("Sem conexão com a internet! Verifique sua rede.");
+
+                } catch (java.net.ConnectException e) {
+                    AlertUtil.mostrarErro("Não foi possível conectar ao servidor do CEP.");
+
+                } catch (java.net.SocketTimeoutException e) {
+                    AlertUtil.mostrarErro("A busca por CEP demorou muito (timeout). Tente novamente.");
+
+                } catch (IOException e) {
+                    AlertUtil.mostrarErro("Erro de comunicação com o servidor.");
+
+                } catch (Exception e) {
+                    AlertUtil.mostrarErro("Ocorreu um erro inesperado: " + e.getMessage());
                 }
-
-            } catch (java.net.UnknownHostException e) {
-                AlertUtil.mostrarErro("Sem conexão com a internet! Verifique sua rede.");
-
-            } catch (java.net.ConnectException e) {
-                AlertUtil.mostrarErro("Não foi possível conectar ao servidor do CEP.");
-
-            } catch (java.net.SocketTimeoutException e) {
-                AlertUtil.mostrarErro("A busca por CEP demorou muito (timeout). Tente novamente.");
-
-            } catch (IOException e) {
-                AlertUtil.mostrarErro("Erro de comunicação com o servidor.");
-
-            } catch (Exception e) {
-                AlertUtil.mostrarErro("Ocorreu um erro inesperado: " + e.getMessage());
             }
-        }
         });
 
         txtCep.textProperty().addListener((obs, oldVal, newVal) -> {
 
             // Mantém apenas números
-            
+
             txtCep.setText(newVal);
 
             if (newVal.length() == 9 || newVal.length() == 9) {
 
-            try {
+                try {
 
-                String cep = txtCep.getText();
-                Endereco end = BuscaCep.buscar(cep);
-                if (end != null) {
-                    txtLogradouro.setText(end.getLogradouro());
-                    txtBairro.setText(end.getBairro());
-                    txtCidade.setText(end.getCidade());
-                    txtEstado.setText(end.getEstado());
+                    String cep = txtCep.getText();
+                    Endereco end = BuscaCep.buscar(cep);
+                    if (end != null) {
+                        txtLogradouro.setText(end.getLogradouro());
+                        txtBairro.setText(end.getBairro());
+                        txtCidade.setText(end.getCidade());
+                        txtEstado.setText(end.getEstado());
 
-                } else {
-                    AlertUtil.mostrarErro("Cep não encontrado!");
+                    } else {
+                        AlertUtil.mostrarErro("Cep não encontrado!");
+                    }
+
+                } catch (java.net.UnknownHostException e) {
+                    AlertUtil.mostrarErro("Sem conexão com a internet! Verifique sua rede.");
+
+                } catch (java.net.ConnectException e) {
+                    AlertUtil.mostrarErro("Não foi possível conectar ao servidor do CEP.");
+
+                } catch (java.net.SocketTimeoutException e) {
+                    AlertUtil.mostrarErro("A busca por CEP demorou muito (timeout). Tente novamente.");
+
+                } catch (IOException e) {
+                    AlertUtil.mostrarErro("Erro de comunicação com o servidor.");
+
+                } catch (Exception e) {
+                    AlertUtil.mostrarErro("Ocorreu um erro inesperado: " + e.getMessage());
                 }
-
-            } catch (java.net.UnknownHostException e) {
-                AlertUtil.mostrarErro("Sem conexão com a internet! Verifique sua rede.");
-
-            } catch (java.net.ConnectException e) {
-                AlertUtil.mostrarErro("Não foi possível conectar ao servidor do CEP.");
-
-            } catch (java.net.SocketTimeoutException e) {
-                AlertUtil.mostrarErro("A busca por CEP demorou muito (timeout). Tente novamente.");
-
-            } catch (IOException e) {
-                AlertUtil.mostrarErro("Erro de comunicação com o servidor.");
-
-            } catch (Exception e) {
-                AlertUtil.mostrarErro("Ocorreu um erro inesperado: " + e.getMessage());
             }
-        }
         });
-
 
         txtCepFornec.textProperty().addListener((obs, oldVal, newVal) -> {
 
             // Mantém apenas números
-            
+
             txtCepFornec.setText(newVal);
 
             if (newVal.length() == 9 || newVal.length() == 9) {
 
-            try {
+                try {
 
-                String cep = txtCepFornec.getText();
-                Endereco end = BuscaCep.buscar(cep);
-                if (end != null) {
-                    txtLogradouroFornec.setText(end.getLogradouro());
-                    txtBairroFornec.setText(end.getBairro());
-                    txtCidadeFornec.setText(end.getCidade());
-                    txtEstadoFornec.setText(end.getEstado());
+                    String cep = txtCepFornec.getText();
+                    Endereco end = BuscaCep.buscar(cep);
+                    if (end != null) {
+                        txtLogradouroFornec.setText(end.getLogradouro());
+                        txtBairroFornec.setText(end.getBairro());
+                        txtCidadeFornec.setText(end.getCidade());
+                        txtEstadoFornec.setText(end.getEstado());
 
-                } else {
-                    AlertUtil.mostrarErro("Cep não encontrado!");
+                    } else {
+                        AlertUtil.mostrarErro("Cep não encontrado!");
+                    }
+
+                } catch (java.net.UnknownHostException e) {
+                    AlertUtil.mostrarErro("Sem conexão com a internet! Verifique sua rede.");
+
+                } catch (java.net.ConnectException e) {
+                    AlertUtil.mostrarErro("Não foi possível conectar ao servidor do CEP.");
+
+                } catch (java.net.SocketTimeoutException e) {
+                    AlertUtil.mostrarErro("A busca por CEP demorou muito (timeout). Tente novamente.");
+
+                } catch (IOException e) {
+                    AlertUtil.mostrarErro("Erro de comunicação com o servidor.");
+
+                } catch (Exception e) {
+                    AlertUtil.mostrarErro("Ocorreu um erro inesperado: " + e.getMessage());
                 }
-
-            } catch (java.net.UnknownHostException e) {
-                AlertUtil.mostrarErro("Sem conexão com a internet! Verifique sua rede.");
-
-            } catch (java.net.ConnectException e) {
-                AlertUtil.mostrarErro("Não foi possível conectar ao servidor do CEP.");
-
-            } catch (java.net.SocketTimeoutException e) {
-                AlertUtil.mostrarErro("A busca por CEP demorou muito (timeout). Tente novamente.");
-
-            } catch (IOException e) {
-                AlertUtil.mostrarErro("Erro de comunicação com o servidor.");
-
-            } catch (Exception e) {
-                AlertUtil.mostrarErro("Ocorreu um erro inesperado: " + e.getMessage());
             }
-        }
         });
-        
 
         // MaskTextField.validarNaoVazio(txtNome, btnCadastrar);
         // MaskTextField.validarNaoVazio(txtLogradouro, btnCadastrar);

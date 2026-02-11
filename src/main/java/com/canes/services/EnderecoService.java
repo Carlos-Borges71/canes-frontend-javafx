@@ -2,164 +2,84 @@ package com.canes.services;
 
 import java.io.IOException;
 import java.net.ConnectException;
-import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
 import java.util.List;
+
+import com.canes.config.ApiConstantes;
+import com.canes.infra.http.BaseService;
+import com.canes.model.Cliente;
 import com.canes.model.Endereco;
-import com.canes.util.AlertUtil;
+import com.canes.model.Fornecedor;
+import com.canes.model.Usuario;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class EnderecoService {
+public class EnderecoService extends BaseService {
 
-    private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
-
-    private static final String BASE_URL = "http://localhost:8080/enderecos";
-
-    HttpClient client = HttpClient.newHttpClient();
-    ObjectMapper mapper = new ObjectMapper();
-
-    public EnderecoService() {
-        this.httpClient = HttpClient.newHttpClient();
-        this.objectMapper = new ObjectMapper();
-
+    public EnderecoService(HttpClient client, ObjectMapper mapper) {
+        super(client, mapper);
     }
 
-    public static void salvarEndereco(String logradouro, String numero, String bairro, String cidade, String estado,
-            String cep, Long operadorId, Long clienteId, Long fornecedorId) throws Exception, ConnectException {
+    public void salvarEndereco(String logradouro, String numero, String bairro,
+            String cidade, String estado, String cep,
+            Long operadorId, Long clienteId, Long fornecedorId)
+            throws IOException, InterruptedException, ConnectException {
 
-        StringBuilder jsonBuilder = new StringBuilder();
-        jsonBuilder.append("{\n")
-                .append("  \"logradouro\": \"").append(logradouro).append("\",\n")
-                .append("  \"numero\": \"").append(numero).append("\",\n")
-                .append("  \"bairro\": \"").append(bairro).append("\",\n")
-                .append("  \"cidade\": \"").append(cidade).append("\",\n")
-                .append("  \"estado\": \"").append(estado).append("\",\n")
-                .append("  \"cep\": \"").append(cep).append("\"");
+        // Monta objeto Endereco (Java, não JSON manual)
+        Endereco endereco = new Endereco();
+        endereco.setLogradouro(logradouro);
+        endereco.setNumero(numero);
+        endereco.setBairro(bairro);
+        endereco.setCidade(cidade);
+        endereco.setEstado(estado);
+        endereco.setCep(cep);
 
+        // Só adiciona se não for nulo
         if (operadorId != null) {
-            jsonBuilder.append(",\n  \"operador\": {\"id\": ").append(operadorId).append("}");
+            endereco.setOperador(new Usuario(operadorId));
         }
 
         if (clienteId != null) {
-            jsonBuilder.append(",\n  \"cliente\": {\"id\": ").append(clienteId).append("}");
+            endereco.setCliente(new Cliente(clienteId));
         }
 
         if (fornecedorId != null) {
-            jsonBuilder.append(",\n  \"fornecedor\": {\"id\": ").append(fornecedorId).append("}");
+            endereco.setFornecedor(new Fornecedor(fornecedorId));
         }
 
-        jsonBuilder.append("\n}");
-
-        String json = jsonBuilder.toString();
-
-        // String json = String.format("""
-        // {
-
-        // "logradouro": "%s",
-        // "numero": "%s",
-        // "bairro": "%s",
-        // "cidade": "%s",
-        // "estado": "%s",
-        // "cep": "%s",
-        // "operador": {"id": %d}
-        // }
-        // """,
-        // logradouro, numero, bairro, cidade, estado, cep, operadorId);
-
-        HttpClient client = HttpClient.newHttpClient();
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        int status = response.statusCode();
-        if (status == 200 || status == 201) {
-
-            // AlertUtil.mostrarSucesso("Dados inserido com sucesso!");
-
-        } else {
-            System.out.println(response.body());
-            System.out.println(json);
-            AlertUtil.mostrarErro("Erro ao inserir:\n " + response.body());
-
-        }
+        // Usa o POST genérico do BaseService
+        post(ApiConstantes.ENDERECOS, endereco, Void.class);
     }
 
     public List<Endereco> buscarTodos() throws IOException, InterruptedException, ConnectException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .GET()
-                .build();
 
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() == 200) {
-            return objectMapper.readValue(response.body(), new TypeReference<List<Endereco>>() {
-            });
-        } else {
-            throw new RuntimeException("Erro ao buscar telefones: " + response.statusCode());
-        }
+        return getList(ApiConstantes.ENDERECOS, new TypeReference<List<Endereco>>() {
+        });
     }
 
-    public Endereco buscarEnderecoPorId(Long id) {
-        if (id == null)
-            return null;
-
-        String url = BASE_URL + "/" + id;
-
-        try {
-            HttpRequest req = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .timeout(Duration.ofSeconds(8))
-                    .GET()
-                    .header("Accept", "application/json")
-                    .build();
-
-            HttpResponse<String> resp = client.send(req, HttpResponse.BodyHandlers.ofString());
-
-            if (resp.statusCode() == 200 && resp.body() != null && !resp.body().isBlank()) {
-                return mapper.readValue(resp.body(), Endereco.class);
-            } else {
-                System.out.println("[EnderecoService] status=" + resp.statusCode() + ", body: " + resp.body());
-            }
-        } catch (Exception e) {
-            System.err.println("[EnderecoService] erro ao buscar endereco: " + e.getMessage());
-        }
-
-        return null;
-    }
-
+    // atualizar todo endereço
     public Endereco atualizar(Endereco endereco)
             throws IOException, InterruptedException, ConnectException {
 
-        if (endereco.getId() == null) {
-            throw new IllegalArgumentException("Endereco precisa ter ID para atualização.");
-        }
+        String url = ApiConstantes.ENDERECOS + "/" + endereco.getId();
 
-        String json = mapper.writeValueAsString(endereco);
+        return put(url, endereco, Endereco.class);
+    }
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/" + endereco.getId()))
-                .header("Content-Type", "application/json")
-                .PUT(HttpRequest.BodyPublishers.ofString(json))
-                .build();
+    // Atualizar parte dos endereços
+    public Endereco atualizarParcial(Long id, Endereco enderecoParcial)
+            throws IOException, InterruptedException {
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        String url = ApiConstantes.ENDERECOS + "/" + id;
 
-        if (response.statusCode() == 200) {
-            return mapper.readValue(response.body(), Endereco.class);
-        } else {
-            throw new RuntimeException("Erro ao atualizar endereço: " + response.body());
-        }
+        return patch(url, enderecoParcial, Endereco.class);
+    }
+
+    // Deletar Endereço
+    public void deletar(Long id)
+            throws IOException, InterruptedException, ConnectException {
+
+        delete(ApiConstantes.ENDERECOS + "/" + id);
     }
 
 }

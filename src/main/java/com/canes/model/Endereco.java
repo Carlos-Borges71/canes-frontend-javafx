@@ -104,4 +104,12 @@ public class Endereco {
         return cliente;
     }
 
+    public void setOperador(Usuario operador) {
+        this.operador = operador;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
 }

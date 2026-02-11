@@ -13,6 +13,9 @@ import com.canes.util.MaskTextField;
 import com.canes.util.ScreenUtils;
 import com.canes.util.TextFieldUtil;
 import com.canes.util.UserSession;
+import com.canes.factory.EnderecoFactory;
+import com.canes.factory.TelefoneFactory;
+import com.canes.factory.UsuarioFactory;
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Fornecedor;
@@ -356,15 +359,15 @@ public class AtualizarController {
     private void atualizarUsuario() {
 
         try {
-            Map<String, Object> dados = new HashMap<>();
+            Usuario dados = new Usuario();
 
-            dados.put("setor", txtSetor.getValue().toString());
-            dados.put("nome", txtNome.getText());
-            dados.put("login", txtLogin.getText());
-            dados.put("nome", txtNome.getText());
-            dados.put("senha", passwordSenha.getText());
+            dados.setSetor(txtSetor.getValue().toString());
+            dados.setNome(txtNome.getText());
+            dados.setLogin(txtLogin.getText());
+            dados.setSenha(passwordSenha.getText());
 
-            UsuarioService usuarioService = new UsuarioService();
+            UsuarioService usuarioService = UsuarioFactory.getUsuarioService();
+
             usuarioService.atualizarParcial(usuarioId, dados);
             AlertUtil.mostrarSucesso("Usuário atualizado com sucesso!");
 
@@ -389,7 +392,7 @@ public class AtualizarController {
             endereco.setEstado(txtEstado.getText());
             endereco.setCep(txtCep.getText());
 
-            EnderecoService enderecoService = new EnderecoService();
+            EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
             enderecoService.atualizar(endereco);
 
         } catch (Exception e) {
@@ -401,8 +404,8 @@ public class AtualizarController {
     private void buscarUsuario() {
 
         try {
-            TelefoneService telefoneService = new TelefoneService();
-            EnderecoService enderecoService = new EnderecoService();
+            TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
+            EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
 
             Map<String, Usuario> mapaTelefoneUsuario = new HashMap<>();
             Map<Long, Endereco> mapaUsuarioEndereco = new HashMap<>();
@@ -468,8 +471,8 @@ public class AtualizarController {
     private void buscarCliente() {
 
         try {
-            TelefoneService telefoneService = new TelefoneService();
-            EnderecoService enderecoService = new EnderecoService();
+            TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
+            EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
 
             Map<String, Cliente> mapaTelefoneCliente = new HashMap<>();
             Map<Long, Endereco> mapaClienteEndereco = new HashMap<>();
@@ -590,8 +593,8 @@ public class AtualizarController {
     void onClickBuscarFornec(ActionEvent event) {
 
         try {
-            TelefoneService telefoneService = new TelefoneService();
-            EnderecoService enderecoService = new EnderecoService();
+            TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
+            EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
 
             Map<String, Fornecedor> mapaTelefoneFornecedor = new HashMap<>();
             Map<Long, Endereco> mapaFornecedorEndereco = new HashMap<>();

@@ -2,67 +2,58 @@ package com.canes.services;
 
 import java.io.IOException;
 import java.net.ConnectException;
-import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 
+import com.canes.config.ApiConstantes;
+import com.canes.infra.http.BaseService;
 import com.canes.model.Cliente;
-import com.canes.model.dpo.ClienteDPO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ClienteService {
+public class ClienteService extends BaseService {
 
-    private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
-
-    private static final String BASE_URL = "http://localhost:8080/clientes";
-
-    HttpClient client = HttpClient.newHttpClient();
-    ObjectMapper mapper = new ObjectMapper();
-
-    public ClienteService() {
-        this.httpClient = HttpClient.newHttpClient();
-        this.objectMapper = new ObjectMapper();
+    public ClienteService(HttpClient client, ObjectMapper mapper) {
+        super(client, mapper);
     }
 
-    public Long salvarCliente(ClienteDPO cliente) throws IOException, InterruptedException, ConnectException {
+    // Salvar cliente
+    public Long salvarCliente(Cliente cliente) throws IOException, InterruptedException, ConnectException {
 
-        String json = mapper.writeValueAsString(cliente);
+        // Usando método generico
+        Cliente clienteSalvo = post(ApiConstantes.CLIENTES, cliente, Cliente.class);
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() == 200 || response.statusCode() == 201) {
-            Cliente clienteSalvo = mapper.readValue(response.body(), Cliente.class);
-
-            return clienteSalvo.getId();
-        } else {
-            System.out.println(json + response);
-            throw new RuntimeException("Erro ao salvar cliente: " + response.body());
-        }
+        return clienteSalvo.getId();
     }
 
-    public List<Cliente> buscarTodos() throws IOException, InterruptedException ,ConnectException{
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .GET()
-                .build();
+    public List<Cliente> buscarTodos() throws IOException, InterruptedException, ConnectException {
 
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        return getList(ApiConstantes.CLIENTES, new TypeReference<List<Cliente>>() {
+        });
+    }
 
-        if (response.statusCode() == 200) {
-            return objectMapper.readValue(response.body(), new TypeReference<List<Cliente>>() {
-            });
-        } else {
-            throw new RuntimeException("Erro ao buscar cliente: " + response.statusCode());
-        }
+    // atualizar todo cliente
+    public Cliente atualizarCliente(Cliente cliente)
+            throws IOException, InterruptedException, ConnectException {
+
+        String url = ApiConstantes.CLIENTES + "/" + cliente.getId();
+
+        return put(url, cliente, Cliente.class);
+    }
+
+    // Atualizar parte dos clientes
+    public Cliente atualizarParcial(Long id, Cliente clienteParcial)
+            throws IOException, InterruptedException {
+
+        String url = ApiConstantes.CLIENTES + "/" + id;
+
+        return patch(url, clienteParcial, Cliente.class);
+    }
+
+    // Deletar Cliente
+    public void deletar(Long id)
+            throws IOException, InterruptedException, ConnectException {
+
+        delete(ApiConstantes.CLIENTES + "/" + id);
     }
 }

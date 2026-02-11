@@ -2,7 +2,6 @@ package com.canes.model;
 
 import java.util.List;
 
-
 public class Cliente {
 
     private Long id;
@@ -16,14 +15,23 @@ public class Cliente {
     public Cliente() {
     }
 
+    public Cliente(Long id) {
+        this.id = id;
+    }
+
+    public Cliente(String nome, String instante) {
+        this.nome = nome;
+        this.instante = instante;
+    }
+
     public Cliente(Long id, String nome, String instante, Endereco endereco, String telefones) {
 
         this.id = id;
         this.nome = nome;
         this.instante = instante;
-        //this.operador = operador;
+        // this.operador = operador;
         this.endereco = endereco;
-        this.telefones =telefones;
+        this.telefones = telefones;
 
     }
 
@@ -82,7 +90,5 @@ public class Cliente {
     public void setUsuarios(List<Usuario> usuarios) {
         this.usuarios = usuarios;
     }
-    
-    
 
 }

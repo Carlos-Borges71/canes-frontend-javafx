@@ -1,7 +1,5 @@
 package com.canes.controller;
 
-
-
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.Instant;
@@ -12,6 +10,11 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.canes.factory.ClienteFactory;
+import com.canes.factory.EnderecoFactory;
+import com.canes.factory.FornecedorFactory;
+import com.canes.factory.TelefoneFactory;
+import com.canes.factory.UsuarioFactory;
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Fornecedor;
@@ -315,9 +318,9 @@ public class PesquisaController {
         colPedidoCliente.setCellValueFactory(new PropertyValueFactory<>("pedidos"));
 
         try {
-            ClienteService clienteService = new ClienteService();
-            TelefoneService telefoneService = new TelefoneService();
-            EnderecoService enderecoService = new EnderecoService();
+            ClienteService clienteService = ClienteFactory.getClienteService();
+            TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
+            EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
             PedidoService pedidoService = new PedidoService();
 
             List<Cliente> clientes = clienteService.buscarTodos();
@@ -494,9 +497,9 @@ public class PesquisaController {
         colNotaFiscalFornec.setCellValueFactory(new PropertyValueFactory<>("notasFiscais"));
 
         try {
-            FornecedorService fornecedorService = new FornecedorService();
-            TelefoneService telefoneService = new TelefoneService();
-            EnderecoService enderecoService = new EnderecoService();
+            FornecedorService fornecedorService = FornecedorFactory.getFornecedorService();
+            TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
+            EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
             ProdutoService produtoService = new ProdutoService();
             NotaFiscalService notaFiscalService = new NotaFiscalService();
 
@@ -889,7 +892,7 @@ public class PesquisaController {
                 // 🔥 DATA
                 boolean matchData = false;
                 if (pedido.getData() != null) {
-                    //matchData = pedido.getData().toLowerCase().contains(filtro);
+                    // matchData = pedido.getData().toLowerCase().contains(filtro);
                     // OU se for Instant:
                     Instant inst = Instant.parse(pedido.getData());
                     matchData = formatter.format(inst).contains(filtro);
@@ -1028,7 +1031,7 @@ public class PesquisaController {
                 HouverEffectUtil.apllyHouverSobre(btnLimparProduto);
             });
 
-             btnLimparPedido.setOnMouseExited(e -> {
+            btnLimparPedido.setOnMouseExited(e -> {
                 HouverEffectUtil.apllyHouverSair(btnLimparPedido);
             });
 
@@ -1068,9 +1071,9 @@ public class PesquisaController {
     private void carregarUsuarios() {
 
         try {
-            UsuarioService usuarioService = new UsuarioService();
-            TelefoneService telefoneService = new TelefoneService();
-            EnderecoService enderecoService = new EnderecoService();
+            UsuarioService usuarioService = UsuarioFactory.getUsuarioService();
+            TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
+            EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
 
             List<Usuario> usuarios = usuarioService.buscarTodos();
             List<Telefone> telefones = telefoneService.buscarTodos();
