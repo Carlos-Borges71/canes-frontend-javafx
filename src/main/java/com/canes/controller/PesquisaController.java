@@ -5,6 +5,7 @@ import java.text.NumberFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -25,6 +26,7 @@ import com.canes.model.Telefone;
 import com.canes.model.Usuario;
 import com.canes.model.dpo.ClienteTabelaDPO;
 import com.canes.model.dpo.FornecedorDTO;
+import com.canes.model.dpo.PedidoDPO;
 import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
 import com.canes.services.FornecedorService;
@@ -44,6 +46,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -417,7 +420,12 @@ public class PesquisaController {
 
                 listaFiltradaCliente = new FilteredList<>(listaClientes, p -> true);
 
-                tabelaCliente.setItems(listaFiltradaCliente);
+                // Ordenar a tabela por dececente ID
+                SortedList<ClienteTabelaDPO> listaOrdenada = new SortedList<>(listaFiltradaCliente);
+                listaOrdenada.setComparator(
+                        Comparator.comparing(ClienteTabelaDPO::getId).reversed());
+
+                tabelaCliente.setItems(listaOrdenada);
 
                 txtFiltrarCliente.textProperty().addListener((obs, oldValue, newValue) -> {
                     String filtro = newValue.toLowerCase();
@@ -850,7 +858,13 @@ public class PesquisaController {
                     .observableArrayList(pedidos != null ? pedidos : List.of());
 
             listaFiltradaPedido = new FilteredList<>(listaPedido, p -> true);
-            tabelaPedido.setItems(listaFiltradaPedido);
+
+            // Ordenar a tabela por dececente ID
+            SortedList<Pedido> listaOrdenada = new SortedList<>(listaFiltradaPedido);
+            listaOrdenada.setComparator(
+                    Comparator.comparing(Pedido::getId).reversed());
+
+            tabelaPedido.setItems(listaOrdenada);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1139,7 +1153,13 @@ public class PesquisaController {
             }
 
             listaFiltrada = new FilteredList<>(listaUsuarios, p -> true);
-            tabelaUsuario.setItems(listaFiltrada);
+
+            // Ordenar a tabela por dececente ID
+            SortedList<Usuario> listaOrdenada = new SortedList<>(listaFiltrada);
+            listaOrdenada.setComparator(
+                    Comparator.comparing(Usuario::getId).reversed());
+
+            tabelaUsuario.setItems(listaOrdenada);
 
         } catch (Exception e) {
             AlertUtil.mostrarErro("Erro ao carregar usuários: " + e.getMessage());
