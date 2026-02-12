@@ -2,7 +2,6 @@ package com.canes.model;
 
 import java.util.List;
 
-
 public class Pedido {
 
     private Long id;
@@ -11,15 +10,19 @@ public class Pedido {
     private Double valor;
     private String data;
     private Cliente cliente;
-    
+
     private List<Pagamento> pagamentos;
     private List<PedidoProduto> pedido;
 
     public Pedido() {
     }
 
-   
-    public Pedido(Long id, String status,  Double valor, String data, List<Produto> produtos, List<Pagamento> pagamentos,List<PedidoProduto> pedido) {
+    public Pedido(Long id) {
+        this.id = id;
+    }
+
+    public Pedido(Long id, String status, Double valor, String data, List<Produto> produtos, List<Pagamento> pagamentos,
+            List<PedidoProduto> pedido) {
         this.id = id;
         this.status = status;
         this.valor = valor;
@@ -28,8 +31,7 @@ public class Pedido {
         this.pagamentos = pagamentos;
         this.pedido = pedido;
     }
-    
-   
+
     public Long getId() {
         return id;
     }
@@ -41,8 +43,6 @@ public class Pedido {
     public String getStatus() {
         return status;
     }
-
-    
 
     public void setStatus(String status) {
         this.status = status;
@@ -63,7 +63,6 @@ public class Pedido {
     public void setData(String data) {
         this.data = data;
     }
-    
 
     public List<Produto> getProdutos() {
         return produtos;
@@ -76,18 +75,21 @@ public class Pedido {
     public List<Pagamento> getPagamentos() {
         return pagamentos;
     }
-    
 
     public void setPagamentos(List<Pagamento> pagamentos) {
         this.pagamentos = pagamentos;
     }
-    
+
     public List<PedidoProduto> getPedido() {
         return pedido;
     }
 
     public void setPedido(List<PedidoProduto> pedido) {
         this.pedido = pedido;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     @Override

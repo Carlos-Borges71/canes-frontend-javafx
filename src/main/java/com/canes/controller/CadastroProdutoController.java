@@ -2,6 +2,7 @@ package com.canes.controller;
 
 import java.lang.classfile.Label;
 
+import com.canes.factory.ProdutoFactory;
 import com.canes.model.Produto;
 import com.canes.services.ProdutoService;
 import com.canes.util.AlertUtil;
@@ -65,27 +66,27 @@ public class CadastroProdutoController {
     @FXML
     void onClickcadastrar(ActionEvent event) throws Exception {
 
-        if(txtProduto.getText().isEmpty()){ 
+        if (txtProduto.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo Produto não \npode ficar vazio!.");
             return;
         }
-         if(txtCodigo.getText().isEmpty()){ 
+        if (txtCodigo.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo Código não \npode ficar vazio!.");
             return;
         }
-         if(txtQuantidade.getText().isEmpty()){ 
+        if (txtQuantidade.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo Quantidade não \npode ficar vazio!.");
             return;
         }
-         if(txtTamanho.getText().isEmpty()){ 
+        if (txtTamanho.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo Tamanho não \npode ficar vazio!.");
-            return;        
+            return;
         }
-         if(txtValorCompra.getText().isEmpty()){ 
+        if (txtValorCompra.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo Compra não \npode ficar vazio!.");
             return;
         }
-         if(txtValorVenda.getText().isEmpty()){ 
+        if (txtValorVenda.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo Venda não \npode ficar vazio!.");
             return;
         }
@@ -95,14 +96,15 @@ public class CadastroProdutoController {
         String codigo = txtCodigo.getText();
         String nome = txtProduto.getText();
         Double valorCompra = TextFieldUtil.converterParaDouble(txtValorCompra.getText());
-        //Double.parseDouble(txtValorCompra.getText().replaceAll("[^\\d,\\.]", "").replace(".", "").replace(",", "."));
+        // Double.parseDouble(txtValorCompra.getText().replaceAll("[^\\d,\\.]",
+        // "").replace(".", "").replace(",", "."));
         Double valorVenda = TextFieldUtil.converterParaDouble(txtValorVenda.getText());
-        //Double.parseDouble(txtValorVenda.getText().replaceAll("[^\\d,\\.]", "").replace(".", "").replace(",", "."));
-        
+        // Double.parseDouble(txtValorVenda.getText().replaceAll("[^\\d,\\.]",
+        // "").replace(".", "").replace(",", "."));
+
         Integer quantCompra = Integer.parseInt(txtQuantidade.getText());
-        
-        
-        ProdutoService produtoService = new ProdutoService();
+
+        ProdutoService produtoService = ProdutoFactory.getProdutoService();
 
         produtoService.salvarProduto(codigo, nome, valorCompra, valorVenda, quantCompra, fornecedorId, notaFiscalId);
 
@@ -148,7 +150,7 @@ public class CadastroProdutoController {
         txtTamanho.clear();
         txtValorCompra.clear();
         txtValorVenda.clear();
-        
+
     }
 
     public void initialize() {

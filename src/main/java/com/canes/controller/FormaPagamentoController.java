@@ -11,6 +11,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
+import com.canes.factory.PagamentoFactory;
+import com.canes.factory.PedidoFactory;
+import com.canes.factory.ProdutoFactory;
 import com.canes.model.Produto;
 import com.canes.model.dpo.PedidoDPO;
 import com.canes.services.ClienteService;
@@ -128,7 +131,7 @@ public class FormaPagamentoController {
 
     NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
-    PedidoService pedidoService = new PedidoService();
+    PedidoService pedidoService = PedidoFactory.getPedidoService();
 
     public Long salvarPedido() {
         try {
@@ -149,7 +152,7 @@ public class FormaPagamentoController {
 
             Double valorPagamento = valorDigitado.doubleValue();
             String tipo = txtPagamento.getText();
-            PagamentoService pagamentoService = new PagamentoService();
+            PagamentoService pagamentoService = PagamentoFactory.getPagamentoService();
             pagamentoService.salvarPagamento(
                     data,
                     tipo,
@@ -170,7 +173,7 @@ public class FormaPagamentoController {
     public void salvarDados() {
 
         PedidoProdutoService pedidoProdutoService = new PedidoProdutoService();
-        ProdutoService produtoService = new ProdutoService();
+        ProdutoService produtoService = ProdutoFactory.getProdutoService();
 
         try {
 
@@ -393,7 +396,7 @@ public class FormaPagamentoController {
 
             // if (evet.getCode() == KeyCode.F11) {
             // try{
-            // PagamentoService pagamentoService = new PagamentoService();
+            // PagamentoService pagamentoService = PagamentoFactory.getPagamentoService();
             // Long pagamentoId = pagamentoService.buscarUltimoPagamentoId();
 
             // }catch(Exception e){

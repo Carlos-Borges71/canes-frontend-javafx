@@ -113,4 +113,8 @@ public class Produto {
         this.nota = nota;
     }
 
+    public void setFornecedor(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
+    }
+
 }

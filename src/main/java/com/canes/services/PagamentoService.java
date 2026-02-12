@@ -1,92 +1,78 @@
 package com.canes.services;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
+import com.canes.config.ApiConstantes;
+import com.canes.infra.http.BaseService;
+import com.canes.model.Fornecedor;
 import com.canes.model.Pagamento;
 import com.canes.model.Pedido;
+import com.canes.model.Produto;
 import com.canes.util.AlertUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class PagamentoService {
-    private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
+public class PagamentoService extends BaseService {
 
-    HttpClient client = HttpClient.newHttpClient();
-    ObjectMapper mapper = new ObjectMapper();
-
-    private static final String BASE_URL = "http://localhost:8080/pagamentos";
-
-    public PagamentoService() {
-
-        this.httpClient = HttpClient.newHttpClient();
-        this.objectMapper = new ObjectMapper();
-
+    public PagamentoService(HttpClient client, ObjectMapper mapper) {
+        super(client, mapper);
     }
 
-    private String data;
-    private String tipo;
-    private Double valorPagamento;
-    private Pedido pedido;
+    public void salvarPagamento(String data, String tipo, Double valorPagamneto, Long pedidoId)
+            throws IOException, InterruptedException, ConnectException {
 
-    public static void salvarPagamento(String data, String tipo, Double valorPagamneto, Long pedidoId)
-            throws Exception {
+        // Monta objeto produto (Java, não JSON manual)
+        Pagamento pagamento = new Pagamento();
+        pagamento.setData(data);
+        pagamento.setTipo(tipo);
+        pagamento.setValorPagamento(valorPagamneto);
 
-        String json = String.format("""
-                {
+        // Só adiciona se não for nulo
 
-                "data": "%s",
-                "tipo": "%s",
-                "valorPagamento": "%s",
-                "pedido": {"id": %d}
-                }
-                """,
-                data, tipo, valorPagamneto, pedidoId);
-
-        HttpClient client = HttpClient.newHttpClient();
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        int status = response.statusCode();
-        if (status == 200 || status == 201) {
-
-            // AlertUtil.mostrarSucesso("Dados inserido com sucesso!");
-
-        } else {
-            System.out.println(response.body());
-            System.out.println(json);
-            AlertUtil.mostrarErro("Erro ao inserir:\n " + response.body());
-
+        if (pedidoId != null) {
+            pagamento.setPedido(new Pedido(pedidoId));
         }
+
+        // Usa o POST genérico do BaseService
+        post(ApiConstantes.PAGAMENTOS, pagamento, Void.class);
+
     }
 
-    public List<Pagamento> buscarTodos() throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .GET()
-                .build();
+    public List<Pagamento> buscarTodos() throws IOException, InterruptedException, ConnectException {
 
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() == 200) {
-            return objectMapper.readValue(response.body(), new TypeReference<List<Pagamento>>() {
-            });
-        } else {
-            throw new RuntimeException("Erro ao buscar pagamentos: " + response.statusCode());
-        }
+        return getList(ApiConstantes.PAGAMENTOS, new TypeReference<List<Pagamento>>() {
+        });
     }
 
-   
+    // atualizar todo pagamento
+    public Pagamento atualizar(Pagamento pagamento)
+            throws IOException, InterruptedException, ConnectException {
+
+        String url = ApiConstantes.PAGAMENTOS + "/" + pagamento.getId();
+
+        return put(url, pagamento, Pagamento.class);
+    }
+
+    // Atualizar parte dos pagamentos
+    public Pagamento atualizarParcial(Long id, Produto pagamentoParcial)
+            throws IOException, InterruptedException, ConnectException {
+
+        String url = ApiConstantes.PAGAMENTOS + "/" + id;
+
+        return patch(url, pagamentoParcial, Pagamento.class);
+    }
+
+    // Deletar pagamento
+    public void deletar(Long id)
+            throws IOException, InterruptedException, ConnectException {
+
+        delete(ApiConstantes.PAGAMENTOS + "/" + id);
+    }
 
 }

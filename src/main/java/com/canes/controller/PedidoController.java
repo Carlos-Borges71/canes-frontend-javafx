@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.canes.factory.ClienteFactory;
+import com.canes.factory.ProdutoFactory;
 import com.canes.factory.TelefoneFactory;
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
@@ -705,7 +706,7 @@ public class PedidoController {
 
         try {
 
-            ProdutoService produtoService = new ProdutoService();
+            ProdutoService produtoService = ProdutoFactory.getProdutoService();
             List<Produto> produtos = produtoService.buscarTodos();
 
             String codigo = txtCodigo.getText();

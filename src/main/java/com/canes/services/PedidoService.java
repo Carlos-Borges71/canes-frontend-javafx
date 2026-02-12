@@ -2,93 +2,63 @@ package com.canes.services;
 
 import java.io.IOException;
 import java.net.ConnectException;
-import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 
-import org.json.JSONObject;
-
+import com.canes.config.ApiConstantes;
+import com.canes.infra.http.BaseService;
+import com.canes.model.Cliente;
 import com.canes.model.Pedido;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class PedidoService {
+public class PedidoService extends BaseService {
 
-    private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
-
-    private static final String BASE_URL = "http://localhost:8080/pedidos";
-
-    HttpClient client = HttpClient.newHttpClient();
-    ObjectMapper mapper = new ObjectMapper();
-
-    public PedidoService() {
-        this.httpClient = HttpClient.newHttpClient();
-        this.objectMapper = new ObjectMapper();
+    public PedidoService(HttpClient client, ObjectMapper mapper) {
+        super(client, mapper);
     }
 
-    public static Long salvarPedido(String statusPedido, Double valor, String data, Long clienteId)
-        throws IOException, InterruptedException {
+    public Long salvarPedido(String statusPedido, Double valor, String data, Long clienteId)
+            throws IOException, InterruptedException {
 
-    String json = "{\n" +
-            "  \"status\": \"" + statusPedido + "\"";
-    json += ", \"valor\": " + valor;
-    json += ", \"data\": \"" + data + "\"";
-    json += ", \"cliente\": {\"id\": " + clienteId + "}";
-    json += "\n}";
+        // Monta objeto Pedido (Java, não JSON manual)
+        Pedido pedido = new Pedido();
+        pedido.setStatus(statusPedido);
+        pedido.setValor(valor);
+        pedido.setData(data);
 
-    HttpClient client = HttpClient.newHttpClient();
+        // Só adiciona se não for nulo
 
-    HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(BASE_URL))
-            .header("Content-Type", "application/json")
-            .POST(HttpRequest.BodyPublishers.ofString(json))
-            .build();
-
-    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-    int status = response.statusCode();
-
-    if (status == 201 || status == 200) {
-        // Extrai o ID retornado
-        JSONObject obj = new JSONObject(response.body());
-        Long idPedido = obj.getLong("id");
-
-        System.out.println("Pedido salvo com ID: " + idPedido);
-
-        return idPedido;
-    } else {
-        System.out.println("Erro ao salvar pedido: " + status);
-        System.out.println("Resposta: " +json);
-        return null;
-    }
-}
-
-
-    public List<Pedido> buscarTodos() throws IOException, InterruptedException ,ConnectException{
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .GET()
-                .build();
-
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() == 200) {
-            return objectMapper.readValue(response.body(), new TypeReference<List<Pedido>>() {
-            });
-        } else {
-            throw new RuntimeException("Erro ao buscar pedido: " + response.statusCode());
+        if (clienteId != null) {
+            pedido.setCliente(new Cliente(clienteId));
         }
+
+        // Usa o POST do BaseService
+        Pedido pedidoSalvo = post(ApiConstantes.PEDIDOS, pedido, Pedido.class);
+        return pedidoSalvo.getId();
     }
 
-    //  public Long buscarUltimoPedidoId()
-    //         throws IOException, InterruptedException {
+    public List<Pedido> buscarTodos() throws IOException, InterruptedException, ConnectException {
 
-    //     return buscarTodos().stream()
-    //             .max(Comparator.comparing(PedidoDPO::getId))
-    //             .map(Pedido::getId)
-    //             .orElse(null);
-    // }
+        return getList(ApiConstantes.PEDIDOS, new TypeReference<List<Pedido>>() {
+        });
+    }
+
+    // atualizar todo endereço
+    public Pedido atualizar(Pedido pedido)
+            throws IOException, InterruptedException, ConnectException {
+
+        String url = ApiConstantes.PEDIDOS + "/" + pedido.getId();
+
+        return put(url, pedido, Pedido.class);
+    }
+
+    // Atualizar parte dos endereços
+    public Pedido atualizarParcial(Long id, Pedido pedidoParcial)
+            throws IOException, InterruptedException {
+
+        String url = ApiConstantes.PEDIDOS + "/" + id;
+
+        return patch(url, pedidoParcial, Pedido.class);
+    }
 }

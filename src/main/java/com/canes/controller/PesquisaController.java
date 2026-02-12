@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 import com.canes.factory.ClienteFactory;
 import com.canes.factory.EnderecoFactory;
 import com.canes.factory.FornecedorFactory;
+import com.canes.factory.PedidoFactory;
+import com.canes.factory.ProdutoFactory;
 import com.canes.factory.TelefoneFactory;
 import com.canes.factory.UsuarioFactory;
 import com.canes.model.Cliente;
@@ -324,7 +326,7 @@ public class PesquisaController {
             ClienteService clienteService = ClienteFactory.getClienteService();
             TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
             EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
-            PedidoService pedidoService = new PedidoService();
+            PedidoService pedidoService = PedidoFactory.getPedidoService();
 
             List<Cliente> clientes = clienteService.buscarTodos();
             List<Telefone> telefones = telefoneService.buscarTodos();
@@ -508,7 +510,7 @@ public class PesquisaController {
             FornecedorService fornecedorService = FornecedorFactory.getFornecedorService();
             TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
             EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
-            ProdutoService produtoService = new ProdutoService();
+            ProdutoService produtoService = ProdutoFactory.getProdutoService();
             NotaFiscalService notaFiscalService = new NotaFiscalService();
 
             List<Fornecedor> fornecedores = fornecedorService.buscarTodos();
@@ -687,7 +689,7 @@ public class PesquisaController {
 
         try {
 
-            ProdutoService produtoService = new ProdutoService();
+            ProdutoService produtoService = ProdutoFactory.getProdutoService();
             List<Produto> prod = produtoService.buscarTodos();
 
             ObservableList<Produto> listaProdutos = FXCollections.observableArrayList();
@@ -851,7 +853,7 @@ public class PesquisaController {
         });
 
         try {
-            PedidoService pedidoService = new PedidoService();
+            PedidoService pedidoService = PedidoFactory.getPedidoService();
             List<Pedido> pedidos = pedidoService.buscarTodos();
 
             ObservableList<Pedido> listaPedido = FXCollections

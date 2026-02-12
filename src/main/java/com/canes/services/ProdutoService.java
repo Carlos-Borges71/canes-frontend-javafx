@@ -1,91 +1,75 @@
 package com.canes.services;
 
 import java.io.IOException;
-import java.net.URI;
+import java.net.ConnectException;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 
+import com.canes.config.ApiConstantes;
+import com.canes.infra.http.BaseService;
+import com.canes.model.Fornecedor;
 import com.canes.model.Produto;
-import com.canes.util.AlertUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ProdutoService {
+public class ProdutoService extends BaseService {
 
-    private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
-
-     
-
-     HttpClient client = HttpClient.newHttpClient();
-    ObjectMapper mapper = new ObjectMapper();
-
-    private static final String BASE_URL = "http://localhost:8080/produtos";
-
-    public ProdutoService(){
-
-    this.httpClient = HttpClient.newHttpClient();
-        this.objectMapper = new ObjectMapper();
-
-    }
-    
-    public static void salvarProduto(String codigo, String nome, Double valorCompra, Double valorVenda,
-            Integer quantcompra, Long fornecedorId, Long notaFiscalId) throws Exception {
-
-       
-        String json = String.format("""
-        {
-
-        "codigo": "%s",
-        "nome": "%s",
-        "valorCompra": "%s",
-        "valorVenda": "%s",
-        "quantcompra": "%s",
-        "fornecedor": {"id": %d},
-        "nota": {"id": %d}
-        }
-        """,
-        codigo, nome,valorCompra, valorVenda, quantcompra, fornecedorId, notaFiscalId);
-
-        HttpClient client = HttpClient.newHttpClient();
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        int status = response.statusCode();
-        if (status == 200 || status == 201) {
-
-            AlertUtil.mostrarSucesso("Dados inserido com sucesso!");
-
-        } else {
-            System.out.println(response.body());
-            System.out.println(json);
-            AlertUtil.mostrarErro("Erro ao inserir:\n " + response.body());
-
-        }
+    public ProdutoService(HttpClient client, ObjectMapper mapper) {
+        super(client, mapper);
     }
 
-    public List<Produto> buscarTodos() throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .GET()
-                .build();
+    public void salvarProduto(String codigo, String nome, Double valorCompra, Double valorVenda,
+            Integer quantcompra, Long fornecedorId, Long notaFiscalId)
+            throws IOException, InterruptedException, ConnectException {
 
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        // Monta objeto produto (Java, não JSON manual)
+        Produto produto = new Produto();
+        produto.setCodigo(codigo);
+        produto.setNome(nome);
+        produto.setValorCompra(valorCompra);
+        produto.setValorVenda(valorVenda);
+        produto.setQuantcompra(quantcompra);
 
-        if (response.statusCode() == 200) {
-            return objectMapper.readValue(response.body(), new TypeReference<List<Produto>>() {
-            });
-        } else {
-            throw new RuntimeException("Erro ao buscar fornecedores: " + response.statusCode());
+        // Só adiciona se não for nulo
+
+        if (fornecedorId != null) {
+            produto.setFornecedor(new Fornecedor(fornecedorId));
         }
+
+        // Usa o POST genérico do BaseService
+        post(ApiConstantes.PRODUTOS, produto, Void.class);
+
+    }
+
+    public List<Produto> buscarTodos() throws IOException, InterruptedException, ConnectException {
+
+        return getList(ApiConstantes.PRODUTOS, new TypeReference<List<Produto>>() {
+        });
+    }
+
+    // atualizar todo produto
+    public Produto atualizar(Produto produto)
+            throws IOException, InterruptedException, ConnectException {
+
+        String url = ApiConstantes.PRODUTOS + "/" + produto.getId();
+
+        return put(url, produto, Produto.class);
+    }
+
+    // Atualizar parte dos produto
+    public Produto atualizarParcial(Long id, Produto produtoParcial)
+            throws IOException, InterruptedException, ConnectException {
+
+        String url = ApiConstantes.PRODUTOS + "/" + id;
+
+        return patch(url, produtoParcial, Produto.class);
+    }
+
+    // Deletar produto
+    public void deletar(Long id)
+            throws IOException, InterruptedException, ConnectException {
+
+        delete(ApiConstantes.PRODUTOS + "/" + id);
     }
 
 }

@@ -14,6 +14,8 @@ import com.canes.util.ScreenUtils;
 import com.canes.util.TextFieldUtil;
 import com.canes.util.UserSession;
 import com.canes.factory.EnderecoFactory;
+import com.canes.factory.PedidoFactory;
+import com.canes.factory.ProdutoFactory;
 import com.canes.factory.TelefoneFactory;
 import com.canes.factory.UsuarioFactory;
 import com.canes.model.Cliente;
@@ -548,7 +550,7 @@ public class AtualizarController {
     @FXML
     void onClickBuscarPedido(ActionEvent event) {
         try {
-            PedidoService pedidoService = new PedidoService();
+            PedidoService pedidoService = PedidoFactory.getPedidoService();
             List<Pedido> pedido = pedidoService.buscarTodos();
 
             boolean encontrado = false;
@@ -667,7 +669,7 @@ public class AtualizarController {
 
         try {
 
-            ProdutoService produtoService = new ProdutoService();
+            ProdutoService produtoService = ProdutoFactory.getProdutoService();
             List<Produto> produto = produtoService.buscarTodos();
 
             boolean encontrado = false;

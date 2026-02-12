@@ -5,6 +5,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.Locale;
 
+import com.canes.factory.ProdutoFactory;
 import com.canes.model.Produto;
 import com.canes.services.ProdutoService;
 import com.canes.util.MoedaCorrenteCellFactory;
@@ -32,7 +33,6 @@ public class ProdutoController {
 
     @FXML
     private Button btnLimparProduto;
-    
 
     @FXML
     private TableColumn<Produto, String> colCodigoProduto;
@@ -103,10 +103,10 @@ public class ProdutoController {
         colEstoqueProduto.setCellValueFactory(new PropertyValueFactory<>("estoque"));
         colValorProduto.setCellValueFactory(new PropertyValueFactory<>("valorVenda"));
         colValorProduto.setCellFactory(MoedaCorrenteCellFactory.forTableColumn());
-        //realColuna(colValorProduto);
+        // realColuna(colValorProduto);
 
         try {
-            ProdutoService produtoService = new ProdutoService();
+            ProdutoService produtoService = ProdutoFactory.getProdutoService();
 
             List<Produto> produt = produtoService.buscarTodos();
 
