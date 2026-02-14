@@ -21,6 +21,13 @@ public class Pedido {
         this.id = id;
     }
 
+    public Pedido(String status, Double valor, String data, Cliente cliente) {
+        this.status = status;
+        this.valor = valor;
+        this.data = data;
+        this.cliente = cliente;
+    }
+
     public Pedido(Long id, String status, Double valor, String data, List<Produto> produtos, List<Pagamento> pagamentos,
             List<PedidoProduto> pedido) {
         this.id = id;

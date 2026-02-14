@@ -16,6 +16,12 @@ public class HttpResponseValidator {
             return;
         }
 
+        System.err.println("========== ERRO HTTP ==========");
+        System.err.println("Status Code: " + status);
+        System.err.println("Response Body:");
+        System.err.println(response.body());
+        System.err.println("================================");
+
         String mensagem = switch (status) {
             case 400 -> "Requisição inválida";
             case 401 -> "Não autorizado";
@@ -24,7 +30,14 @@ public class HttpResponseValidator {
             case 500 -> "Erro interno no servidor";
             default -> "Erro inesperado";
         };
+
+        // Mostra algo amigável na UI
         AlertUtil.mostrarErro(mensagem);
-        throw new ApiException(status, mensagem + ": " + response.body());
+
+        // Lança exceção com detalhes COMPLETOS
+        throw new ApiException(
+                status,
+                mensagem + " | STATUS=" + status + " | BODY=" + response.body());
     }
+
 }

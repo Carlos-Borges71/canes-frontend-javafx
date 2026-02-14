@@ -8,73 +8,85 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
+import com.canes.config.ApiConstantes;
+import com.canes.infra.http.BaseService;
+import com.canes.model.Cliente;
+import com.canes.model.Endereco;
+import com.canes.model.Fornecedor;
+import com.canes.model.Pedido;
 import com.canes.model.PedidoProduto;
+import com.canes.model.Produto;
+import com.canes.model.Usuario;
+import com.canes.model.dpo.PedidoDPO;
+import com.canes.model.dpo.PedidoProdutoDPO;
+import com.canes.model.dpo.ProdutoDPO;
+import com.canes.model.pk.PedidoProdutoPK;
 import com.canes.util.AlertUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class PedidoProdutoService {
+public class PedidoProdutoService extends BaseService {
 
-    private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
+    public PedidoProdutoService(HttpClient client, ObjectMapper mapper) {
+        super(client, mapper);
 
-    private static final String BASE_URL = "http://localhost:8080/pedido_produto";
-
-    HttpClient client = HttpClient.newHttpClient();
-    ObjectMapper mapper = new ObjectMapper();
-
-    public PedidoProdutoService() {
-        this.httpClient = HttpClient.newHttpClient();
-        this.objectMapper = new ObjectMapper();
     }
 
-    public static void salvarPedidoProduto(Integer quant, Double valor, Long pedidoId, Long produtoId)
+    public void salvarPedidoProduto(Long pedidoId, Long produtoId, Integer quant, Double valor)
             throws IOException, InterruptedException {
 
-        String json = "{\n" +
-                "  \"id\": {\n" +
-                "    \"pedido\": { \"id\": " + pedidoId + " },\n" +
-                "    \"produto\": { \"id\": " + produtoId + " }\n" +
-                "  },\n" +
-                "  \"quant\": " + quant + ",\n" +
-                "  \"valor\": " + valor + "\n" +
-                "}";
+        PedidoProdutoDPO pedidoProduto = new PedidoProdutoDPO();
 
-        HttpClient client = HttpClient.newHttpClient();
+        // 🔹 cria a PK composta
+        PedidoProdutoPK pk = new PedidoProdutoPK();
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        int status = response.statusCode();
-        if (status == 200 || status == 201) {
-
-        } else {
-            System.out.println(response.body());
-            System.out.println(json);
-            AlertUtil.mostrarErro("Erro ao inserir:\n " + response.body());
-
+        if (pedidoId != null) {
+            pk.setPedido(new PedidoDPO(pedidoId));
         }
 
-    }
-
-    public List<PedidoProduto> buscarTodos() throws IOException, InterruptedException, ConnectException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .GET()
-                .build();
-
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() == 200) {
-            return objectMapper.readValue(response.body(), new TypeReference<List<PedidoProduto>>() {
-            });
-        } else {
-            throw new RuntimeException("Erro ao buscar pedido: " + response.statusCode());
+        if (produtoId != null) {
+            pk.setProduto(new ProdutoDPO(produtoId));
         }
+
+        // 🔹 seta o ID composto
+        pedidoProduto.setId(pk);
+
+        // 🔹 seta os outros campos
+        pedidoProduto.setQuant(quant);
+        pedidoProduto.setValor(valor);
+
+        // converte para JSON
+        String json = mapper.writeValueAsString(pedidoProduto);
+
+        System.out.println("JSON enviado:");
+        System.out.println(json);
+
+        post(ApiConstantes.PEDIDOPRODUTOS, pedidoProduto, Void.class);
     }
+
+    // atualizar todo endereço
+    public Endereco atualizar(Endereco endereco)
+            throws IOException, InterruptedException, ConnectException {
+
+        String url = ApiConstantes.ENDERECOS + "/" + endereco.getId();
+
+        return put(url, endereco, Endereco.class);
+    }
+
+    // Atualizar parte dos endereços
+    public Endereco atualizarParcial(Long id, Endereco enderecoParcial)
+            throws IOException, InterruptedException {
+
+        String url = ApiConstantes.ENDERECOS + "/" + id;
+
+        return patch(url, enderecoParcial, Endereco.class);
+    }
+
+    // Deletar Endereço
+    public void deletar(Long id)
+            throws IOException, InterruptedException, ConnectException {
+
+        delete(ApiConstantes.ENDERECOS + "/" + id);
+    }
+
 }

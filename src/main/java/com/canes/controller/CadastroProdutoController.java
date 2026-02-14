@@ -4,6 +4,7 @@ import java.lang.classfile.Label;
 
 import com.canes.factory.ProdutoFactory;
 import com.canes.model.Produto;
+import com.canes.model.dpo.ProdutoDPO;
 import com.canes.services.ProdutoService;
 import com.canes.util.AlertUtil;
 import com.canes.util.HouverEffectUtil;
@@ -91,7 +92,7 @@ public class CadastroProdutoController {
             return;
         }
 
-        Produto produto = new Produto();
+        ProdutoDPO produto = new ProdutoDPO();
 
         String codigo = txtCodigo.getText();
         String nome = txtProduto.getText();

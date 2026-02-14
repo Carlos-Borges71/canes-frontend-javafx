@@ -23,6 +23,10 @@ public class Produto {
     public Produto() {
     }
 
+    public Produto(Long id) {
+        this.id = id;
+    }
+
     public Produto(Long id, String codigo, String nome, Integer estoque, Double valorCompra,
             Double valorVenda, Integer quantcompra, String fornec) {
 

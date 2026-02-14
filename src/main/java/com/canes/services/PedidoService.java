@@ -9,6 +9,7 @@ import com.canes.config.ApiConstantes;
 import com.canes.infra.http.BaseService;
 import com.canes.model.Cliente;
 import com.canes.model.Pedido;
+import com.canes.model.dpo.PedidoDPORequest;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,7 +23,7 @@ public class PedidoService extends BaseService {
             throws IOException, InterruptedException {
 
         // Monta objeto Pedido (Java, não JSON manual)
-        Pedido pedido = new Pedido();
+        PedidoDPORequest pedido = new PedidoDPORequest();
         pedido.setStatus(statusPedido);
         pedido.setValor(valor);
         pedido.setData(data);
@@ -33,8 +34,16 @@ public class PedidoService extends BaseService {
             pedido.setCliente(new Cliente(clienteId));
         }
 
+        // // converte o objeto em JSON
+        // String json = mapper.writeValueAsString(pedido);
+
+        // // exibe no console
+        // System.out.println("JSON enviado:");
+        // System.out.println(json);
+
         // Usa o POST do BaseService
         Pedido pedidoSalvo = post(ApiConstantes.PEDIDOS, pedido, Pedido.class);
+        System.out.println("id do pedido = " + pedidoSalvo.getId());
         return pedidoSalvo.getId();
     }
 

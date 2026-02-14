@@ -13,6 +13,7 @@ import java.util.Locale;
 
 import com.canes.factory.PagamentoFactory;
 import com.canes.factory.PedidoFactory;
+import com.canes.factory.PedidoProdutoFactory;
 import com.canes.factory.ProdutoFactory;
 import com.canes.model.Produto;
 import com.canes.model.dpo.PedidoDPO;
@@ -96,6 +97,7 @@ public class FormaPagamentoController {
     private BigDecimal valorDigitado;
     private BigDecimal valorRestante;
     private Long pedidoId = null;
+    private Long produtoId = null;
 
     private String statusSelecionado;
     private String formaPagamento;
@@ -138,12 +140,15 @@ public class FormaPagamentoController {
 
             Double valor = Double.parseDouble(total.replaceAll("[^0-9,]", "").replace(",", "."));
 
-            Long pedidoId = pedidoService.salvarPedido(getStatusSelecionada(), valor, data, idCliente);
+            pedidoId = pedidoService.salvarPedido(getStatusSelecionada(), valor, data, idCliente);
+
             return pedidoId;
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            return pedidoId;
         }
-        return null;
+
     }
 
     public void salvarPagamento(Long pedidoId, BigDecimal valorDigitado) {
@@ -167,12 +172,13 @@ public class FormaPagamentoController {
 
         } catch (Exception e) {
             e.printStackTrace();
+            return;
         }
     }
 
     public void salvarDados() {
 
-        PedidoProdutoService pedidoProdutoService = new PedidoProdutoService();
+        PedidoProdutoService pedidoProdutoService = PedidoProdutoFactory.getPedidoProdutoService();
         ProdutoService produtoService = ProdutoFactory.getProdutoService();
 
         try {
@@ -189,8 +195,6 @@ public class FormaPagamentoController {
             List<Produto> busca = produtoService.buscarTodos();
 
             for (PedidoDPO p : produtosTabela) {
-
-                Long produtoId = null;
 
                 Integer quant = p.getQuant();
                 Double valorProd = p.getValorUnitario();
@@ -209,10 +213,11 @@ public class FormaPagamentoController {
                 }
 
                 pedidoProdutoService.salvarPedidoProduto(
-                        quant,
-                        valorProd,
+
                         pedidoId,
-                        produtoId);
+                        produtoId,
+                        quant,
+                        valorProd);
 
             }
 
@@ -357,6 +362,12 @@ public class FormaPagamentoController {
                     salvarDados();
                     // Long pedidoId = pedidoService.buscarUltimoPedidoId();
 
+                    if (pedidoId == null) {
+                        System.out.println("pedido id = nulo");
+                    } else {
+                        System.out.println("pedido id = com valor");
+                    }
+                    System.out.println();
                     salvarPagamento(pedidoId, valorPagamento);
 
                     // 🔽 atualiza valor restante

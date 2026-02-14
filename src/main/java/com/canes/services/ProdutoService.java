@@ -8,7 +8,10 @@ import java.util.List;
 import com.canes.config.ApiConstantes;
 import com.canes.infra.http.BaseService;
 import com.canes.model.Fornecedor;
+import com.canes.model.NotaFiscal;
 import com.canes.model.Produto;
+import com.canes.model.dpo.NotaFiscalDTO;
+import com.canes.model.dpo.ProdutoDPO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -23,7 +26,7 @@ public class ProdutoService extends BaseService {
             throws IOException, InterruptedException, ConnectException {
 
         // Monta objeto produto (Java, não JSON manual)
-        Produto produto = new Produto();
+        ProdutoDPO produto = new ProdutoDPO();
         produto.setCodigo(codigo);
         produto.setNome(nome);
         produto.setValorCompra(valorCompra);
@@ -35,6 +38,17 @@ public class ProdutoService extends BaseService {
         if (fornecedorId != null) {
             produto.setFornecedor(new Fornecedor(fornecedorId));
         }
+
+        if (notaFiscalId != null) {
+            produto.setNota(new NotaFiscalDTO(notaFiscalId));
+        }
+
+        // converte o objeto em JSON
+        String json = mapper.writeValueAsString(produto);
+
+        // exibe no console
+        System.out.println("JSON enviado:");
+        System.out.println(json);
 
         // Usa o POST genérico do BaseService
         post(ApiConstantes.PRODUTOS, produto, Void.class);

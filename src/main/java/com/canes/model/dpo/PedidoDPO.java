@@ -1,5 +1,9 @@
 package com.canes.model.dpo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PedidoDPO {
     private Long id;
     private Long item;
@@ -12,17 +16,20 @@ public class PedidoDPO {
     private String status;
     private String pagamento;
     private String data;
-    
 
+    @JsonIgnore
     private boolean totalRow;
 
-   
+    public PedidoDPO() {
 
-    public PedidoDPO(){
-        
     }
 
-    public PedidoDPO(Long item, String codigo,  String produto, Integer quant, Double valorUnitario, Double total, String cliente, String status,String pagamento, String data, Long id) {
+    public PedidoDPO(Long id) {
+        this.id = id;
+    }
+
+    public PedidoDPO(Long item, String codigo, String produto, Integer quant, Double valorUnitario, Double total,
+            String cliente, String status, String pagamento, String data, Long id) {
         this.item = item;
         this.codigo = codigo;
         this.produto = produto;
@@ -36,14 +43,13 @@ public class PedidoDPO {
         this.id = id;
     }
 
-     public boolean isTotalRow() {
+    public boolean isTotalRow() {
         return totalRow;
     }
 
     public void setTotalRow(boolean totalRow) {
         this.totalRow = totalRow;
     }
-
 
     public Long getItem() {
         return item;
@@ -53,21 +59,17 @@ public class PedidoDPO {
         return codigo;
     }
 
-
     public String getProduto() {
         return produto;
     }
-
 
     public Integer getQuant() {
         return quant;
     }
 
-
     public Double getValorUnitario() {
         return valorUnitario;
     }
-
 
     public Double getTotal() {
         return total;
@@ -136,6 +138,5 @@ public class PedidoDPO {
     public void setId(Long id) {
         this.id = id;
     }
-    
-    
+
 }

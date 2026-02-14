@@ -40,7 +40,8 @@ public abstract class BaseService {
                 .build();
 
         // Envia para o servidor
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = client.send(request,
+                HttpResponse.BodyHandlers.ofString());
         HttpResponseValidator.validar(response);
 
         // Se sucesso

@@ -1,27 +1,21 @@
-package com.canes.model;
+package com.canes.model.dpo;
 
-import java.util.List;
+import com.canes.model.Fornecedor;
 
-public class NotaFiscal {
+public class NotaFiscalDTO {
+
     private Long id;
     private Integer notaFiscal;
     private String data;
-    private List<Produto> produtos;
+
     private Fornecedor fornecedor;
 
-    public NotaFiscal() {
+    public NotaFiscalDTO() {
 
     }
 
-    public NotaFiscal(Long id) {
+    public NotaFiscalDTO(Long id) {
         this.id = id;
-    }
-
-    public NotaFiscal(Integer notaFiscal, String data, Fornecedor fornecedor) {
-        this.notaFiscal = notaFiscal;
-        this.data = data;
-        this.fornecedor = fornecedor;
-
     }
 
     public Long getId() {
@@ -40,10 +34,6 @@ public class NotaFiscal {
         return fornecedor;
     }
 
-    public List<Produto> getProduto() {
-        return produtos;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -54,14 +44,6 @@ public class NotaFiscal {
 
     public void setData(String data) {
         this.data = data;
-    }
-
-    public List<Produto> getProdutos() {
-        return produtos;
-    }
-
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
     }
 
     public void setFornecedor(Fornecedor fornecedor) {
