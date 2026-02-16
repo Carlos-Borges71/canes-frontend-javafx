@@ -8,7 +8,6 @@ import java.util.List;
 import com.canes.config.ApiConstantes;
 import com.canes.infra.http.BaseService;
 import com.canes.model.Fornecedor;
-import com.canes.model.NotaFiscal;
 import com.canes.model.Produto;
 import com.canes.model.dpo.NotaFiscalDTO;
 import com.canes.model.dpo.ProdutoDPO;

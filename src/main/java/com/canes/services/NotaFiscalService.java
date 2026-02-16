@@ -1,87 +1,78 @@
 package com.canes.services;
 
 import java.io.IOException;
-import java.net.URI;
+import java.net.ConnectException;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 
-import com.canes.model.NotaFiscal;
+import com.canes.config.ApiConstantes;
+import com.canes.infra.http.BaseService;
+import com.canes.model.Fornecedor;
 import com.canes.model.dpo.NotaFiscalDTO;
-import com.canes.util.AlertUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class NotaFiscalService {
+public class NotaFiscalService extends BaseService {
 
-    private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
-
-    HttpClient client = HttpClient.newHttpClient();
-    ObjectMapper mapper = new ObjectMapper();
-
-    private static final String BASE_URL = "http://localhost:8080/notasfiscais";
-
-    public NotaFiscalService() {
-
-        this.httpClient = HttpClient.newHttpClient();
-        this.objectMapper = new ObjectMapper();
-
+    public NotaFiscalService(HttpClient client, ObjectMapper mapper) {
+        super(client, mapper);
     }
 
-    public static Long salvarNotaFiscal(Integer notafiscal, String data, Long fornecedorId) throws Exception {
+    public Long salvarNotaFiscal(Integer notafiscal, String data, Long fornecedorId) throws Exception {
 
-        String json = String.format("""
-                {
-                    "notaFiscal": "%s",
-                    "data": "%s",
-                    "fornecedor": {"id": %d}
-                }
-                """,
-                notafiscal, data, fornecedorId);
+        // Monta objeto Nota (Java, não JSON manual)
+        NotaFiscalDTO nota = new NotaFiscalDTO();
+        nota.setNotaFiscal(notafiscal);
+        nota.setData(data);
 
-        HttpClient client = HttpClient.newHttpClient();
+        // Só adiciona se não for nulo
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        int status = response.statusCode();
-
-        if (status == 200 || status == 201) {
-
-            // Converte o JSON retornado
-            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
-            NotaFiscalDTO nota = mapper.readValue(response.body(), NotaFiscalDTO.class);
-
-            return nota.getId(); // <-- retorna o ID salvo
-        } else {
-            System.out.println(response.body());
-            System.out.println(json);
-            AlertUtil.mostrarErro("Erro ao inserir:\n " + response.body());
-            return null;
+        if (fornecedorId != null) {
+            nota.setFornecedor(new Fornecedor(fornecedorId));
         }
+
+        // converte o objeto em JSON
+        String json = mapper.writeValueAsString(nota);
+
+        // exibe no console
+        System.out.println("JSON enviado:");
+        System.out.println(json);
+
+        // Usa o POST genérico do BaseService
+        NotaFiscalDTO notaFiscalSalva = post(ApiConstantes.NOTASFISCAIS, nota, NotaFiscalDTO.class);
+
+        return notaFiscalSalva.getId();
     }
 
-    public List<NotaFiscal> buscarTodos() throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .GET()
-                .build();
+    public List<NotaFiscalDTO> buscarTodos() throws IOException, InterruptedException, ConnectException {
 
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        return getList(ApiConstantes.NOTASFISCAIS, new TypeReference<List<NotaFiscalDTO>>() {
+        });
+    }
 
-        if (response.statusCode() == 200) {
-            return objectMapper.readValue(response.body(), new TypeReference<List<NotaFiscal>>() {
-            });
-        } else {
-            throw new RuntimeException("Erro ao buscar notas fiscais: " + response.statusCode());
-        }
+    // atualizar todo nota
+    public NotaFiscalDTO atualizarUsuario(NotaFiscalDTO nota)
+            throws IOException, InterruptedException, ConnectException {
+
+        String url = ApiConstantes.NOTASFISCAIS + "/" + nota.getId();
+
+        return put(url, nota, NotaFiscalDTO.class);
+    }
+
+    // Atualizar parte dos nota
+    public NotaFiscalDTO atualizarParcial(Long id, NotaFiscalDTO notaParcial)
+            throws IOException, InterruptedException {
+
+        String url = ApiConstantes.NOTASFISCAIS + "/" + id;
+
+        return patch(url, notaParcial, NotaFiscalDTO.class);
+    }
+
+    // Deletar nota
+    public void deletar(Long id)
+            throws IOException, InterruptedException, ConnectException {
+
+        delete(ApiConstantes.NOTASFISCAIS + "/" + id);
     }
 
 }

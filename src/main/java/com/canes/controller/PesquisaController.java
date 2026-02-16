@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import com.canes.factory.ClienteFactory;
 import com.canes.factory.EnderecoFactory;
 import com.canes.factory.FornecedorFactory;
+import com.canes.factory.NotaFiscalFactory;
 import com.canes.factory.PedidoFactory;
 import com.canes.factory.ProdutoFactory;
 import com.canes.factory.TelefoneFactory;
@@ -21,14 +22,13 @@ import com.canes.factory.UsuarioFactory;
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Fornecedor;
-import com.canes.model.NotaFiscal;
 import com.canes.model.Pedido;
 import com.canes.model.Produto;
 import com.canes.model.Telefone;
 import com.canes.model.Usuario;
 import com.canes.model.dpo.ClienteTabelaDPO;
 import com.canes.model.dpo.FornecedorDTO;
-import com.canes.model.dpo.PedidoDPO;
+import com.canes.model.dpo.NotaFiscalDTO;
 import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
 import com.canes.services.FornecedorService;
@@ -386,8 +386,15 @@ public class PesquisaController {
 
                 }
 
-                String instant = c != null && c.getInstante() != null ? c.getInstante() : null;
-                String inst = formatter.format(Instant.parse(instant));
+                /* ================= DATA ================= */
+                String dataFormatada = "";
+                try {
+                    if (c.getInstante() != null && !c.getInstante().isBlank()) {
+                        dataFormatada = formatter.format(Instant.parse(c.getInstante()));
+                    }
+                } catch (Exception e) {
+                    dataFormatada = "";
+                }
 
                 Long codigo = c.getId();
                 String nome = c != null && c.getNome() != null ? c.getNome() : "";
@@ -415,41 +422,43 @@ public class PesquisaController {
                 listaClientes.add(new ClienteTabelaDPO(
                         codigo,
                         nome,
-                        inst,
+                        dataFormatada,
                         numerosTelefone,
                         endereco,
                         numeroPedido));
 
-                listaFiltradaCliente = new FilteredList<>(listaClientes, p -> true);
-
-                // Ordenar a tabela por dececente ID
-                SortedList<ClienteTabelaDPO> listaOrdenada = new SortedList<>(listaFiltradaCliente);
-                listaOrdenada.setComparator(
-                        Comparator.comparing(ClienteTabelaDPO::getId).reversed());
-
-                tabelaCliente.setItems(listaOrdenada);
-
-                txtFiltrarCliente.textProperty().addListener((obs, oldValue, newValue) -> {
-                    String filtro = newValue.toLowerCase();
-                    listaFiltradaCliente.setPredicate(cliente -> {
-                        if (filtro == null || filtro.isEmpty()) {
-                            return true;
-                        }
-
-                        return cliente.getNome().toLowerCase().contains(filtro) ||
-                                cliente.getEndereco().toLowerCase().contains(filtro) ||
-                                cliente.getTelefones().contains(filtro) ||
-                                cliente.getPedidos().contains(filtro) ||
-                                String.valueOf(cliente.getId()).contains(filtro) ||
-                                cliente.getInstante().contains(filtro) ||
-                                cliente.getPedidos().toLowerCase().contains(filtro);
-
-                    });
-                });
             }
+
+            listaFiltradaCliente = new FilteredList<>(listaClientes, p -> true);
+
+            // Ordenar a tabela por dececente ID
+            SortedList<ClienteTabelaDPO> listaOrdenada = new SortedList<>(listaFiltradaCliente);
+            listaOrdenada.setComparator(
+                    Comparator.comparing(ClienteTabelaDPO::getId).reversed());
+
+            tabelaCliente.setItems(listaOrdenada);
+
+            txtFiltrarCliente.textProperty().addListener((obs, oldValue, newValue) -> {
+                String filtro = newValue.toLowerCase();
+                listaFiltradaCliente.setPredicate(cliente -> {
+                    if (filtro == null || filtro.isEmpty()) {
+                        return true;
+                    }
+
+                    return cliente.getNome().toLowerCase().contains(filtro) ||
+                            cliente.getEndereco().toLowerCase().contains(filtro) ||
+                            cliente.getTelefones().contains(filtro) ||
+                            cliente.getPedidos().contains(filtro) ||
+                            String.valueOf(cliente.getId()).contains(filtro) ||
+                            cliente.getInstante().contains(filtro) ||
+                            cliente.getPedidos().toLowerCase().contains(filtro);
+
+                });
+            });
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -511,13 +520,13 @@ public class PesquisaController {
             TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
             EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
             ProdutoService produtoService = ProdutoFactory.getProdutoService();
-            NotaFiscalService notaFiscalService = new NotaFiscalService();
+            NotaFiscalService notaFiscalService = NotaFiscalFactory.getNotaFiscal();
 
             List<Fornecedor> fornecedores = fornecedorService.buscarTodos();
             List<Telefone> telefones = telefoneService.buscarTodos();
             List<Endereco> end = enderecoService.buscarTodos();
             List<Produto> prod = produtoService.buscarTodos();
-            List<NotaFiscal> nota = notaFiscalService.buscarTodos();
+            List<NotaFiscalDTO> nota = notaFiscalService.buscarTodos();
 
             ObservableList<FornecedorDTO> listaFornecedores = FXCollections.observableArrayList();
 
@@ -526,7 +535,7 @@ public class PesquisaController {
             List<Telefone> telefonesSeguros = telefones != null ? telefones : List.of();
             List<Endereco> enderecosSeguros = end != null ? end : List.of();
             List<Produto> produtosSeguros = prod != null ? prod : List.of();
-            List<NotaFiscal> notasFiscaisSeguros = nota != null ? nota : List.of();
+            List<NotaFiscalDTO> notasFiscaisSeguros = nota != null ? nota : List.of();
 
             for (Fornecedor f : fornecedoresSeguros) {
 
@@ -585,7 +594,7 @@ public class PesquisaController {
                     endereco = "Usuário sem endereço";
                 }
 
-                NotaFiscal notas = notasFiscaisSeguros.stream()
+                NotaFiscalDTO notas = notasFiscaisSeguros.stream()
                         .filter(n -> n != null && n.getFornecedor() != null && n.getFornecedor().getId().equals(userId))
                         .findFirst()
                         .orElse(null);

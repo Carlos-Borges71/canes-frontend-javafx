@@ -2,6 +2,9 @@ package com.canes.controller;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +16,9 @@ import com.canes.util.MaskTextField;
 import com.canes.util.ScreenUtils;
 import com.canes.util.TextFieldUtil;
 import com.canes.util.UserSession;
+import com.canes.factory.ClienteFactory;
 import com.canes.factory.EnderecoFactory;
+import com.canes.factory.FornecedorFactory;
 import com.canes.factory.PedidoFactory;
 import com.canes.factory.ProdutoFactory;
 import com.canes.factory.TelefoneFactory;
@@ -25,7 +30,9 @@ import com.canes.model.Pedido;
 import com.canes.model.Produto;
 import com.canes.model.Telefone;
 import com.canes.model.Usuario;
+import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
+import com.canes.services.FornecedorService;
 import com.canes.services.PedidoService;
 import com.canes.services.ProdutoService;
 import com.canes.services.TelefoneService;
@@ -325,7 +332,18 @@ public class AtualizarController {
     private Label lblProduto;
 
     private Long usuarioId;
+    private Long clienteId;
+    private Long fornecedorId;
     private Long enderecoId;
+    private Long celId;
+
+    Instant instante = Instant.now();
+
+    DateTimeFormatter formatter = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+            .withZone(ZoneOffset.UTC);
+
+    String instanteFormatado = formatter.format(instante);
 
     @FXML
     void onActionProduto(ActionEvent event) {
@@ -381,6 +399,162 @@ public class AtualizarController {
 
     }
 
+    private void atualizarCliente() {
+
+        try {
+            Cliente cliente = new Cliente();
+
+            cliente.setNome(txtNomeClient.getText());
+            cliente.setId(clienteId);
+            cliente.setInstante(instanteFormatado);
+
+            ClienteService clienteService = ClienteFactory.getClienteService();
+
+            clienteService.atualizarCliente(cliente);
+            AlertUtil.mostrarSucesso("Cliente atualizado com sucesso!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertUtil.mostrarErro("Erro ao tentar salvar no banco\n" + e.getMessage());
+            txtcelClient.requestFocus();
+        }
+
+    }
+
+    private void atualizarFornecedor() {
+
+        try {
+            Fornecedor fornecedor = new Fornecedor();
+
+            fornecedor.setId(fornecedorId);
+            fornecedor.setEmpresa(txtNomeFornec.getText());
+            fornecedor.setCnpjCpf(txtCnpjFornec.getText());
+
+            FornecedorService fornecedorService = FornecedorFactory.getFornecedorService();
+
+            fornecedorService.atualizarFornecedor(fornecedor);
+            AlertUtil.mostrarSucesso("Fornecedor atualizado com sucesso!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertUtil.mostrarErro("Erro ao tentar salvar no banco\n" + e.getMessage());
+            txtCelFornec.requestFocus();
+        }
+
+    }
+
+    private void atualizarTelefoneFornec() {
+        try {
+
+            if (celId == null) {
+                AlertUtil.mostrarErro("Telefone não selecionado para atualização.");
+                return;
+            }
+
+            Telefone tel = new Telefone();
+            tel.setId(celId);
+            tel.setNumero(txtCelFornec.getText());
+
+            // ✅ Correção aqui
+            Fornecedor fornecedor = new Fornecedor();
+            fornecedor.setId(fornecedorId); // ID já existente no banco
+
+            tel.setFornecedor(fornecedor);
+
+            TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
+            telefoneService.atualizar(tel);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertUtil.mostrarErro("Erro ao tentar atualizar Telefone");
+            txtcelClient.requestFocus();
+        }
+    }
+
+    private void atualizarTelefone() {
+        try {
+
+            if (celId == null) {
+                AlertUtil.mostrarErro("Telefone não selecionado para atualização.");
+                return;
+            }
+
+            Telefone tel = new Telefone();
+            tel.setId(celId);
+            tel.setNumero(txtCelUsuario.getText());
+
+            // ✅ Correção aqui
+            Usuario usuario = new Usuario();
+            usuario.setId(usuarioId); // ID já existente no banco
+
+            tel.setOperador(usuario);
+
+            TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
+            telefoneService.atualizar(tel);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertUtil.mostrarErro("Erro ao tentar atualizar Telefone");
+            txtcelClient.requestFocus();
+        }
+    }
+
+    private void atualizarTelefoneCliente() {
+
+        try {
+            System.out.println("celId antes do IF: " + celId + " id Cliente: " + clienteId);
+
+            if (celId == null) {
+                AlertUtil.mostrarErro("Telefone não selecionado para atualização.");
+                return;
+            }
+
+            Telefone tel = new Telefone();
+            tel.setId(celId);
+            tel.setNumero(txtcelClient.getText());
+
+            // ✅ Correção aqui
+            Cliente cliente = new Cliente();
+            cliente.setId(clienteId); // ID já existente no banco
+
+            tel.setCliente(cliente);
+
+            System.out.println("Atualizando telefone ID: " + celId);
+
+            TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
+            telefoneService.atualizar(tel);
+
+            System.out.println("Telefone atualizado com sucesso!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertUtil.mostrarErro("Erro ao tentar atualizar Telefone");
+            txtcelClient.requestFocus();
+        }
+    }
+
+    private void atualizarederecoFornecedor() {
+
+        try {
+
+            Endereco endereco = new Endereco();
+            endereco.setId(enderecoId);
+            endereco.setLogradouro(txtLogradouroFornec.getText());
+            endereco.setNumero(txtNumeroFornec.getText());
+            endereco.setBairro(txtBairroFornec.getText());
+            endereco.setCidade(txtCidadeFornec.getText());
+            endereco.setEstado(txtEstadoFornec.getText());
+            endereco.setCep(txtCepFornec.getText());
+
+            EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
+            enderecoService.atualizar(endereco);
+
+        } catch (Exception e) {
+            AlertUtil.mostrarErro("Erro ao tentar salvar endereço no banco\n" + e.getMessage());
+
+        }
+    }
+
     private void atualizaredereco() {
 
         try {
@@ -403,13 +577,35 @@ public class AtualizarController {
         }
     }
 
+    private void atualizarederecoCliente() {
+
+        try {
+
+            Endereco endereco = new Endereco();
+            endereco.setId(enderecoId);
+            endereco.setLogradouro(txtLogradouroClient.getText());
+            endereco.setNumero(txtNumeroClient.getText());
+            endereco.setBairro(txtBairroClient.getText());
+            endereco.setCidade(txtCidadeClient.getText());
+            endereco.setEstado(txtEstadoClient.getText());
+            endereco.setCep(txtCepClient.getText());
+
+            EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
+            enderecoService.atualizar(endereco);
+
+        } catch (Exception e) {
+            AlertUtil.mostrarErro("Erro ao tentar salvar endereço no banco\n" + e.getMessage());
+
+        }
+    }
+
     private void buscarUsuario() {
 
         try {
             TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
             EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
 
-            Map<String, Usuario> mapaTelefoneUsuario = new HashMap<>();
+            Map<String, Telefone> mapaTelefoneUsuario = new HashMap<>();
             Map<Long, Endereco> mapaUsuarioEndereco = new HashMap<>();
 
             // 1️⃣ Mapa cliente -> endereco
@@ -425,18 +621,20 @@ public class AtualizarController {
                 if (t.getNumero() == null || t.getOperador() == null)
                     continue;
 
-                mapaTelefoneUsuario.put(t.getNumero(), t.getOperador());
+                mapaTelefoneUsuario.put(t.getNumero(), t);
             }
 
             // 3️⃣ Busca
             String telefoneDigitado = txtCelUsuario.getText();
             txtcel.setText(telefoneDigitado);
 
-            Usuario usuario = mapaTelefoneUsuario.get(telefoneDigitado);
+            Telefone telefone = mapaTelefoneUsuario.get(telefoneDigitado);
 
-            if (usuario != null) {
+            if (telefone != null) {
 
+                Usuario usuario = telefone.getOperador();
                 usuarioId = usuario.getId();
+                celId = telefone.getId(); // ✅ AQUI você pega o ID do telefone
 
                 txtNome.setText(usuario.getNome());
                 txtLogin.setText(usuario.getLogin());
@@ -476,7 +674,7 @@ public class AtualizarController {
             TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
             EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
 
-            Map<String, Cliente> mapaTelefoneCliente = new HashMap<>();
+            Map<String, Telefone> mapaTelefone = new HashMap<>();
             Map<Long, Endereco> mapaClienteEndereco = new HashMap<>();
 
             // 1️⃣ Mapa cliente -> endereco
@@ -492,22 +690,31 @@ public class AtualizarController {
                 if (t.getNumero() == null || t.getCliente() == null)
                     continue;
 
-                mapaTelefoneCliente.put(t.getNumero(), t.getCliente());
+                mapaTelefone.put(t.getNumero(), t);
+
             }
 
             // 3️⃣ Busca
             String telefoneDigitado = txtcelClient.getText();
             txtCelClient1.setText(telefoneDigitado);
 
-            Cliente cliente = mapaTelefoneCliente.get(telefoneDigitado);
+            Telefone telefone = mapaTelefone.get(telefoneDigitado);
 
-            if (cliente != null) {
+            if (telefone != null) {
+
+                Cliente cliente = telefone.getCliente();
+                celId = telefone.getId(); // ✅ AQUI você pega o ID do telefone
+                clienteId = cliente.getId();
+
                 txtNomeClient.setText(cliente.getNome());
+                System.out.println("ID do Telefone: " + telefone.getId());
 
-                // ✅ AGORA SIM
+                // ✅ AGORA SIMt
+
                 Endereco endereco = mapaClienteEndereco.get(cliente.getId());
 
                 if (endereco != null) {
+                    enderecoId = endereco.getId();
                     txtLogradouroClient.setText(endereco.getLogradouro());
                     txtCidadeClient.setText(endereco.getCidade());
                     txtBairroClient.setText(endereco.getBairro());
@@ -591,14 +798,13 @@ public class AtualizarController {
 
     }
 
-    @FXML
-    void onClickBuscarFornec(ActionEvent event) {
+    private void buscarfornecedor() {
 
         try {
             TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
             EnderecoService enderecoService = EnderecoFactory.getEnderecoService();
 
-            Map<String, Fornecedor> mapaTelefoneFornecedor = new HashMap<>();
+            Map<String, Telefone> mapaTelefoneFornecedor = new HashMap<>();
             Map<Long, Endereco> mapaFornecedorEndereco = new HashMap<>();
 
             // 1️⃣ Mapa fornecedor -> endereco
@@ -614,16 +820,21 @@ public class AtualizarController {
                 if (t.getNumero() == null || t.getFornecedor() == null)
                     continue;
 
-                mapaTelefoneFornecedor.put(t.getNumero(), t.getFornecedor());
+                mapaTelefoneFornecedor.put(t.getNumero(), t);
+
             }
 
             // 3️⃣ Busca
             String telefoneDigitado = txtCelFornec.getText();
             txtCelFornec1.setText(telefoneDigitado);
 
-            Fornecedor fornecedor = mapaTelefoneFornecedor.get(telefoneDigitado);
+            Telefone telefone = mapaTelefoneFornecedor.get(telefoneDigitado);
 
-            if (fornecedor != null) {
+            if (telefone != null) {
+
+                Fornecedor fornecedor = telefone.getFornecedor();
+                celId = telefone.getId();
+                fornecedorId = fornecedor.getId();
                 txtNomeFornec.setText(fornecedor.getEmpresa());
                 txtCnpjFornec.setText(fornecedor.getCnpjCpf());
 
@@ -631,12 +842,15 @@ public class AtualizarController {
                 Endereco endereco = mapaFornecedorEndereco.get(fornecedor.getId());
 
                 if (endereco != null) {
+
+                    enderecoId = endereco.getId();
                     txtLogradouroFornec.setText(endereco.getLogradouro());
                     txtCidadeFornec.setText(endereco.getCidade());
                     txtBairroFornec.setText(endereco.getBairro());
                     txtNumeroFornec.setText(endereco.getNumero());
                     txtEstadoFornec.setText(endereco.getEstado());
                     txtCepFornec.setText(endereco.getCep());
+
                 } else {
                     AlertUtil.mostrarErro("Endereço não encontrado.");
                 }
@@ -649,6 +863,18 @@ public class AtualizarController {
             e.printStackTrace();
 
         }
+    }
+
+    @FXML
+    void onClickFornecedor(ActionEvent event) {
+
+        buscarfornecedor();
+    }
+
+    @FXML
+    void onClickBuscarFornec(ActionEvent event) {
+
+        buscarfornecedor();
 
     }
 
@@ -841,14 +1067,12 @@ public class AtualizarController {
             AlertUtil.mostrarErro("O campo Celular não \npode ficar vazio!.");
             return;
         } else {
-            AlertUtil.mostrarSucesso("Cadastro do Cliente " + txtNomeFornec.getText() + "\nSalvo com sucesso");
 
-            try {
-                ScreenUtils.changeScreen(event, "/com/canes/menu.fxml", "Menu", null);
-            } catch (Exception e) {
+            atualizarTelefoneFornec();
+            atualizarederecoFornecedor();
+            atualizarFornecedor();
+            limparFornecedor();
 
-                e.printStackTrace();
-            }
         }
 
     }
@@ -856,6 +1080,12 @@ public class AtualizarController {
     //
     @FXML
     void onClickLimparFornec(ActionEvent event) {
+
+        limparFornecedor();
+
+    }
+
+    private void limparFornecedor() {
 
         txtNomeFornec.clear();
         txtCelFornec.clear();
@@ -874,11 +1104,9 @@ public class AtualizarController {
         txtNotaFiscalFornec.clear();
         txtCelFornec.clear();
         txtCelFornec1.clear();
-
     }
 
-    @FXML
-    void onclickLimparClient(ActionEvent event) {
+    private void limparCliente() {
 
         Platform.runLater(() -> txtcelClient.requestFocus());
 
@@ -891,6 +1119,12 @@ public class AtualizarController {
         txtEstadoClient.clear();
         txtCepClient.clear();
         txtCelClient1.clear();
+    }
+
+    @FXML
+    void onclickLimparClient(ActionEvent event) {
+
+        limparCliente();
 
     }
 
@@ -929,16 +1163,11 @@ public class AtualizarController {
         else if (txtcelClient.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo Celular não \npode ficar vazio!.");
             return;
-        } else {
-            AlertUtil.mostrarSucesso("Cadastro do Cliente " + txtNomeClient.getText() + "\nSalvo com sucesso");
-
-            try {
-                ScreenUtils.changeScreen(event, "/com/canes/menu.fxml", "Menu", null);
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
         }
+        atualizarederecoCliente();
+        atualizarTelefoneCliente();
+        atualizarCliente();
+        limparCliente();
 
     }
 
@@ -1167,6 +1396,7 @@ public class AtualizarController {
         }
 
         atualizaredereco();
+        atualizarTelefone();
         atualizarUsuario();
         limparUsuario();
         txtCelUsuario.requestFocus();

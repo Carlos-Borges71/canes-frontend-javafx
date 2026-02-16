@@ -1,7 +1,6 @@
 package com.canes.model.dpo;
 
 import com.canes.model.Fornecedor;
-import com.canes.model.NotaFiscal;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

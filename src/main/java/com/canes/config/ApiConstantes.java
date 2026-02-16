@@ -17,4 +17,5 @@ public class ApiConstantes {
     public static final String PRODUTOS = BASE_URL + "/produtos";
     public static final String PAGAMENTOS = BASE_URL + "/pagamentos";
     public static final String PEDIDOPRODUTOS = BASE_URL + "/pedido_produto";
+    public static final String NOTASFISCAIS = BASE_URL + "/notasfiscais";
 }

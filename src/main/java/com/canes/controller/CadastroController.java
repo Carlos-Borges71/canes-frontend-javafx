@@ -14,11 +14,13 @@ import com.canes.util.UserSession;
 import com.canes.factory.ClienteFactory;
 import com.canes.factory.EnderecoFactory;
 import com.canes.factory.FornecedorFactory;
+import com.canes.factory.NotaFiscalFactory;
 import com.canes.factory.TelefoneFactory;
 import com.canes.factory.UsuarioFactory;
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Fornecedor;
+import com.canes.model.Telefone;
 import com.canes.model.Usuario;
 import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
@@ -400,7 +402,7 @@ public class CadastroController {
             Integer notaFisccal = Integer.parseInt(txtNotaFiscalFornec.getText());
             String data = instanteFormatado;
 
-            NotaFiscalService ntFiscal = new NotaFiscalService();
+            NotaFiscalService ntFiscal = NotaFiscalFactory.getNotaFiscal();
 
             Long notaFiscalId = ntFiscal.salvarNotaFiscal(notaFisccal, data, fornecedorId);
 
@@ -783,8 +785,27 @@ public class CadastroController {
 
     String instanteFormatado = formatter.format(instante);
 
+    private void verificarCelularUsuario() {
+        try {
+            TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
+
+            List<Telefone> telefoneUsuario = telefoneService.buscarTodos();
+
+            for (Telefone t : telefoneUsuario) {
+                if (t.getNumero().equals(txtcel.getText())) {
+                    AlertUtil.mostrarErro("Usuário já tem cadastro com \n este número!");
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     void onClickcadastrar(ActionEvent event) {
+
+        verificarCelularUsuario();
 
         if (txtNome.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo nome não pode ficar vazio!.");
@@ -835,6 +856,7 @@ public class CadastroController {
             try {
 
                 Usuario usuario = new Usuario();
+                Telefone telefone = new Telefone();
 
                 usuario.setSetor(txtSetor.getValue().toString());
                 usuario.setNome(txtNome.getText());
@@ -843,10 +865,11 @@ public class CadastroController {
                 usuario.setSenha(passwordSenha.getText());
 
                 UsuarioService usuarioService = UsuarioFactory.getUsuarioService();
+                TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
+
                 Long usuarioId = usuarioService.salvarUsuario(usuario);
 
                 String numeroTel = txtcel.getText();
-                TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
 
                 telefoneService.salvarTelefone(numeroTel, usuarioId, null, null);
 
@@ -978,6 +1001,14 @@ public class CadastroController {
         Platform.runLater(() -> {
             txtNome.requestFocus();
             // txtNomeProduto.selectAll(); // opcional: seleciona todo o texto
+        });
+
+        txtcel.focusedProperty().addListener((obs, oldValue, newValue) -> {
+            if (!newValue) { // perdeu o foco
+
+                // Sua ação aqui
+                verificarCelularUsuario();
+            }
         });
 
         txtCep.setPromptText("Buscar");

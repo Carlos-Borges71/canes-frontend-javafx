@@ -1,7 +1,6 @@
 package com.canes.factory;
 
 import com.canes.config.AppConfig;
-import com.canes.services.ClienteService;
 import com.canes.services.PedidoProdutoService;
 
 public class PedidoProdutoFactory {

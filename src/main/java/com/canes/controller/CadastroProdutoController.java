@@ -3,7 +3,6 @@ package com.canes.controller;
 import java.lang.classfile.Label;
 
 import com.canes.factory.ProdutoFactory;
-import com.canes.model.Produto;
 import com.canes.model.dpo.ProdutoDPO;
 import com.canes.services.ProdutoService;
 import com.canes.util.AlertUtil;
