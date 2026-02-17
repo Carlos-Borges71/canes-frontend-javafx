@@ -335,6 +335,8 @@ public class CadastroController {
     @FXML
     void onClickCadastrarFornec(ActionEvent event) {
 
+        verificarCelular(txtCelFornec.getText());
+
         if (txtNomeFornec.getText().trim().isEmpty()) {
             AlertUtil.mostrarErro("O campo nome não pode ficar vazio!.");
             return;
@@ -528,6 +530,8 @@ public class CadastroController {
 
     @FXML
     void onClickcadastrarClient(ActionEvent event) {
+
+        verificarCelular(txtcelClient.getText());
 
         if (txtNomeClient.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo nome não pode ficar vazio!.");
@@ -785,18 +789,19 @@ public class CadastroController {
 
     String instanteFormatado = formatter.format(instante);
 
-    private void verificarCelularUsuario() {
+    private void verificarCelular(String numeroTelefone) {
         try {
             TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
 
-            List<Telefone> telefoneUsuario = telefoneService.buscarTodos();
+            List<Telefone> telefoneCadastrado = telefoneService.buscarTodos();
 
-            for (Telefone t : telefoneUsuario) {
-                if (t.getNumero().equals(txtcel.getText())) {
-                    AlertUtil.mostrarErro("Usuário já tem cadastro com \n este número!");
+            for (Telefone t : telefoneCadastrado) {
+                if (t.getNumero().equals(numeroTelefone)) {
+                    AlertUtil.mostrarErro("Telefone já cadastrado!");
                     return;
                 }
             }
+            return;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -805,7 +810,7 @@ public class CadastroController {
     @FXML
     void onClickcadastrar(ActionEvent event) {
 
-        verificarCelularUsuario();
+        verificarCelular(txtcel.getText());
 
         if (txtNome.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo nome não pode ficar vazio!.");
@@ -1007,7 +1012,22 @@ public class CadastroController {
             if (!newValue) { // perdeu o foco
 
                 // Sua ação aqui
-                verificarCelularUsuario();
+                verificarCelular(txtcel.getText());
+            }
+        });
+
+        txtcelClient.focusedProperty().addListener((obs, oldValue, newValue) -> {
+            if (!newValue) { // perdeu o foco
+
+                // Sua ação aqui
+                verificarCelular(txtcelClient.getText());
+            }
+        });
+        txtCelFornec.focusedProperty().addListener((obs, oldValue, newValue) -> {
+            if (!newValue) { // perdeu o foco
+
+                // Sua ação aqui
+                verificarCelular(txtCelFornec.getText());
             }
         });
 
