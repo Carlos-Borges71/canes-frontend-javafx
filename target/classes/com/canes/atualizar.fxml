@@ -615,7 +615,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="btnAtualizarProduto" layoutX="685.0" layoutY="274.0" mnemonicParsing="false" onAction="#onClickcadastrarClient" onMouseEntered="#onMouseEntered" onMouseExited="#onMouseExited" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Atualizar" textFill="WHITE">
+                  <Button fx:id="btnAtualizarProduto" layoutX="685.0" layoutY="274.0" mnemonicParsing="false" onAction="#onClickAtualizarProduto" onMouseEntered="#onMouseEntered" onMouseExited="#onMouseExited" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Atualizar" textFill="WHITE">
                      <font>
                         <Font name="Verdana Bold" size="14.0" />
                      </font>
@@ -637,7 +637,7 @@
                      </padding>
                   </TextField>
                   <Label layoutX="240.0" layoutY="121.0" text="Produto:" textFill="WHITE" />
-                  <TextField fx:id="txtCodigoFornec" layoutX="383.0" layoutY="25.0" prefHeight="25.0" prefWidth="122.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent; -fx-text-fill: fff;">
+                  <TextField fx:id="txtCodigoFornec" layoutX="383.0" layoutY="25.0" onAction="#onActionBuscarProduto" prefHeight="25.0" prefWidth="122.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent; -fx-text-fill: fff;">
                      <font>
                         <Font name="Verdana" size="12.0" />
                      </font>

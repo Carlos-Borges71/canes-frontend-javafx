@@ -594,15 +594,21 @@ public class PesquisaController {
                     endereco = "Usuário sem endereço";
                 }
 
-                NotaFiscalDTO notas = notasFiscaisSeguros.stream()
-                        .filter(n -> n != null && n.getFornecedor() != null && n.getFornecedor().getId().equals(userId))
-                        .findFirst()
-                        .orElse(null);
+                List<Integer> notasUsuario = notasFiscaisSeguros.stream()
+                        .filter(n -> n != null
+                                && n.getFornecedor() != null
+                                && n.getFornecedor().getId().equals(userId))
+                        .map(NotaFiscalDTO::getNotaFiscal)
+                        .collect(Collectors.toList());
 
-                Integer notaFiscal = null;
-                if (notas != null) {
+                String numerosNotas;
 
-                    notaFiscal = notas.getNotaFiscal();
+                if (notasUsuario.isEmpty()) {
+                    numerosNotas = "Fornecedor sem nota fiscal";
+                } else {
+                    numerosNotas = notasUsuario.stream()
+                            .map(String::valueOf)
+                            .collect(Collectors.joining(",  "));
                 }
 
                 // proteger campos de Fornecedor também
@@ -617,7 +623,7 @@ public class PesquisaController {
                         numerosTelefone,
                         endereco,
                         produtoF,
-                        notaFiscal
+                        numerosNotas
 
                 ));
                 listaFiltradaFornecedor = new FilteredList<>(listaFornecedores, p -> true);

@@ -781,6 +781,7 @@ public class CadastroController {
 
     }
 
+    // Formatando datas
     Instant instante = Instant.now();
 
     DateTimeFormatter formatter = DateTimeFormatter
@@ -801,7 +802,6 @@ public class CadastroController {
                     return;
                 }
             }
-            return;
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -11,13 +11,13 @@ public class FornecedorDTO {
 
     private String produtos;
 
-    private Integer notasFiscais;
+    private String notasFiscais;
 
     public FornecedorDTO() {
     }
 
     public FornecedorDTO(Long id, String empresa, String cnpjCpf, String telefones, String endereco, String produtos,
-            Integer notasFiscais) {
+            String notasFiscais) {
         this.id = id;
         this.empresa = empresa;
         this.cnpjCpf = cnpjCpf;
@@ -60,7 +60,7 @@ public class FornecedorDTO {
         return endereco;
     }
 
-    public Integer getNotasFiscais() {
+    public String getNotasFiscais() {
         return notasFiscais;
     }
 
@@ -80,7 +80,7 @@ public class FornecedorDTO {
         this.produtos = produtos;
     }
 
-    public void setNotasFiscais(Integer notasFiscais) {
+    public void setNotasFiscais(String notasFiscais) {
         this.notasFiscais = notasFiscais;
     }
 

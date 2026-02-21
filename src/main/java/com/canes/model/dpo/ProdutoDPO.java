@@ -11,6 +11,7 @@ public class ProdutoDPO {
     private String nome;
     private Double valorCompra;
     private Double valorVenda;
+    private Integer estoque;
     private Integer quantcompra;
     private Fornecedor fornecedor;
     private NotaFiscalDTO nota;
@@ -85,6 +86,14 @@ public class ProdutoDPO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getEstoque() {
+        return estoque;
+    }
+
+    public void setEstoque(Integer estoque) {
+        this.estoque = estoque;
     }
 
 }

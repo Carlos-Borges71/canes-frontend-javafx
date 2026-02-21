@@ -19,6 +19,7 @@ import com.canes.util.UserSession;
 import com.canes.factory.ClienteFactory;
 import com.canes.factory.EnderecoFactory;
 import com.canes.factory.FornecedorFactory;
+import com.canes.factory.NotaFiscalFactory;
 import com.canes.factory.PedidoFactory;
 import com.canes.factory.ProdutoFactory;
 import com.canes.factory.TelefoneFactory;
@@ -26,13 +27,17 @@ import com.canes.factory.UsuarioFactory;
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Fornecedor;
+import com.canes.model.NotaFiscal;
 import com.canes.model.Pedido;
 import com.canes.model.Produto;
 import com.canes.model.Telefone;
 import com.canes.model.Usuario;
+import com.canes.model.dpo.NotaFiscalDTO;
+import com.canes.model.dpo.ProdutoDPO;
 import com.canes.services.ClienteService;
 import com.canes.services.EnderecoService;
 import com.canes.services.FornecedorService;
+import com.canes.services.NotaFiscalService;
 import com.canes.services.PedidoService;
 import com.canes.services.ProdutoService;
 import com.canes.services.TelefoneService;
@@ -336,6 +341,9 @@ public class AtualizarController {
     private Long fornecedorId;
     private Long enderecoId;
     private Long celId;
+    private Long produtoId;
+    private Long notaFiscalId;
+    private Integer quantCompra;
 
     Instant instante = Instant.now();
 
@@ -577,6 +585,67 @@ public class AtualizarController {
         }
     }
 
+    private void atualizarProduto() {
+
+        try {
+
+            ProdutoService produtoService = ProdutoFactory.getProdutoService();
+            ProdutoDPO produto = new ProdutoDPO();
+            produto.setId(produtoId);
+            produto.setCodigo(txtCodigoFornec.getText());
+            produto.setNome(txtProdutoFornec.getText());
+            Double valorCompra = TextFieldUtil.converterParaDouble(txtValorCompraFornec.getText());
+            Double valorVenda = TextFieldUtil.converterParaDouble(txtValorVendaFornec.getText());
+            Integer estoque = Integer.parseInt(txtQuantFornec.getText());
+            produto.setValorCompra(valorCompra);
+            produto.setValorVenda(valorVenda);
+            // produto.setEstoque(estoque);
+
+            Fornecedor fornecedor = new Fornecedor();
+            fornecedor.setId(fornecedorId);
+
+            NotaFiscalDTO notaFiscal = new NotaFiscalDTO();
+            notaFiscal.setId(notaFiscalId);
+
+            produto.setNota(notaFiscal);
+            produto.setFornecedor(fornecedor);
+            produto.setQuantcompra(quantCompra);
+            produto.setEstoque(estoque);
+
+            produtoService.atualizar(produto);
+
+        } catch (Exception e) {
+            AlertUtil.mostrarErro("Erro ao tentar salvar Produto no banco\n" + e.getMessage());
+
+        }
+    }
+
+    private void atualizarNotaFiscal() {
+
+        try {
+
+            NotaFiscalService notaFiscalService = NotaFiscalFactory.getNotaFiscal();
+
+            NotaFiscalDTO notaFiscal = new NotaFiscalDTO();
+
+            notaFiscal.setId(notaFiscalId);
+            Integer nota = Integer.valueOf(txtNotaFiscalFornec.getText());
+            notaFiscal.setNotaFiscal(nota);
+            notaFiscal.setData(instanteFormatado);
+
+            Fornecedor fornecedor = new Fornecedor(fornecedorId);
+            notaFiscal.setFornecedor(fornecedor);
+
+            notaFiscalService.atualizarUsuario(notaFiscal);
+
+            AlertUtil.mostrarSucesso("Produto Atualizado!");
+
+        } catch (Exception e) {
+            AlertUtil.mostrarErro("Erro ao tentar salvar Produto no banco\n" + e.getMessage());
+
+        }
+    }
+
     private void atualizarederecoCliente() {
 
         try {
@@ -787,6 +856,7 @@ public class AtualizarController {
 
     @FXML
     void onclickLimparPedido(ActionEvent event) {
+
         txtCodigoPedido.clear();
         txtStatusPedido.clear();
         txtValorPedido.clear();
@@ -865,6 +935,62 @@ public class AtualizarController {
         }
     }
 
+    private void buscarProdudo() {
+        try {
+
+            ProdutoService produtoService = ProdutoFactory.getProdutoService();
+            List<Produto> produto = produtoService.buscarTodos();
+
+            NotaFiscalService notaFiscalService = NotaFiscalFactory.getNotaFiscal();
+            List<NotaFiscalDTO> notaFiscal = notaFiscalService.buscarTodos();
+
+            boolean encontrado = false;
+
+            for (Produto p : produto) {
+
+                if (txtCodigoFornec.getText().equals(p.getCodigo())) {
+
+                    BigDecimal valorCompra = new BigDecimal(p.getValorCompra());
+                    BigDecimal valorVenda = new BigDecimal(p.getValorVenda());
+
+                    produtoId = p.getId();
+                    fornecedorId = p.getFornecedor().getId();
+                    notaFiscalId = p.getNota().getId();
+                    quantCompra = p.getQuantcompra();
+
+                    txtProdutoFornec.setText(p.getNome());
+                    txtNotaFiscalFornec.setText(p.getNota().getNotaFiscal().toString());
+                    txtValorCompraFornec.setText(numberFormat(valorCompra));
+                    txtValorVendaFornec.setText(numberFormat(valorVenda));
+
+                    txtQuantFornec.setText(p.getEstoque().toString());
+
+                    for (NotaFiscalDTO n : notaFiscal) {
+                        if (n.getId() == p.getNota().getId()) {
+
+                            txtNotaFiscalFornec.setText(n.getNotaFiscal().toString());
+                        }
+
+                    }
+
+                    encontrado = true;
+                    break;
+                }
+            }
+
+            if (!encontrado) {
+                AlertUtil.mostrarErro("Produto não encontrado.");
+            }
+
+        } catch (
+
+        Exception e) {
+            e.printStackTrace();
+            AlertUtil.mostrarErro("Erro ao buscar produto.");
+
+        }
+    }
+
     @FXML
     void onClickFornecedor(ActionEvent event) {
 
@@ -893,45 +1019,11 @@ public class AtualizarController {
     @FXML
     void onClickBuscarProduto(ActionEvent event) {
 
-        try {
-
-            ProdutoService produtoService = ProdutoFactory.getProdutoService();
-            List<Produto> produto = produtoService.buscarTodos();
-
-            boolean encontrado = false;
-            for (Produto p : produto) {
-
-                if (txtCodigoFornec.getText().equals(p.getCodigo())) {
-                    BigDecimal valorCompra = new BigDecimal(p.getValorCompra());
-                    BigDecimal valorVenda = new BigDecimal(p.getValorVenda());
-
-                    txtProdutoFornec.setText(p.getNome());
-                    txtNotaFiscalFornec.setText(p.getNota().getNotaFiscal().toString());
-                    txtValorCompraFornec.setText(numberFormat(valorCompra));
-                    txtValorVendaFornec.setText(numberFormat(valorVenda));
-
-                    txtQuantFornec.setText(p.getQuantcompra().toString());
-
-                    encontrado = true;
-                    break;
-                }
-            }
-
-            if (!encontrado) {
-                AlertUtil.mostrarErro("Produto não encontrado.");
-            }
-
-        } catch (
-
-        Exception e) {
-            e.printStackTrace();
-            AlertUtil.mostrarErro("Erro ao buscar produto.");
-
-        }
+        buscarProdudo();
     }
 
-    @FXML
-    void onclickLimparProduto(ActionEvent event) {
+    private void limparProduto() {
+
         txtCodigoFornec.clear();
         txtProdutoFornec.clear();
         txtNotaFiscalFornec.clear();
@@ -939,6 +1031,11 @@ public class AtualizarController {
         txtValorCompraFornec.clear();
         txtQuantFornec.clear();
         txtValorVendaFornec.clear();
+    }
+
+    @FXML
+    void onclickLimparProduto(ActionEvent event) {
+        limparProduto();
     }
 
     @FXML
@@ -1125,6 +1222,46 @@ public class AtualizarController {
     void onclickLimparClient(ActionEvent event) {
 
         limparCliente();
+
+    }
+
+    @FXML
+    void onActionBuscarProduto(ActionEvent event) {
+        buscarProdudo();
+    }
+
+    @FXML
+    void onClickAtualizarProduto(ActionEvent event) {
+
+        if (txtProdutoFornec.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Produto não \npode ficar vazio!.");
+            return;
+        }
+        if (txtCodigoFornec.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Código não \npode ficar vazio!.");
+            return;
+        }
+        if (txtQuantFornec.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Quantidade não \npode ficar vazio!.");
+            return;
+        }
+        // if (txtTamanhoFornec.getText().isEmpty()) {
+        // AlertUtil.mostrarErro("O campo Tamanho não \npode ficar vazio!.");
+        // return;
+        // }
+        if (txtValorCompraFornec.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Compra não \npode ficar vazio!.");
+            return;
+        }
+        if (txtValorVendaFornec.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Venda não \npode ficar vazio!.");
+            return;
+        }
+
+        atualizarProduto();
+        atualizarNotaFiscal();
+        limparProduto();
+        txtCodigoFornec.requestFocus();
 
     }
 

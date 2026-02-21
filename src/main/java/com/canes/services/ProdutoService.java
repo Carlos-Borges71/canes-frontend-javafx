@@ -49,6 +49,13 @@ public class ProdutoService extends BaseService {
         System.out.println("JSON enviado:");
         System.out.println(json);
 
+        // converte o objeto em JSON
+        // String json = mapper.writeValueAsString(pedido);
+
+        // // exibe no console
+        // System.out.println("JSON enviado:");
+        // System.out.println(json);
+
         // Usa o POST genérico do BaseService
         post(ApiConstantes.PRODUTOS, produto, Void.class);
 
@@ -61,10 +68,17 @@ public class ProdutoService extends BaseService {
     }
 
     // atualizar todo produto
-    public Produto atualizar(Produto produto)
+    public Produto atualizar(ProdutoDPO produto)
             throws IOException, InterruptedException, ConnectException {
 
         String url = ApiConstantes.PRODUTOS + "/" + produto.getId();
+
+        // converte o objeto em JSON
+        String json = mapper.writeValueAsString(produto);
+
+        // exibe no console
+        System.out.println("JSON enviado:");
+        System.out.println(json);
 
         return put(url, produto, Produto.class);
     }
