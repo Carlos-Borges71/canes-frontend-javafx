@@ -340,14 +340,18 @@ public class FormaPagamentoController {
 
                     String txt = lblValor.getText();
 
-                    BigDecimal valor = new BigDecimal(
-                            txt.replaceAll("[^0-9,.-]", "") // remove tudo que não é número
-                                    .replace(",", "."));
+                    String valorLimpo = txt
+                            .replaceAll("[^0-9,.-]", "") // mantém números, vírgula, ponto e sinal
+                            .replace(".", "") // remove separador de milhar
+                            .replace(",", "."); // troca decimal para padrão Java
+
+                    BigDecimal valor = new BigDecimal(valorLimpo);
 
                     String txt1 = txtValor.getText();
 
                     BigDecimal valor1 = new BigDecimal(
                             txt1.replaceAll("[^0-9,.-]", "") // remove tudo que não é número
+                                    .replace(".", "")
                                     .replace(",", "."));
 
                     if (valor1.compareTo(valor) >= 0) {

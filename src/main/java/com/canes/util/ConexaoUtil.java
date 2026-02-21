@@ -3,6 +3,8 @@ package com.canes.util;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.canes.config.ApiConstantes;
+
 public class ConexaoUtil {
 
     // Testa conexão tentando acessar o Google (rápido e confiável)
@@ -20,7 +22,7 @@ public class ConexaoUtil {
 
     public static boolean isConectadoAPI() {
         try {
-            URL url = new URL("http://localhost:8080/usuarios");
+            URL url = new URL(ApiConstantes.USUARIOS);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(2000); // timeout 2s
             conn.connect();

@@ -6,7 +6,7 @@ public class ApiConstantes {
         // impede instanciar
     }
 
-    public static final String BASE_URL = "http://localhost:8080";
+    public static final String BASE_URL = "http://192.168.1.5:8080";
 
     public static final String USUARIOS = BASE_URL + "/usuarios";
     public static final String ENDERECOS = BASE_URL + "/enderecos";
