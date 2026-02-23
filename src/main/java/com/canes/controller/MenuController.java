@@ -1,6 +1,5 @@
 package com.canes.controller;
 
-
 import com.canes.util.AlertUtil;
 import com.canes.util.ConexaoUtil;
 import com.canes.util.HouverEffectUtil;
@@ -21,7 +20,6 @@ public class MenuController {
 
     @FXML
     private Button btnExcluir;
-
 
     @FXML
     private Button btnPesquisa;
@@ -49,7 +47,6 @@ public class MenuController {
 
     @FXML
     private Label lblPedido;
-    
 
     @FXML
     private Label lblSair;
@@ -60,21 +57,18 @@ public class MenuController {
     @FXML
     void onClickAtualizar(ActionEvent event) {
 
-        
-         try {
-            ScreenUtils.changeScreen(event,"/com/canes/atualizar.fxml", "Atualização", null);
+        try {
+            ScreenUtils.changeScreen(event, "/com/canes/atualizar.fxml", "Atualização", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-   
-
     @FXML
     void onClickExcluir(ActionEvent event) {
 
         try {
-            ScreenUtils.changeScreen(event,"/com/canes/excluir.fxml", "Exclusão", null);
+            ScreenUtils.changeScreen(event, "/com/canes/excluir.fxml", "Exclusão", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,24 +78,22 @@ public class MenuController {
     void onClickPedido(ActionEvent event) {
 
         try {
-            ScreenUtils.changeScreen(event,"/com/canes/pedido.fxml", "Pedido", null);
+            ScreenUtils.changeScreen(event, "/com/canes/pedido.fxml", "Pedido", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    
-
     @FXML
     void onClickPesquisar(ActionEvent event) {
 
-         if (!ConexaoUtil.isConectado() || !ConexaoUtil.isConectadoAPI()) {
-        AlertUtil.mostrarErro("Sem conexão com a internet!\n ou com API!");
-        return; // não abre a tela
-    }
+        if (!ConexaoUtil.isConectado() || !ConexaoUtil.isConectadoAPI()) {
+            AlertUtil.mostrarErro("Sem conexão com a internet!\n ou com API!");
+            return; // não abre a tela
+        }
 
-         try {
-            ScreenUtils.changeScreen(event,"/com/canes/pesquisar.fxml", "Pesquisar", null);
+        try {
+            ScreenUtils.changeScreen(event, "/com/canes/pesquisar.fxml", "Pesquisar", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,13 +103,18 @@ public class MenuController {
     @FXML
     void onClickRelatorio(ActionEvent event) {
 
+        try {
+            ScreenUtils.changeScreen(event, "/com/canes/view/relatorio.fxml", "relatorio", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void onClickSair(ActionEvent event) {
 
-         try {
-            ScreenUtils.changeScreen(event,"/com/canes/view/login.fxml", "Login", null);
+        try {
+            ScreenUtils.changeScreen(event, "/com/canes/view/login.fxml", "Login", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -126,9 +123,8 @@ public class MenuController {
     @FXML
     void onClickCadastrar(ActionEvent event) {
 
-        
-         try {
-            ScreenUtils.changeScreen(event,"/com/canes/cadastro.fxml", "Cadastro de Usuário", null);
+        try {
+            ScreenUtils.changeScreen(event, "/com/canes/cadastro.fxml", "Cadastro de Usuário", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -141,8 +137,6 @@ public class MenuController {
         HouverEffectUtil.apllyHouverSobre(btnSair);
         lblSair.setMouseTransparent(true);
 
-        
-
     }
 
     @FXML
@@ -151,10 +145,6 @@ public class MenuController {
         HouverEffectUtil.apllyHouverSair(btnSair);
 
     }
-   
-        
-
-    
 
     @FXML
     void onMouseExitedCadastrar(MouseEvent event) {
@@ -168,7 +158,6 @@ public class MenuController {
 
         HouverEffectUtil.apllyHouverSobre(btnCadastrar);
         lblCadastrar.setMouseTransparent(true);
-        
 
     }
 
@@ -184,11 +173,10 @@ public class MenuController {
 
         HouverEffectUtil.apllyHouverSobre(btnAtualizar);
         lblAtualizar.setMouseTransparent(true);
-        
 
     }
 
-     @FXML
+    @FXML
     void onMouseExitedExcluir(MouseEvent event) {
 
         HouverEffectUtil.apllyHouverSair(btnExcluir);
@@ -200,7 +188,6 @@ public class MenuController {
 
         HouverEffectUtil.apllyHouverSobre(btnExcluir);
         lblExcluir.setMouseTransparent(true);
-        
 
     }
 
@@ -216,11 +203,10 @@ public class MenuController {
 
         HouverEffectUtil.apllyHouverSobre(btnPedido);
         lblPedido.setMouseTransparent(true);
-        
 
     }
 
-     @FXML
+    @FXML
     void onMouseExitedPesquisar(MouseEvent event) {
 
         HouverEffectUtil.apllyHouverSair(btnPesquisa);
@@ -232,12 +218,7 @@ public class MenuController {
 
         HouverEffectUtil.apllyHouverSobre(btnPesquisa);
         lblPesquisa.setMouseTransparent(true);
-        
 
     }
-  
 
 }
-
-
-

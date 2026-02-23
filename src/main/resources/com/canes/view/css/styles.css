@@ -1,0 +1,96 @@
+.chart-title {
+    -fx-text-fill: #ffffff;
+    /* cor do título */
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.chart-pie-label {
+    -fx-fill: white;
+    -fx-font-size: 12px;
+}
+
+.date-picker {
+    -fx-background-color: transparent;
+    -fx-border-color: #ffffff;
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
+}
+
+.date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: white;
+}
+
+/* .combo-box .list-cell {
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #0E0E29;
+    -fx-background-radius: 7;
+} */
+
+.chart-series-area-fill {
+    -fx-fill: rgba(174, 234, 185, 0.1);
+}
+
+.chart-series-area-line {
+    -fx-stroke: cyan;
+    -fx-stroke-width: 3px;
+}
+
+/* Números dos eixos (datas e valores) */
+.axis {
+    -fx-tick-label-fill: white;
+}
+
+/* Texto do título dos eixos */
+.axis-label {
+    -fx-text-fill: white;
+}
+
+/* Linhas dos eixos */
+.axis .axis-line {
+    -fx-stroke: white;
+}
+
+/* Marcas (tracinhos) do eixo */
+.axis .tick-mark {
+    -fx-stroke: white;
+}
+
+/* Remove fundo geral do gráfico */
+.chart {
+    -fx-background-color: transparent;
+}
+
+/* Remove fundo da área interna (onde o gráfico é desenhado) */
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+/* Remove fundo externo */
+.chart-content {
+    -fx-background-color: transparent;
+}
+
+/* Remove fundo da legenda */
+/* .chart-legend {
+    -fx-background-color: transparent;
+} */
+
+/* Remove linhas horizontais */
+.chart-horizontal-grid-lines {
+    -fx-stroke: transparent;
+}
+
+/* Remove linhas verticais */
+.chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}

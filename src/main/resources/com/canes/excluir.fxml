@@ -92,7 +92,7 @@
                   <Font name="Verdana Bold" size="24.0" />
                </font>
             </Label>
-            <Pane fx:id="paneUser" layoutX="114.0" layoutY="290.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
+            <Pane fx:id="paneUser" layoutX="114.0" layoutY="290.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;">
                <children>
                   <Label layoutX="383.0" layoutY="61.0" text="Nome:" textFill="WHITE" />
                   <TextField fx:id="txtNome" layoutX="429.0" layoutY="58.0" prefHeight="25.0" prefWidth="306.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent; -fx-text-fill: fff;">
@@ -187,7 +187,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="btnExcluir" layoutX="710.0" layoutY="316.0" mnemonicParsing="false" onAction="#onClickExcluir" onMouseEntered="#onMouseEntered" onMouseExited="#onMouseExited" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Excuir" textFill="WHITE">
+                  <Button fx:id="btnDeletar" layoutX="710.0" layoutY="316.0" mnemonicParsing="false" onAction="#onClickExcluir" onMouseEntered="#onMouseEntered" onMouseExited="#onMouseExited" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Excuir" textFill="WHITE">
                      <font>
                         <Font name="Verdana Bold" size="14.0" />
                      </font>
@@ -309,7 +309,7 @@
                         <Font size="8.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtCelUsuario" alignment="TOP_LEFT" layoutX="64.0" layoutY="56.0" prefHeight="27.0" prefWidth="139.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7; -fx-text-fill: fff;">
+                  <TextField fx:id="txtCelUsuario" alignment="TOP_LEFT" layoutX="64.0" layoutY="56.0" onAction="#onActionUsuarioBuscar" prefHeight="27.0" prefWidth="139.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7; -fx-text-fill: fff;">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -604,7 +604,7 @@
                   <Insets bottom="20.0" />
                </padding>
             </Pane>
-            <Pane fx:id="paneProduto" layoutX="114.0" layoutY="290.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;">
+            <Pane fx:id="paneProduto" layoutX="114.0" layoutY="290.0" prefWidth="922.0" style="-fx-background-color: transparent; -fx-border-radius: 30; -fx-border-color: fff;" visible="false">
                <children>
                   <VBox fx:id="vBoxTelClient1" layoutX="164.0" layoutY="136.0" />
                   <Button fx:id="btnLimparProduto" layoutX="561.0" layoutY="275.0" mnemonicParsing="false" onAction="#onClickLimparProduto" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Limpar" textFill="WHITE">

@@ -732,16 +732,8 @@
                         <VBox fx:id="vBoxTelFornec211" prefHeight="33.0" prefWidth="174.0" />
                      </children>
                   </HBox>
-                  <TextField fx:id="txtStatusPedido" layoutX="262.0" layoutY="117.0" prefHeight="25.0" prefWidth="182.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent; -fx-text-fill: fff;">
-                     <font>
-                        <Font name="Verdana" size="12.0" />
-                     </font>
-                     <padding>
-                        <Insets left="8.0" />
-                     </padding>
-                  </TextField>
                   <Label layoutX="217.0" layoutY="121.0" text="Status:" textFill="WHITE" />
-                  <TextField fx:id="txtCodigoPedido" layoutX="383.0" layoutY="25.0" prefHeight="25.0" prefWidth="122.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent; -fx-text-fill: fff;">
+                  <TextField fx:id="txtCodigoPedido" layoutX="383.0" layoutY="25.0" onAction="#onActionBuscarPedido" prefHeight="25.0" prefWidth="122.0" style="-fx-border-radius: 7; -fx-border-color: fff; -fx-background-color: transparent; -fx-text-fill: fff;">
                      <font>
                         <Font name="Verdana" size="12.0" />
                      </font>
@@ -771,6 +763,15 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
+                  <ComboBox fx:id="txtStatusPedido" layoutX="275.0" layoutY="116.0" prefHeight="27.0" prefWidth="182.0">
+                     <items>
+                        <FXCollections fx:factory="observableArrayList">
+                           <String fx:value="PAGO" />
+                           <String fx:value="AGUARDANDO_PAGAMENTO" />
+                           <String fx:value="CANCELADO" />
+                        </FXCollections>
+                     </items>
+                  </ComboBox>
                </children>
                <padding>
                   <Insets bottom="20.0" />

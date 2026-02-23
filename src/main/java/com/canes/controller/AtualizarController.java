@@ -27,7 +27,6 @@ import com.canes.factory.UsuarioFactory;
 import com.canes.model.Cliente;
 import com.canes.model.Endereco;
 import com.canes.model.Fornecedor;
-import com.canes.model.NotaFiscal;
 import com.canes.model.Pedido;
 import com.canes.model.Produto;
 import com.canes.model.Telefone;
@@ -187,7 +186,7 @@ public class AtualizarController {
     private TextField txtCodigoPedido;
 
     @FXML
-    private TextField txtStatusPedido;
+    private ComboBox txtStatusPedido;
 
     @FXML
     private TextField txtValorPedido;
@@ -336,6 +335,7 @@ public class AtualizarController {
     @FXML
     private Label lblProduto;
 
+    private Long pedidoId;
     private Long usuarioId;
     private Long clienteId;
     private Long fornecedorId;
@@ -425,6 +425,29 @@ public class AtualizarController {
             e.printStackTrace();
             AlertUtil.mostrarErro("Erro ao tentar salvar no banco\n" + e.getMessage());
             txtcelClient.requestFocus();
+        }
+
+    }
+
+    private void atualizarPedido() {
+
+        try {
+            Pedido pedido = new Pedido();
+
+            Double valor = TextFieldUtil.converterParaDouble(txtValorPedido.getText());
+            String status = txtStatusPedido.getValue().toString();
+            pedido.setStatus(status);
+            pedido.setValor(valor);
+
+            PedidoService pedidoService = PedidoFactory.getPedidoService();
+
+            pedidoService.atualizarParcial(pedidoId, pedido);
+            AlertUtil.mostrarSucesso("Pedido atualizado com sucesso!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertUtil.mostrarErro("Erro ao tentar salvar no banco\n" + e.getMessage());
+            txtCodigoPedido.requestFocus();
         }
 
     }
@@ -668,7 +691,7 @@ public class AtualizarController {
         }
     }
 
-    private void buscarUsuario() {
+    public void buscarUsuario() {
 
         try {
             TelefoneService telefoneService = TelefoneFactory.getTelefoneService();
@@ -821,10 +844,14 @@ public class AtualizarController {
     @FXML
     void onClickAtualizarPedido(ActionEvent event) {
 
+        atualizarPedido();
+        limparPedido();
+        txtCodigoPedido.requestFocus();
+
     }
 
-    @FXML
-    void onClickBuscarPedido(ActionEvent event) {
+    private void buscarPedido() {
+
         try {
             PedidoService pedidoService = PedidoFactory.getPedidoService();
             List<Pedido> pedido = pedidoService.buscarTodos();
@@ -834,9 +861,13 @@ public class AtualizarController {
             for (Pedido p : pedido) {
                 if (txtCodigoPedido.getText().equals(p.getId().toString())) {
 
-                    BigDecimal valorPedido = new BigDecimal(p.getValor());
+                    pedidoId = p.getId();
 
-                    txtStatusPedido.setText(p.getStatus());
+                    BigDecimal valorPedido = new BigDecimal(p.getValor());
+                    String status = p.getStatus();
+
+                    txtStatusPedido.setValue(status);
+
                     txtValorPedido.setText(numberFormat(valorPedido));
 
                     encontrado = true;
@@ -846,20 +877,39 @@ public class AtualizarController {
 
             if (!encontrado) {
                 AlertUtil.mostrarErro("Pedido não encontrado.");
+                txtCodigoPedido.requestFocus();
             }
         } catch (Exception e) {
             e.printStackTrace();
             AlertUtil.mostrarErro("Erro ao busca Pedido.");
         }
+    }
 
+    @FXML
+    void onActionBuscarPedido(ActionEvent event) {
+
+        buscarPedido();
+
+    }
+
+    @FXML
+    void onClickBuscarPedido(ActionEvent event) {
+
+        buscarPedido();
+
+    }
+
+    private void limparPedido() {
+
+        txtCodigoPedido.clear();
+        txtStatusPedido.setValue("");
+        txtValorPedido.clear();
     }
 
     @FXML
     void onclickLimparPedido(ActionEvent event) {
 
-        txtCodigoPedido.clear();
-        txtStatusPedido.clear();
-        txtValorPedido.clear();
+        limparPedido();
 
     }
 
