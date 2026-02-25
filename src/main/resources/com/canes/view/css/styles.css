@@ -37,7 +37,7 @@
 } */
 
 .chart-series-area-fill {
-    -fx-fill: rgba(174, 234, 185, 0.1);
+    -fx-fill: rgba(174, 234, 185, 0.3);
 }
 
 .chart-series-area-line {

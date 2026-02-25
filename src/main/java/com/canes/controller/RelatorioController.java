@@ -1,6 +1,7 @@
 package com.canes.controller;
 
 import java.text.NumberFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,11 +11,15 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import com.canes.factory.PagamentoFactory;
 import com.canes.factory.PedidoFactory;
+import com.canes.model.Pagamento;
 import com.canes.model.Pedido;
-import com.canes.model.dpo.PedidoDPO;
+import com.canes.services.PagamentoService;
 import com.canes.services.PedidoService;
 import com.canes.util.ScreenUtils;
+import com.canes.util.AlertUtil;
+import com.canes.util.HouverEffectUtil;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -22,11 +27,11 @@ import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -36,6 +41,9 @@ public class RelatorioController {
 
     @FXML
     private ImageView btnVoltar;
+
+    @FXML
+    private Button btnFiltrar;
 
     @FXML
     private PieChart pieChartRelatorio;
@@ -62,28 +70,54 @@ public class RelatorioController {
         }
     }
 
-    @FXML
-    public void carregarGrafico() {
+    public void carregarGraficoPagamento() {
         try {
-            PedidoService pedidoService = PedidoFactory.getPedidoService();
+            PagamentoService pagamentoService = PagamentoFactory.getPagamentoService();
+            List<Pagamento> pagamentos = pagamentoService.buscarTodos();
 
-            List<Pedido> pedidos = pedidoService.buscarTodos();
+            LocalDate dataInicial = dpDataInicial.getValue();
+            LocalDate dataFinal = dpDataFinal.getValue();
 
-            long pagos = pedidos.stream()
-                    .filter(p -> p.getStatus().equals("PAGO"))
-                    .count();
+            if (dataInicial == null || dataFinal == null) {
+                AlertUtil.mostrarErro("Selecione as duas datas!");
+                return;
+            }
 
-            long pendentes = pedidos.stream()
-                    .filter(p -> p.getStatus().equals("AGUARDANDO_PAGAMENTO"))
-                    .count();
+            if (dataInicial.isAfter(dataFinal)) {
+                AlertUtil.mostrarErro("Data inicial maior que final!");
+                return;
+            }
 
-            ObservableList<PieChart.Data> dados = FXCollections.observableArrayList(
-                    new PieChart.Data("Pagos", pagos),
-                    new PieChart.Data("Pendentes", pendentes));
+            // Filtra pedidos dentro do período
+            List<Pagamento> pagamentosFiltrados = pagamentos.stream()
+                    .filter(p -> p.getData() != null)
+                    .filter(p -> {
+                        LocalDate dataPedido = OffsetDateTime.parse(p.getData())
+                                .minusHours(3) // ajusta fuso, se necessário
+                                .toLocalDate();
+                        return !dataPedido.isBefore(dataInicial) && !dataPedido.isAfter(dataFinal);
+                    })
+                    .toList();
 
-            pieChartRelatorio.setLabelsVisible(true);
+            // Agrupa e soma por tipo de pagamento
+            Map<String, Double> totalPorTipo = pagamentosFiltrados.stream()
+                    .collect(Collectors.groupingBy(
+                            Pagamento::getTipo, // "Pix", "Dinheiro", etc.
+                            Collectors.summingDouble(Pagamento::getValorPagamento)));
 
-            pieChartRelatorio.setData(dados);
+            // Cria dados para o gráfico de pizza
+            ObservableList<PieChart.Data> dados = FXCollections.observableArrayList();
+            totalPorTipo.forEach((tipo, total) -> {
+                String nome = tipo + " - R$ " + String.format("%.2f", total);
+                dados.add(new PieChart.Data(nome, total));
+            });
+
+            if (dados.isEmpty()) {
+                AlertUtil.mostrarErro("Nenhum pedido encontrado no período.");
+            } else {
+                pieChartRelatorio.setData(dados);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -93,12 +127,11 @@ public class RelatorioController {
     public void carregarGraficoArea() {
 
         try {
-
             PedidoService pedidoService = PedidoFactory.getPedidoService();
             List<Pedido> pedidos = pedidoService.buscarTodos();
 
             LocalDate dataInicial = dpDataInicial.getValue();
-            LocalDate dataFinal = dpDataFinal.getValue();
+            LocalDate dataFinal = dpDataFinal.getValue().plusDays(1);
 
             if (dataInicial == null || dataFinal == null) {
                 System.out.println("Selecione as duas datas!");
@@ -112,18 +145,26 @@ public class RelatorioController {
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
 
-            // Agrupa por data e soma os valores
+            // Filtra e agrupa por data, somando valores
             Map<LocalDate, Double> totalPorData = pedidos.stream()
                     .filter(p -> p.getData() != null)
                     .filter(p -> {
                         LocalDate dataPedido = OffsetDateTime.parse(p.getData()).toLocalDate();
-
-                        return !dataPedido.isBefore(dataInicial)
-                                && !dataPedido.isAfter(dataFinal);
+                        return !dataPedido.isBefore(dataInicial) && !dataPedido.isAfter(dataFinal);
                     })
                     .collect(Collectors.groupingBy(
                             p -> OffsetDateTime.parse(p.getData()).toLocalDate(),
                             Collectors.summingDouble(Pedido::getValor)));
+
+            if (totalPorData.isEmpty()) {
+                System.out.println("Nenhum pedido encontrado no período.");
+                return;
+            }
+
+            // Calcula a soma total
+            double somaTotal = totalPorData.values().stream()
+                    .mapToDouble(Double::doubleValue)
+                    .sum();
 
             // Ordena por data
             Map<LocalDate, Double> ordenado = new TreeMap<>(totalPorData);
@@ -131,38 +172,25 @@ public class RelatorioController {
             // Limpa gráfico antes de adicionar novos dados
             areaChartRelatorio.getData().clear();
 
+            // Cria série com o nome incluindo a soma total
             XYChart.Series<String, Number> serie = new XYChart.Series<>();
-            serie.setName("Vendas por Período");
+            serie.setName("Vendas por Período - Total: R$ " + String.format("%.2f", somaTotal));
 
             ordenado.forEach((data, total) -> {
-                serie.getData().add(
-                        new XYChart.Data<>(
-                                data.format(formatter),
-                                total));
+                serie.getData().add(new XYChart.Data<>(data.format(formatter), total));
             });
-
-            if (serie.getData().isEmpty()) {
-                System.out.println("Nenhum pedido encontrado no período.");
-                return;
-            }
 
             areaChartRelatorio.getData().add(serie);
 
-            double max = ordenado.values()
-                    .stream()
-                    .mapToDouble(Double::doubleValue)
-                    .max()
-                    .orElse(0);
-
+            // Configura eixo Y em reais
+            double max = ordenado.values().stream().mapToDouble(Double::doubleValue).max().orElse(0);
             NumberAxis yAxis = (NumberAxis) areaChartRelatorio.getYAxis();
-
             yAxis.setAutoRanging(false);
             yAxis.setLowerBound(0);
-            yAxis.setUpperBound(max + (max * 0.1)); // 10% margem
-            yAxis.setTickUnit(max / 5); // só 5 marcações
+            yAxis.setUpperBound(max + (max * 0.1)); // margem 10%
+            yAxis.setTickUnit(max / 5); // 5 marcações
 
             yAxis.setTickLabelFormatter(new StringConverter<Number>() {
-
                 private final NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
                 @Override
@@ -215,10 +243,12 @@ public class RelatorioController {
 
             LocalDate dataInicial = dpDataInicial.getValue();
             LocalDate dataFinal = dpDataFinal.getValue();
+            System.out.println("Datafinal : " + dataFinal);
 
             for (Pedido p : pedidos) {
 
-                LocalDate dataPedido = OffsetDateTime.parse(p.getData()).toLocalDate();
+                OffsetDateTime dataOriginal = OffsetDateTime.parse(p.getData());
+                LocalDate dataPedido = dataOriginal.minusHours(3).toLocalDate();
 
                 boolean dentro = !dataPedido.isBefore(dataInicial) &&
                         !dataPedido.isAfter(dataFinal);
@@ -230,12 +260,12 @@ public class RelatorioController {
             }
 
             if (dataInicial == null || dataFinal == null) {
-                System.out.println("Selecione as duas datas!");
+                AlertUtil.mostrarErro("Selecione as duas datas!");
                 return;
             }
 
             if (dataInicial.isAfter(dataFinal)) {
-                System.out.println("Data inicial maior que final!");
+                AlertUtil.mostrarErro("Data inicial maior que final!");
                 return;
             }
 
@@ -259,7 +289,7 @@ public class RelatorioController {
                     total)));
 
             if (dados.isEmpty()) {
-                System.out.println("Nenhum pedido encontrado no período.");
+                AlertUtil.mostrarErro("Nenhum pedido encontrado no período.");
             }
 
             pieChartRelatorio.setData(dados);
@@ -272,7 +302,7 @@ public class RelatorioController {
     @FXML
     void onFiltrarClick(ActionEvent event) {
 
-        carregarGrafico2();
+        carregarGraficoPagamento();
         carregarGraficoArea();
     }
 
@@ -283,6 +313,21 @@ public class RelatorioController {
 
         dpDataFinal.setValue(hoje);
         dpDataInicial.setValue(hoje.minusDays(30));
+
+        Platform.runLater(() -> {
+
+            carregarGraficoPagamento();
+            carregarGraficoArea();
+
+        });
+
+        btnFiltrar.setOnMouseEntered(e -> {
+            HouverEffectUtil.apllyHouverSobre(btnFiltrar);
+        });
+
+        btnFiltrar.setOnMouseExited(e -> {
+            HouverEffectUtil.apllyHouverSair(btnFiltrar);
+        });
 
         // ObservableList<PieChart.Data> dados = FXCollections.observableArrayList(
         // new PieChart.Data("Vendas", 40),
