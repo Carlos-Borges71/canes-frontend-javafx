@@ -3,12 +3,16 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.chart.AreaChart?>
+<?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -45,10 +49,10 @@
                   <Font name="Verdana Bold" size="14.0" />
                </font>
             </Label>
-            <PieChart fx:id="pieChartRelatorio" labelLineLength="30.0" layoutX="613.0" layoutY="13.0" prefHeight="723.0" prefWidth="668.0" />
-            <DatePicker fx:id="dpDataInicial" layoutX="366.0" layoutY="51.0" />
-            <DatePicker fx:id="dpDataFinal" layoutX="562.0" layoutY="51.0" />
-            <Button fx:id="btnFiltrar" layoutX="754.0" layoutY="48.0" mnemonicParsing="false" onAction="#onFiltrarClick" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Filtrar" textFill="WHITE">
+            <PieChart fx:id="pieChartRelatorio" labelLineLength="30.0" layoutX="613.0" layoutY="14.0" prefHeight="673.0" prefWidth="668.0" />
+            <DatePicker fx:id="dpDataInicial" layoutX="641.0" layoutY="51.0" prefHeight="27.0" prefWidth="152.0" />
+            <DatePicker fx:id="dpDataFinal" layoutX="809.0" layoutY="51.0" prefHeight="27.0" prefWidth="152.0" />
+            <Button fx:id="btnFiltrar" layoutX="980.0" layoutY="48.0" mnemonicParsing="false" onAction="#onFiltrarClick" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: transparent; -fx-border-color: fff; -fx-border-radius: 7;" text="Filtrar" textFill="WHITE">
                <font>
                   <Font name="Verdana Bold" size="14.0" />
                </font>
@@ -56,7 +60,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <AreaChart fx:id="areaChartRelatorio" layoutX="27.0" layoutY="284.0" prefHeight="442.0" prefWidth="568.0">
+            <AreaChart fx:id="areaChartRelatorio" layoutX="27.0" layoutY="284.0" prefHeight="415.0" prefWidth="498.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -64,6 +68,31 @@
                 <NumberAxis prefHeight="402.0" prefWidth="29.0" side="LEFT" />
               </yAxis>
             </AreaChart>
+            <Label layoutX="641.0" layoutY="26.0" text="DE" textFill="WHITE" />
+            <Label layoutX="813.0" layoutY="26.0" text="ATÉ" textFill="WHITE" />
+            <Label layoutX="332.0" layoutY="51.0" text="VENDAS POR PERÍODO" textFill="WHITE">
+               <font>
+                  <Font name="Verdana" size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="1112.0" layoutY="26.0" text="VISUALIZAÇÃO" textFill="WHITE" />
+            <ComboBox fx:id="cmbGrafico" layoutX="1104.0" layoutY="47.0" onAction="#comboGrafico" prefHeight="32.0" prefWidth="105.0" promptText="GRÁFICO"> 
+              
+            </ComboBox>
+            <BarChart fx:id="barChartRelatorio" layoutX="28.0" layoutY="284.0" prefHeight="415.0" prefWidth="498.0" visible="false">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </BarChart>
+            <RadioButton fx:id="rbDia" layoutX="1234.0" layoutY="42.0" mnemonicParsing="false" selected="true" text="Dia" textFill="WHITE">
+               <toggleGroup>
+                  <ToggleGroup fx:id="group" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="rbMes" layoutX="1235.0" layoutY="69.0" mnemonicParsing="false" text="Mês" textFill="WHITE" toggleGroup="$group" />
          </children>
       </AnchorPane>
    </children>

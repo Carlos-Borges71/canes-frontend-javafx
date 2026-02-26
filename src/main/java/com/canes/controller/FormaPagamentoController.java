@@ -322,6 +322,10 @@ public class FormaPagamentoController {
                         AlertUtil.mostrarErro("Preencha valor ou o status do pagamento");
                         return;
                     }
+                    if (txtPagamento.getText().isBlank()) {
+                        AlertUtil.mostrarErro("Escolha a forma de pagamento");
+                        return;
+                    }
 
                     BigDecimal valorDigitado = MaskTextField.parseValor(txtValor.getText());
 

@@ -3,7 +3,9 @@ package com.canes.controller;
 import java.text.NumberFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -11,6 +13,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import com.canes.controller.RelatorioController.TipoAgrupamento;
 import com.canes.factory.PagamentoFactory;
 import com.canes.factory.PedidoFactory;
 import com.canes.model.Pagamento;
@@ -28,12 +31,16 @@ import javafx.util.StringConverter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
@@ -49,7 +56,13 @@ public class RelatorioController {
     private PieChart pieChartRelatorio;
 
     @FXML
+    private ComboBox<String> cmbGrafico;
+
+    @FXML
     private AreaChart<String, Number> areaChartRelatorio;
+
+    @FXML
+    private BarChart<String, Number> barChartRelatorio;
 
     @FXML
     private Label txtOperador;
@@ -59,6 +72,48 @@ public class RelatorioController {
 
     @FXML
     private DatePicker dpDataFinal;
+
+    @FXML
+    private RadioButton rbDia;
+
+    @FXML
+    private RadioButton rbMes;
+
+    @FXML
+    private ToggleGroup group;
+
+    @FXML
+    void comboGrafico(ActionEvent event) {
+
+        String opcao = cmbGrafico.getValue();
+
+        if (opcao == null)
+            return;
+
+        switch (opcao) {
+
+            case "AREA":
+                areaChartRelatorio.setVisible(true);
+                barChartRelatorio.setVisible(false);
+                if (rbDia.isSelected()) {
+                    carregarGraficoArea(TipoAgrupamento.DIA);
+                } else {
+                    carregarGraficoArea(TipoAgrupamento.MES);
+                }
+                break;
+
+            case "BARRA":
+                areaChartRelatorio.setVisible(false);
+                barChartRelatorio.setVisible(true);
+                if (rbDia.isSelected()) {
+                    carregarGraficoBarraDiaMes(TipoAgrupamento.DIA);
+                } else {
+                    carregarGraficoBarraDiaMes(TipoAgrupamento.MES);
+                }
+                break;
+
+        }
+    }
 
     @FXML
     void onActionVoltar(MouseEvent event) {
@@ -124,14 +179,14 @@ public class RelatorioController {
     }
 
     @FXML
-    public void carregarGraficoArea() {
+    public void carregarGraficoArea(TipoAgrupamento tipo) {
 
         try {
             PedidoService pedidoService = PedidoFactory.getPedidoService();
             List<Pedido> pedidos = pedidoService.buscarTodos();
 
             LocalDate dataInicial = dpDataInicial.getValue();
-            LocalDate dataFinal = dpDataFinal.getValue().plusDays(1);
+            LocalDate dataFinal = dpDataFinal.getValue();
 
             if (dataInicial == null || dataFinal == null) {
                 System.out.println("Selecione as duas datas!");
@@ -143,52 +198,96 @@ public class RelatorioController {
                 return;
             }
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
+            DateTimeFormatter formatter;
+            Map<?, Double> totalAgrupado;
 
-            // Filtra e agrupa por data, somando valores
-            Map<LocalDate, Double> totalPorData = pedidos.stream()
-                    .filter(p -> p.getData() != null)
-                    .filter(p -> {
-                        LocalDate dataPedido = OffsetDateTime.parse(p.getData()).toLocalDate();
-                        return !dataPedido.isBefore(dataInicial) && !dataPedido.isAfter(dataFinal);
-                    })
-                    .collect(Collectors.groupingBy(
-                            p -> OffsetDateTime.parse(p.getData()).toLocalDate(),
-                            Collectors.summingDouble(Pedido::getValor)));
+            if (tipo == TipoAgrupamento.DIA) {
 
-            if (totalPorData.isEmpty()) {
+                // 📅 AGRUPAR POR DIA
+                formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
+
+                totalAgrupado = pedidos.stream()
+                        .filter(p -> p.getData() != null)
+                        .filter(p -> {
+                            OffsetDateTime dataOriginal = OffsetDateTime.parse(p.getData());
+                            LocalDate dataPedido = dataOriginal.minusHours(3).toLocalDate();
+                            return !dataPedido.isBefore(dataInicial)
+                                    && !dataPedido.isAfter(dataFinal);
+                        })
+                        .collect(Collectors.groupingBy(
+                                p -> {
+                                    OffsetDateTime dataOriginal = OffsetDateTime.parse(p.getData());
+                                    return dataOriginal.minusHours(3).toLocalDate();
+                                },
+                                Collectors.summingDouble(Pedido::getValor)));
+
+            } else {
+
+                // 📆 AGRUPAR POR MÊS
+                formatter = DateTimeFormatter.ofPattern("MM/yyyy");
+
+                totalAgrupado = pedidos.stream()
+                        .filter(p -> p.getData() != null)
+                        .filter(p -> {
+                            OffsetDateTime dataOriginal = OffsetDateTime.parse(p.getData());
+                            LocalDate dataPedido = dataOriginal.minusHours(3).toLocalDate();
+                            return !dataPedido.isBefore(dataInicial)
+                                    && !dataPedido.isAfter(dataFinal);
+                        })
+                        .collect(Collectors.groupingBy(
+                                p -> {
+                                    OffsetDateTime dataOriginal = OffsetDateTime.parse(p.getData());
+                                    LocalDate dataPedido = dataOriginal.minusHours(3).toLocalDate();
+                                    return YearMonth.from(dataPedido);
+                                },
+                                Collectors.summingDouble(Pedido::getValor)));
+            }
+
+            if (totalAgrupado.isEmpty()) {
                 System.out.println("Nenhum pedido encontrado no período.");
                 return;
             }
 
-            // Calcula a soma total
-            double somaTotal = totalPorData.values().stream()
+            Map<?, Double> ordenado = new TreeMap<>(totalAgrupado);
+
+            areaChartRelatorio.getData().clear();
+
+            XYChart.Series<String, Number> serie = new XYChart.Series<>();
+
+            double somaTotal = ordenado.values()
+                    .stream()
                     .mapToDouble(Double::doubleValue)
                     .sum();
 
-            // Ordena por data
-            Map<LocalDate, Double> ordenado = new TreeMap<>(totalPorData);
+            serie.setName("Total: R$ " + String.format("%.2f", somaTotal));
 
-            // Limpa gráfico antes de adicionar novos dados
-            areaChartRelatorio.getData().clear();
+            ordenado.forEach((chave, total) -> {
 
-            // Cria série com o nome incluindo a soma total
-            XYChart.Series<String, Number> serie = new XYChart.Series<>();
-            serie.setName("Vendas por Período - Total: R$ " + String.format("%.2f", somaTotal));
+                String label;
 
-            ordenado.forEach((data, total) -> {
-                serie.getData().add(new XYChart.Data<>(data.format(formatter), total));
+                if (chave instanceof LocalDate) {
+                    label = ((LocalDate) chave).format(formatter);
+                } else {
+                    label = ((YearMonth) chave).format(formatter);
+                }
+
+                serie.getData().add(new XYChart.Data<>(label, total));
             });
 
             areaChartRelatorio.getData().add(serie);
 
-            // Configura eixo Y em reais
-            double max = ordenado.values().stream().mapToDouble(Double::doubleValue).max().orElse(0);
+            // 🔹 Configuração eixo Y
+            double max = ordenado.values()
+                    .stream()
+                    .mapToDouble(Double::doubleValue)
+                    .max()
+                    .orElse(0);
+
             NumberAxis yAxis = (NumberAxis) areaChartRelatorio.getYAxis();
             yAxis.setAutoRanging(false);
             yAxis.setLowerBound(0);
-            yAxis.setUpperBound(max + (max * 0.1)); // margem 10%
-            yAxis.setTickUnit(max / 5); // 5 marcações
+            yAxis.setUpperBound(max + (max * 0.1));
+            yAxis.setTickUnit(max / 5);
 
             yAxis.setTickLabelFormatter(new StringConverter<Number>() {
                 private final NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
@@ -274,7 +373,10 @@ public class RelatorioController {
             Map<LocalDate, Double> totalPorData = pedidos.stream()
                     .filter(p -> p.getData() != null)
                     .filter(p -> {
-                        LocalDate dataPedido = OffsetDateTime.parse(p.getData()).toLocalDate();
+
+                        OffsetDateTime dataOriginal = OffsetDateTime.parse(p.getData());
+                        LocalDate dataPedido = dataOriginal.minusHours(3).toLocalDate();
+
                         return !dataPedido.isBefore(dataInicial) &&
                                 !dataPedido.isAfter(dataFinal);
                     })
@@ -300,10 +402,268 @@ public class RelatorioController {
     }
 
     @FXML
+    public void carregarGraficoBarra() {
+
+        try {
+            PedidoService pedidoService = PedidoFactory.getPedidoService();
+            List<Pedido> pedidos = pedidoService.buscarTodos();
+
+            LocalDate dataInicial = dpDataInicial.getValue();
+            LocalDate dataFinal = dpDataFinal.getValue();
+
+            if (dataInicial == null || dataFinal == null) {
+                System.out.println("Selecione as duas datas!");
+                return;
+            }
+
+            if (dataInicial.isAfter(dataFinal)) {
+                System.out.println("Data inicial maior que final!");
+                return;
+            }
+
+            // 🔹 Ajuste igual ao seu método anterior
+            // dataFinal = dataFinal.plusDays(1);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
+
+            // Filtra e agrupa por data
+            Map<LocalDate, Double> totalPorData = pedidos.stream()
+                    .filter(p -> p.getData() != null)
+                    .filter(p -> {
+
+                        // Horario original menos 3 horas p obter horario brasil
+                        OffsetDateTime dataOriginal = OffsetDateTime.parse(p.getData());
+                        LocalDate dataPedido = dataOriginal.minusHours(3).toLocalDate();
+
+                        return !dataPedido.isBefore(dataInicial)
+                                && !dataPedido.isAfter(dataFinal);
+                    })
+                    .collect(Collectors.groupingBy(
+                            p -> OffsetDateTime.parse(p.getData()).toLocalDate(),
+                            Collectors.summingDouble(Pedido::getValor)));
+
+            if (totalPorData.isEmpty()) {
+                System.out.println("Nenhum pedido encontrado no período.");
+                return;
+            }
+
+            double somaTotal = totalPorData.values()
+                    .stream()
+                    .mapToDouble(Double::doubleValue)
+                    .sum();
+
+            Map<LocalDate, Double> ordenado = new TreeMap<>(totalPorData);
+
+            // 🔹 Limpa gráfico
+            barChartRelatorio.getData().clear();
+
+            // 🔹 Cria série
+            XYChart.Series<String, Number> serie = new XYChart.Series<>();
+            serie.setName("Vendas por Período - Total: R$ "
+                    + String.format("%.2f", somaTotal));
+
+            ordenado.forEach((data, total) -> {
+                serie.getData().add(
+                        new XYChart.Data<>(data.format(formatter), total));
+            });
+
+            barChartRelatorio.getData().add(serie);
+
+            // 🔹 Configuração eixo Y
+            double max = ordenado.values()
+                    .stream()
+                    .mapToDouble(Double::doubleValue)
+                    .max()
+                    .orElse(0);
+
+            NumberAxis yAxis = (NumberAxis) barChartRelatorio.getYAxis();
+            yAxis.setAutoRanging(false);
+            yAxis.setLowerBound(0);
+            yAxis.setUpperBound(max + (max * 0.1));
+            yAxis.setTickUnit(max / 5);
+
+            yAxis.setTickLabelFormatter(new StringConverter<Number>() {
+                private final NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+
+                @Override
+                public String toString(Number number) {
+                    return format.format(number.doubleValue());
+                }
+
+                @Override
+                public Number fromString(String string) {
+                    return 0;
+                }
+            });
+
+            Platform.runLater(() -> {
+
+                String[] cores = {
+                        "#4CAF50", // verde
+                        "#2196F3", // azul
+                        "#FF9800", // laranja
+                        "#E91E63", // rosa
+                        "#9C27B0", // roxo
+                        "#F44336" // vermelho
+                };
+
+                int i = 0;
+
+                for (XYChart.Data<String, Number> data : serie.getData()) {
+
+                    String cor = cores[i % cores.length];
+
+                    data.getNode().setStyle("-fx-bar-fill: " + cor + ";");
+
+                    i++;
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public enum TipoAgrupamento {
+        DIA,
+        MES
+    }
+
+    @FXML
+    public void carregarGraficoBarraDiaMes(TipoAgrupamento tipo) {
+
+        try {
+            PedidoService pedidoService = PedidoFactory.getPedidoService();
+            List<Pedido> pedidos = pedidoService.buscarTodos();
+
+            LocalDate dataInicial = dpDataInicial.getValue();
+            LocalDate dataFinal = dpDataFinal.getValue();
+
+            if (dataInicial == null || dataFinal == null) {
+                System.out.println("Selecione as duas datas!");
+                return;
+            }
+
+            if (dataInicial.isAfter(dataFinal)) {
+                System.out.println("Data inicial maior que final!");
+                return;
+            }
+
+            // 🔥 Variáveis dinâmicas
+            DateTimeFormatter formatter;
+            Map<?, Double> totalAgrupado;
+
+            if (tipo == TipoAgrupamento.DIA) {
+
+                // 📅 AGRUPAR POR DIA
+                formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
+
+                totalAgrupado = pedidos.stream()
+                        .filter(p -> p.getData() != null)
+                        .filter(p -> {
+                            OffsetDateTime dataOriginal = OffsetDateTime.parse(p.getData());
+                            LocalDate dataPedido = dataOriginal.minusHours(3).toLocalDate();
+                            return !dataPedido.isBefore(dataInicial)
+                                    && !dataPedido.isAfter(dataFinal);
+                        })
+                        .collect(Collectors.groupingBy(
+                                p -> {
+                                    OffsetDateTime dataOriginal = OffsetDateTime.parse(p.getData());
+                                    return dataOriginal.minusHours(3).toLocalDate();
+                                },
+                                Collectors.summingDouble(Pedido::getValor)));
+
+            } else {
+
+                // 📆 AGRUPAR POR MÊS
+                formatter = DateTimeFormatter.ofPattern("MM/yyyy");
+
+                totalAgrupado = pedidos.stream()
+                        .filter(p -> p.getData() != null)
+                        .filter(p -> {
+                            OffsetDateTime dataOriginal = OffsetDateTime.parse(p.getData());
+                            LocalDate dataPedido = dataOriginal.minusHours(3).toLocalDate();
+                            return !dataPedido.isBefore(dataInicial)
+                                    && !dataPedido.isAfter(dataFinal);
+                        })
+                        .collect(Collectors.groupingBy(
+                                p -> {
+                                    OffsetDateTime dataOriginal = OffsetDateTime.parse(p.getData());
+                                    LocalDate dataPedido = dataOriginal.minusHours(3).toLocalDate();
+                                    return YearMonth.from(dataPedido);
+                                },
+                                Collectors.summingDouble(Pedido::getValor)));
+            }
+
+            if (totalAgrupado.isEmpty()) {
+                System.out.println("Nenhum pedido encontrado no período.");
+                return;
+            }
+
+            Map<?, Double> ordenado = new TreeMap<>(totalAgrupado);
+
+            barChartRelatorio.getData().clear();
+
+            XYChart.Series<String, Number> serie = new XYChart.Series<>();
+
+            double somaTotal = ordenado.values()
+                    .stream()
+                    .mapToDouble(Double::doubleValue)
+                    .sum();
+
+            serie.setName("Total: R$ " + String.format("%.2f", somaTotal));
+
+            ordenado.forEach((chave, total) -> {
+
+                String label;
+
+                if (chave instanceof LocalDate) {
+                    label = ((LocalDate) chave).format(formatter);
+                } else {
+                    label = ((YearMonth) chave).format(formatter);
+                }
+
+                serie.getData().add(new XYChart.Data<>(label, total));
+            });
+
+            barChartRelatorio.getData().add(serie);
+
+            Platform.runLater(() -> {
+
+                String[] cores = {
+                        "#4CAF50", // verde
+                        "#2196F3", // azul
+                        "#FF9800", // laranja
+                        "#E91E63", // rosa
+                        "#9C27B0", // roxo
+                        "#F44336" // vermelho
+                };
+
+                int i = 0;
+
+                for (XYChart.Data<String, Number> data : serie.getData()) {
+
+                    String cor = cores[i % cores.length];
+
+                    data.getNode().setStyle("-fx-bar-fill: " + cor + ";");
+
+                    i++;
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     void onFiltrarClick(ActionEvent event) {
 
         carregarGraficoPagamento();
-        carregarGraficoArea();
+        carregarGraficoArea(TipoAgrupamento.DIA);
+        group.selectToggle(rbDia);
+        carregarGraficoBarraDiaMes(TipoAgrupamento.DIA);
+
     }
 
     @FXML
@@ -317,7 +677,7 @@ public class RelatorioController {
         Platform.runLater(() -> {
 
             carregarGraficoPagamento();
-            carregarGraficoArea();
+            carregarGraficoArea(TipoAgrupamento.DIA);
 
         });
 
@@ -329,13 +689,30 @@ public class RelatorioController {
             HouverEffectUtil.apllyHouverSair(btnFiltrar);
         });
 
-        // ObservableList<PieChart.Data> dados = FXCollections.observableArrayList(
-        // new PieChart.Data("Vendas", 40),
-        // new PieChart.Data("Pagamentos", 25),
-        // new PieChart.Data("Pedidos", 35));
+        cmbGrafico.getItems().addAll(
+                "BARRA",
+                "AREA");
 
-        // pieChartRelatorio.setData(dados);
-        // pieChartRelatorio.setTitle("Relatório Geral");
+        // já deixa Dia selecionado
+        rbDia.setSelected(true);
+
+        // Listener do grupo (melhor forma)
+        group.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+
+            if (newToggle == null)
+                return;
+
+            RadioButton selecionado = (RadioButton) newToggle;
+
+            if (selecionado == rbDia) {
+                carregarGraficoBarraDiaMes(TipoAgrupamento.DIA);
+                carregarGraficoArea(TipoAgrupamento.DIA);
+            } else if (selecionado == rbMes) {
+                carregarGraficoBarraDiaMes(TipoAgrupamento.MES);
+                carregarGraficoArea(TipoAgrupamento.MES);
+
+            }
+        });
     }
 
 }
