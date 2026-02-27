@@ -5,6 +5,7 @@
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
@@ -19,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" prefHeight="810.0" prefWidth="1377.0" spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #1B1A16, #141442); -fx-border-color: fff;" stylesheets="@css/styles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.controller.RelatorioController">
+<VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" prefHeight="810.0" prefWidth="1377.0" spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #1B1A16, #141442); -fx-border-color: fff;" stylesheets="@css/styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.canes.controller.RelatorioController">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
@@ -60,7 +61,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <AreaChart fx:id="areaChartRelatorio" layoutX="27.0" layoutY="284.0" prefHeight="415.0" prefWidth="498.0">
+            <AreaChart fx:id="areaChartRelatorio" layoutX="28.0" layoutY="380.0" prefHeight="350.0" prefWidth="498.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -75,11 +76,11 @@
                   <Font name="Verdana" size="24.0" />
                </font>
             </Label>
-            <Label layoutX="1112.0" layoutY="26.0" text="VISUALIZAÇÃO" textFill="WHITE" />
-            <ComboBox fx:id="cmbGrafico" layoutX="1104.0" layoutY="47.0" onAction="#comboGrafico" prefHeight="32.0" prefWidth="105.0" promptText="GRÁFICO"> 
+            <Label layoutX="211.0" layoutY="261.0" text="VISUALIZAÇÃO" textFill="WHITE" />
+            <ComboBox fx:id="cmbGrafico" layoutX="203.0" layoutY="282.0" onAction="#comboGrafico" prefHeight="32.0" prefWidth="105.0"> 
               
             </ComboBox>
-            <BarChart fx:id="barChartRelatorio" layoutX="28.0" layoutY="284.0" prefHeight="415.0" prefWidth="498.0" visible="false">
+            <BarChart fx:id="barChartRelatorio" layoutX="28.0" layoutY="380.0" prefHeight="350.0" prefWidth="498.0" visible="false">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -87,12 +88,21 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </BarChart>
-            <RadioButton fx:id="rbDia" layoutX="1234.0" layoutY="42.0" mnemonicParsing="false" selected="true" text="Dia" textFill="WHITE">
+            <RadioButton fx:id="rbDia" layoutX="329.0" layoutY="260.0" mnemonicParsing="false" selected="true" text="Dia" textFill="WHITE">
                <toggleGroup>
                   <ToggleGroup fx:id="group" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="rbMes" layoutX="1235.0" layoutY="69.0" mnemonicParsing="false" text="Mês" textFill="WHITE" toggleGroup="$group" />
+            <RadioButton fx:id="rbMes" layoutX="330.0" layoutY="287.0" mnemonicParsing="false" text="Mês" textFill="WHITE" toggleGroup="$group" />
+            <RadioButton fx:id="rbAno" layoutX="330.0" layoutY="313.0" mnemonicParsing="false" text="Ano" textFill="WHITE" toggleGroup="$group" />
+            <LineChart fx:id="lineChartRelatorio" layoutX="28.0" layoutY="380.0" prefHeight="350.0" prefWidth="498.0" visible="false">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </LineChart>
          </children>
       </AnchorPane>
    </children>
