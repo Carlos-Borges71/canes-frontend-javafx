@@ -37,6 +37,9 @@ public class MenuController {
     private Label lblCadastrar;
 
     @FXML
+    private Label lblRelatorio;
+
+    @FXML
     private Label lblAtualizar;
 
     @FXML
@@ -218,6 +221,20 @@ public class MenuController {
 
         HouverEffectUtil.apllyHouverSobre(btnPesquisa);
         lblPesquisa.setMouseTransparent(true);
+
+    }
+
+    public void initialize() {
+
+        lblRelatorio.setMouseTransparent(true);
+
+     btnRelatorio.setOnMouseEntered(e -> {
+            HouverEffectUtil.apllyHouverSobre(btnRelatorio);
+        });
+
+        btnRelatorio.setOnMouseExited(e -> {
+            HouverEffectUtil.apllyHouverSair(btnRelatorio);
+        });
 
     }
 

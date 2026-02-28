@@ -186,7 +186,7 @@ public class AtualizarController {
     private TextField txtCodigoPedido;
 
     @FXML
-    private ComboBox txtStatusPedido;
+    private ComboBox<String> txtStatusPedido;
 
     @FXML
     private TextField txtValorPedido;

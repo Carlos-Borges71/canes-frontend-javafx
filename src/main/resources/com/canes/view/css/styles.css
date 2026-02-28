@@ -44,7 +44,7 @@
 }
 
 .chart-series-area-fill {
-    -fx-fill: rgba(233, 132, 132, 0.2);
+    -fx-fill: rgba(255, 255, 255, 0.2);
 }
 
 .chart-series-area-line {

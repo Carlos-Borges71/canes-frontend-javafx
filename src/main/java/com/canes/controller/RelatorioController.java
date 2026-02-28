@@ -1,19 +1,17 @@
 package com.canes.controller;
 
 import java.text.NumberFormat;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import com.canes.controller.RelatorioController.TipoAgrupamento;
 import com.canes.factory.PagamentoFactory;
 import com.canes.factory.PedidoFactory;
 import com.canes.model.Pagamento;
@@ -30,9 +28,7 @@ import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.chart.AreaChart;
@@ -189,16 +185,37 @@ public class RelatorioController {
                     })
                     .toList();
 
-            // Agrupa e soma por tipo de pagamento
+            // Agrupa e soma por tipo de pagamento e ordem decrescente
             Map<String, Double> totalPorTipo = pagamentosFiltrados.stream()
                     .collect(Collectors.groupingBy(
-                            Pagamento::getTipo, // "Pix", "Dinheiro", etc.
-                            Collectors.summingDouble(Pagamento::getValorPagamento)));
-
+                            Pagamento::getTipo,
+                            Collectors.summingDouble(Pagamento::getValorPagamento)))
+                    .entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<String, Double>comparingByValue().reversed()) // 🔥 decrescente
+                    .collect(Collectors.toMap(
+                            Map.Entry::getKey,
+                            Map.Entry::getValue,
+                            (e1, e2) -> e1,
+                            LinkedHashMap::new // 🔥 mantém a ordem
+                    ));
             // Cria dados para o gráfico de pizza
             ObservableList<PieChart.Data> dados = FXCollections.observableArrayList();
+            double somaTotal = totalPorTipo.values()
+                    .stream()
+                    .mapToDouble(Double::doubleValue)
+                    .sum();
+
             totalPorTipo.forEach((tipo, total) -> {
-                String nome = tipo + " - R$ " + String.format("%.2f", total);
+
+                double porcentagem = (total / somaTotal) * 100;
+
+                String nome = String.format(
+                        "%s - R$ %.2f (%.1f%%)",
+                        tipo,
+                        total,
+                        porcentagem);
+
                 dados.add(new PieChart.Data(nome, total));
             });
 
@@ -355,7 +372,7 @@ public class RelatorioController {
             yAxis.setAutoRanging(false);
             yAxis.setLowerBound(0);
             yAxis.setUpperBound(max + (max * 0.1));
-            yAxis.setTickUnit(max / 5);
+            yAxis.setTickUnit(max / 1);
 
             yAxis.setTickLabelFormatter(new StringConverter<Number>() {
                 private final NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
@@ -370,6 +387,52 @@ public class RelatorioController {
                     return 0;
                 }
             });
+
+            // Valor em cima do grafico
+            // Group plotArea = (Group) lineChartRelatorio.lookup(".plot-content");
+
+            Node plotBackground = areaChartRelatorio.lookup(".chart-plot-background");
+
+            if (plotBackground == null)
+                return;
+
+            Parent plotArea = plotBackground.getParent();
+
+            // remove textos antigos
+            plotArea.getChildrenUnmodifiable()
+                    .stream()
+                    .filter(n -> n instanceof Text)
+                    .toList()
+                    .forEach(n -> ((Pane) plotArea).getChildren().remove(n));
+
+            for (XYChart.Data<String, Number> data : serie.getData()) {
+
+                Node node = data.getNode();
+
+                if (node != null) {
+
+                    Text text = new Text(
+                            String.format("R$ %,.2f", data.getYValue().doubleValue()));
+
+                    text.setStyle("""
+                                -fx-font-size: 11px;
+                                -fx-font-weight: bold;
+                                -fx-fill: white;
+                            """);
+
+                    ((Pane) plotArea).getChildren().add(text);
+
+                    node.boundsInParentProperty().addListener((obs, oldVal, bounds) -> {
+
+                        double x = bounds.getMinX() + bounds.getWidth() / 2;
+                        double y = bounds.getMinY();
+
+                        text.setLayoutX(x + 45);
+                        text.setLayoutY(y - 8);
+
+                    });
+                }
+            }
 
         } catch (
 
@@ -519,7 +582,7 @@ public class RelatorioController {
             yAxis.setAutoRanging(false);
             yAxis.setLowerBound(0);
             yAxis.setUpperBound(max + (max * 0.1));
-            yAxis.setTickUnit(max / 3);
+            yAxis.setTickUnit(max / 1);
 
             yAxis.setTickLabelFormatter(new StringConverter<Number>() {
                 private final NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
@@ -536,50 +599,50 @@ public class RelatorioController {
             });
 
             // Valor em cima do grafico
-            //Group plotArea = (Group) lineChartRelatorio.lookup(".plot-content");
+            // Group plotArea = (Group) lineChartRelatorio.lookup(".plot-content");
 
-     Node plotBackground = lineChartRelatorio.lookup(".chart-plot-background");
+            Node plotBackground = lineChartRelatorio.lookup(".chart-plot-background");
 
-    if (plotBackground == null) return;
+            if (plotBackground == null)
+                return;
 
-    Parent plotArea = plotBackground.getParent();
+            Parent plotArea = plotBackground.getParent();
 
-    // remove textos antigos
-    plotArea.getChildrenUnmodifiable()
-            .stream()
-            .filter(n -> n instanceof Text)
-            .toList()
-            .forEach(n -> ((Pane) plotArea).getChildren().remove(n));
+            // remove textos antigos
+            plotArea.getChildrenUnmodifiable()
+                    .stream()
+                    .filter(n -> n instanceof Text)
+                    .toList()
+                    .forEach(n -> ((Pane) plotArea).getChildren().remove(n));
 
-    for (XYChart.Data<String, Number> data : serie.getData()) {
+            for (XYChart.Data<String, Number> data : serie.getData()) {
 
-        Node node = data.getNode();
+                Node node = data.getNode();
 
-        if (node != null) {
+                if (node != null) {
 
-            Text text = new Text(
-                    String.format("R$ %,.2f", data.getYValue().doubleValue())
-            );
+                    Text text = new Text(
+                            String.format("R$ %,.2f", data.getYValue().doubleValue()));
 
-            text.setStyle("""
-                -fx-font-size: 11px;
-                -fx-font-weight: bold;
-                -fx-fill: white;
-            """);
+                    text.setStyle("""
+                                -fx-font-size: 11px;
+                                -fx-font-weight: bold;
+                                -fx-fill: white;
+                            """);
 
-            ((Pane) plotArea).getChildren().add(text);
+                    ((Pane) plotArea).getChildren().add(text);
 
-            node.boundsInParentProperty().addListener((obs, oldVal, bounds) -> {
+                    node.boundsInParentProperty().addListener((obs, oldVal, bounds) -> {
 
-                double x = bounds.getMinX() + bounds.getWidth() / 2;
-                double y = bounds.getMinY();
+                        double x = bounds.getMinX() + bounds.getWidth() / 2;
+                        double y = bounds.getMinY();
 
-                text.setLayoutX(x + 45);
-                text.setLayoutY(y - 8);
-                
-            });
-        }
-    }
+                        text.setLayoutX(x + 45);
+                        text.setLayoutY(y - 8);
+
+                    });
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -763,7 +826,7 @@ public class RelatorioController {
 
                 yAxis.setLowerBound(0);
                 yAxis.setUpperBound(upperBound);
-                yAxis.setTickUnit(upperBound / 5);
+                yAxis.setTickUnit(upperBound / 1);
                 System.out.println(barChartRelatorio.getYAxis().getClass());
                 NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
@@ -931,7 +994,7 @@ public class RelatorioController {
 
                 yAxis.setLowerBound(0);
                 yAxis.setUpperBound(upperBound);
-                yAxis.setTickUnit(upperBound / 3);
+                yAxis.setTickUnit(upperBound / 1);
 
                 NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
