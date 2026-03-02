@@ -94,6 +94,7 @@ public class CadastroProdutoController {
         ProdutoDPO produto = new ProdutoDPO();
 
         String codigo = txtCodigo.getText();
+        String tamanhao = txtTamanho.getText();
         String nome = txtProduto.getText();
         Double valorCompra = TextFieldUtil.converterParaDouble(txtValorCompra.getText());
         // Double.parseDouble(txtValorCompra.getText().replaceAll("[^\\d,\\.]",
@@ -106,7 +107,8 @@ public class CadastroProdutoController {
 
         ProdutoService produtoService = ProdutoFactory.getProdutoService();
 
-        produtoService.salvarProduto(codigo, nome, valorCompra, valorVenda, quantCompra, fornecedorId, notaFiscalId);
+        produtoService.salvarProduto(codigo, nome, tamanhao, valorCompra, valorVenda, quantCompra, fornecedorId,
+                notaFiscalId);
 
         txtProduto.clear();
         txtCodigo.clear();

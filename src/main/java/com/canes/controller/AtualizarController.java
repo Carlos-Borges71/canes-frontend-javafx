@@ -616,6 +616,7 @@ public class AtualizarController {
             ProdutoDPO produto = new ProdutoDPO();
             produto.setId(produtoId);
             produto.setCodigo(txtCodigoFornec.getText());
+            produto.setTamanho(txtTamanhoFornec.getText());
             produto.setNome(txtProdutoFornec.getText());
             Double valorCompra = TextFieldUtil.converterParaDouble(txtValorCompraFornec.getText());
             Double valorVenda = TextFieldUtil.converterParaDouble(txtValorVendaFornec.getText());
@@ -1009,6 +1010,7 @@ public class AtualizarController {
                     quantCompra = p.getQuantcompra();
 
                     txtProdutoFornec.setText(p.getNome());
+                    txtTamanhoFornec.setText(p.getTamanho());
                     txtNotaFiscalFornec.setText(p.getNota().getNotaFiscal().toString());
                     txtValorCompraFornec.setText(numberFormat(valorCompra));
                     txtValorVendaFornec.setText(numberFormat(valorVenda));
@@ -1289,6 +1291,10 @@ public class AtualizarController {
         }
         if (txtCodigoFornec.getText().isEmpty()) {
             AlertUtil.mostrarErro("O campo Código não \npode ficar vazio!.");
+            return;
+        }
+        if (txtTamanhoFornec.getText().isEmpty()) {
+            AlertUtil.mostrarErro("O campo Tamanho não \npode ficar vazio!.");
             return;
         }
         if (txtQuantFornec.getText().isEmpty()) {

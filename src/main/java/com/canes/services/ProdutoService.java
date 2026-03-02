@@ -20,7 +20,7 @@ public class ProdutoService extends BaseService {
         super(client, mapper);
     }
 
-    public void salvarProduto(String codigo, String nome, Double valorCompra, Double valorVenda,
+    public void salvarProduto(String codigo, String nome, String tamanho, Double valorCompra, Double valorVenda,
             Integer quantcompra, Long fornecedorId, Long notaFiscalId)
             throws IOException, InterruptedException, ConnectException {
 
@@ -28,6 +28,7 @@ public class ProdutoService extends BaseService {
         ProdutoDPO produto = new ProdutoDPO();
         produto.setCodigo(codigo);
         produto.setNome(nome);
+        produto.setTamanho(tamanho);
         produto.setValorCompra(valorCompra);
         produto.setValorVenda(valorVenda);
         produto.setQuantcompra(quantcompra);

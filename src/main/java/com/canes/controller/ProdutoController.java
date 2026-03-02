@@ -126,11 +126,13 @@ public class ProdutoController {
                 Double valorCompra = p != null && p.getValorCompra() != null ? p.getValorCompra() : null;
                 Double valorVenda = p != null && p.getValorVenda() != null ? p.getValorVenda() : null;
                 Integer quant = p != null && p.getQuantcompra() != null ? p.getQuantcompra() : null;
+                String tamanho = p != null && p.getTamanho() != null ? p.getTamanho() : "";
 
                 listaProdutos.add(new Produto(
                         id,
                         codigo,
                         nome,
+                        tamanho,
                         estoque,
                         valorCompra,
                         valorVenda,

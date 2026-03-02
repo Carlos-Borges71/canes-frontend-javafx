@@ -472,6 +472,8 @@ public class PedidoController {
                                                 tabelaPedido.getItems());
                                         String total = "R$ " + lblTotal.getText();
                                         String status = txtStatus.getText();
+
+                                        // Envia os dados para a forma pagamento
                                         controller.receberDados(idCliente, total,
                                                 produtosTabela);
 
@@ -492,6 +494,12 @@ public class PedidoController {
 
                         // Mostra e espera fechar
                         stage.showAndWait();
+
+                        // Parar quando fechar a tela FormaPagamento
+                        if (controller.isFechadoNoX()) {
+                            System.out.println("Usuário fechou no X");
+                            return; // 🔥 aqui ele realmente para
+                        }
 
                         String formaEscolhida = controller.getStatusSelecionada();
                         System.out.println("Forma escolida " + formaEscolhida);

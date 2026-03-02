@@ -719,6 +719,7 @@ public class PesquisaController {
                 Double valorCompra = p != null && p.getValorCompra() != null ? p.getValorCompra() : null;
                 Double valorVenda = p != null && p.getValorVenda() != null ? p.getValorVenda() : null;
                 Integer quantcompra = p != null && p.getQuantcompra() != null ? p.getQuantcompra() : null;
+                String tamanho = p != null && p.getTamanho() != null ? p.getTamanho() : "";
 
                 String fornec = p != null && p.getFornecedor().getEmpresa() != null ? p.getFornecedor().getEmpresa()
                         : "Sem fornecedor";
@@ -727,6 +728,7 @@ public class PesquisaController {
                         id,
                         codigo,
                         nome,
+                        tamanho,
                         estoque,
                         valorCompra,
                         valorVenda,

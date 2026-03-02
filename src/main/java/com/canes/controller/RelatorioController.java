@@ -405,32 +405,36 @@ public class RelatorioController {
                     .toList()
                     .forEach(n -> ((Pane) plotArea).getChildren().remove(n));
 
-            for (XYChart.Data<String, Number> data : serie.getData()) {
+            // 🔹 Só mostrar valores se tiver até 12 posições
+            if (serie.getData().size() <= 12) {
 
-                Node node = data.getNode();
+                for (XYChart.Data<String, Number> data : serie.getData()) {
 
-                if (node != null) {
+                    Node node = data.getNode();
 
-                    Text text = new Text(
-                            String.format("R$ %,.2f", data.getYValue().doubleValue()));
+                    if (node != null) {
 
-                    text.setStyle("""
-                                -fx-font-size: 11px;
-                                -fx-font-weight: bold;
-                                -fx-fill: white;
-                            """);
+                        Text text = new Text(
+                                String.format("R$ %,.2f", data.getYValue().doubleValue()));
 
-                    ((Pane) plotArea).getChildren().add(text);
+                        text.setStyle("""
+                                    -fx-font-size: 11px;
+                                    -fx-font-weight: bold;
+                                    -fx-fill: white;
+                                """);
 
-                    node.boundsInParentProperty().addListener((obs, oldVal, bounds) -> {
+                        ((Pane) plotArea).getChildren().add(text);
 
-                        double x = bounds.getMinX() + bounds.getWidth() / 2;
-                        double y = bounds.getMinY();
+                        node.boundsInParentProperty().addListener((obs, oldVal, bounds) -> {
 
-                        text.setLayoutX(x + 45);
-                        text.setLayoutY(y - 8);
+                            double x = bounds.getMinX() + bounds.getWidth() / 2;
+                            double y = bounds.getMinY();
 
-                    });
+                            text.setLayoutX(x + 45);
+                            text.setLayoutY(y - 8);
+
+                        });
+                    }
                 }
             }
 
@@ -615,32 +619,36 @@ public class RelatorioController {
                     .toList()
                     .forEach(n -> ((Pane) plotArea).getChildren().remove(n));
 
-            for (XYChart.Data<String, Number> data : serie.getData()) {
+            // 🔹 Só mostrar valores se tiver até 12 posições
+            if (serie.getData().size() <= 5) {
 
-                Node node = data.getNode();
+                for (XYChart.Data<String, Number> data : serie.getData()) {
 
-                if (node != null) {
+                    Node node = data.getNode();
 
-                    Text text = new Text(
-                            String.format("R$ %,.2f", data.getYValue().doubleValue()));
+                    if (node != null) {
 
-                    text.setStyle("""
-                                -fx-font-size: 11px;
-                                -fx-font-weight: bold;
-                                -fx-fill: white;
-                            """);
+                        Text text = new Text(
+                                String.format("R$ %,.2f", data.getYValue().doubleValue()));
 
-                    ((Pane) plotArea).getChildren().add(text);
+                        text.setStyle("""
+                                    -fx-font-size: 11px;
+                                    -fx-font-weight: bold;
+                                    -fx-fill: white;
+                                """);
 
-                    node.boundsInParentProperty().addListener((obs, oldVal, bounds) -> {
+                        ((Pane) plotArea).getChildren().add(text);
 
-                        double x = bounds.getMinX() + bounds.getWidth() / 2;
-                        double y = bounds.getMinY();
+                        node.boundsInParentProperty().addListener((obs, oldVal, bounds) -> {
 
-                        text.setLayoutX(x + 45);
-                        text.setLayoutY(y - 8);
+                            double x = bounds.getMinX() + bounds.getWidth() / 2;
+                            double y = bounds.getMinY();
 
-                    });
+                            text.setLayoutX(x + 45);
+                            text.setLayoutY(y - 8);
+
+                        });
+                    }
                 }
             }
         } catch (Exception e) {
@@ -1011,23 +1019,27 @@ public class RelatorioController {
                     }
                 });
 
-                for (XYChart.Data<String, Number> data : serie.getData()) {
+                // so exibe valores se tiver até 12
+                if (serie.getData().size() <= 12) {
 
-                    Node node = data.getNode();
+                    for (XYChart.Data<String, Number> data : serie.getData()) {
 
-                    if (node != null) {
+                        Node node = data.getNode();
 
-                        Text text = new Text(
-                                String.format("R$ %,.2f", data.getYValue().doubleValue()));
+                        if (node != null) {
 
-                        text.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-fill: white");
+                            Text text = new Text(
+                                    String.format("R$ %,.2f", data.getYValue().doubleValue()));
 
-                        StackPane parent = (StackPane) node;
+                            text.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-fill: white");
 
-                        parent.getChildren().add(text);
+                            StackPane parent = (StackPane) node;
 
-                        StackPane.setAlignment(text, Pos.TOP_CENTER);
-                        text.setTranslateY(-15); // sobe o texto
+                            parent.getChildren().add(text);
+
+                            StackPane.setAlignment(text, Pos.TOP_CENTER);
+                            text.setTranslateY(-15); // sobe o texto
+                        }
                     }
                 }
             });

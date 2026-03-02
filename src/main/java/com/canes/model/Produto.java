@@ -2,6 +2,7 @@ package com.canes.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -11,9 +12,12 @@ public class Produto {
     private String codigo;
     private String nome;
     private Integer estoque;
+    private String tamanho;
     private Double valorCompra;
     private Double valorVenda;
     private Integer quantcompra;
+
+    @JsonIgnore
     private String fornec;
 
     private Fornecedor fornecedor;
@@ -27,7 +31,11 @@ public class Produto {
         this.id = id;
     }
 
-    public Produto(Long id, String codigo, String nome, Integer estoque, Double valorCompra,
+    public Produto(Integer estoque) {
+        this.estoque = estoque;
+    }
+
+    public Produto(Long id, String codigo, String nome, String tamanho, Integer estoque, Double valorCompra,
             Double valorVenda, Integer quantcompra, String fornec) {
 
         this.codigo = codigo;
@@ -38,6 +46,7 @@ public class Produto {
         this.quantcompra = quantcompra;
         this.id = id;
         this.fornec = fornec;
+        this.tamanho = tamanho;
 
     }
 
@@ -119,6 +128,14 @@ public class Produto {
 
     public void setFornecedor(Fornecedor fornecedor) {
         this.fornecedor = fornecedor;
+    }
+
+    public String getTamanho() {
+        return tamanho;
+    }
+
+    public void setTamanho(String tamanho) {
+        this.tamanho = tamanho;
     }
 
 }

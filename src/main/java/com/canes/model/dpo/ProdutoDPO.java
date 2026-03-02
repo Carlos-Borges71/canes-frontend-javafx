@@ -9,6 +9,7 @@ public class ProdutoDPO {
     private Long id;
     private String codigo;
     private String nome;
+    private String tamanho;
     private Double valorCompra;
     private Double valorVenda;
     private Integer estoque;
@@ -94,6 +95,14 @@ public class ProdutoDPO {
 
     public void setEstoque(Integer estoque) {
         this.estoque = estoque;
+    }
+
+    public String getTamanho() {
+        return tamanho;
+    }
+
+    public void setTamanho(String tamanho) {
+        this.tamanho = tamanho;
     }
 
 }
